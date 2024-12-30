@@ -1,0 +1,9 @@
+/node_modules
+config.js
+/.vscode
+.dev.vars
+.env
+/.wrangler
+wrangler.toml
+
+# /JsonFiles

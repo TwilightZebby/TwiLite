@@ -1,0 +1,7 @@
+contact_links:
+  - name: Feedback & Feature Requests
+    url: https://github.com/TwilightZebby/TwiLite/discussions/new/choose
+    about: Have ideas for TwiLite? Post it in our Discussions tab!
+  - name: Add App
+    url: https://discord.com/oauth2/authorize?client_id=1156152328290840606
+    about: Want to add TwiLite to your own Server or as a User App? Use this link here!

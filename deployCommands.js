@@ -9,6 +9,8 @@ import * as HugCommand from './Commands/SlashCommands/Actions/hug.js';
 import * as KissCommand from './Commands/SlashCommands/Actions/kiss.js';
 import * as YeetCommand from './Commands/SlashCommands/Actions/yeet.js';
 
+import * as RoleMenuCommand from './Commands/SlashCommands/RoleMenus/rolemenu.js';
+
 /** URL used to register Interaction Commands */
 const url = `https://discord.com/api/v10/applications/${DISCORD_APP_USER_ID}/commands`;
 
@@ -16,7 +18,7 @@ const url = `https://discord.com/api/v10/applications/${DISCORD_APP_USER_ID}/com
 const CommandArray = [
     BonkCommand.SlashCommand.getRegisterData(), BoopCommand.SlashCommand.getRegisterData(), CookieCommand.SlashCommand.getRegisterData(),
     HeadpatCommand.SlashCommand.getRegisterData(), HugCommand.SlashCommand.getRegisterData(), KissCommand.SlashCommand.getRegisterData(),
-    YeetCommand.SlashCommand.getRegisterData()
+    YeetCommand.SlashCommand.getRegisterData(), RoleMenuCommand.SlashCommand.getRegisterData()
 ];
 
 const response = await fetch(url, {

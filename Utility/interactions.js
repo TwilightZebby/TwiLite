@@ -6,6 +6,8 @@ export const SlashCommands = {
     'hug': () => import('../Commands/SlashCommands/Actions/hug.js'),
     'kiss': () => import('../Commands/SlashCommands/Actions/kiss.js'),
     'yeet': () => import('../Commands/SlashCommands/Actions/yeet.js'),
+
+    'rolemenu': () => import('../Commands/SlashCommands/RoleMenus/rolemenu.js'),
 }
 
 export const ContextCommands = {

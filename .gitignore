@@ -6,4 +6,6 @@ config.js
 /.wrangler
 wrangler.toml
 
+deployCommands.js
+
 # /JsonFiles

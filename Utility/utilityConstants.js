@@ -26,3 +26,6 @@ export const UtilityCollections = {
      */
     SelectCooldowns: new Collection()
 };
+
+/** Endpoint for sending Messages (outside of Interactions) */
+export const CreateMessageEndpoint = (channelId) => `https://discord.com/api/v10/channels/${channelId}/messages`;

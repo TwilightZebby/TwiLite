@@ -218,6 +218,12 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
     ROLE_MENU_REQUIREMENT_ADD_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role from this Server you would like to add as a requirement to use your Role Menu.`,
     ROLE_MENU_REQUIREMENT_REMOVE_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role Requirement you would like to remove from your Role Menu.`,
 
+    ROLE_MENU_SET_TYPE_SUCCESS: `Successfully set the type of your Role Menu.\nYou may now dismiss this Message.`,
+    ROLE_MENU_ADD_ROLE_SUCCESS: `Successfully added that Role to your Role Menu.\nYou may now dismiss this Message.`,
+    ROLE_MENU_REMOVE_ROLE_SUCCESS: `Successfully removed that Role from your Role Menu.\nYou may now dismiss this Message.`,
+    ROLE_MENU_ADD_REQUIREMENT_SUCCESS: `Successfully added that Role Requirement to your Role Menu.\nYou may now dismiss this Message.`,
+    ROLE_MENU_REMOVE_REQUIREMENT_SUCCESS: `Successfully removed that Role Requirement from your Role Menu.\nYou may now dismiss this Message.`,
+
     ROLE_MENU_RESTRICTION_SINGLE: `Only those with the {{0}} Role can use this Role Menu.`,
     ROLE_MENU_RESTRICTION_MULTIPLE: `Only those with one of either {{0}} Roles can use this Role Menu.`,
 
@@ -249,6 +255,7 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
     ROLE_MENU_ERROR_ACTIVE_CONFIGURATION: `Sorry, but there seems to already be an active Role Menu configuration happening on this Server right now; either by yourself or someone else.\nPlease either wait for the User to finish configuring their Role Menu, or wait for the inactive configuration timer to expire (which is about one hour from initial use of this Context Command).`,
     
     ROLE_MENU_ERROR_BUTTON_LIMIT_EXCEEDED: `Sorry, but you cannot add more than 15 Role Buttons to a single Menu.`,
+    ROLE_MENU_ERROR_NO_ROLES_ON_MENU: `Sorry, you cannot remove Roles from a Menu that doesn't have any Roles on it!`,
     ROLE_MENU_ERROR_ROLE_NOT_ON_MENU: `{{0}} is __not__ on this Menu!`,
     ROLE_MENU_ERROR_ROLE_ALREADY_ON_MENU: `{{0}} has already been added to this Role Menu!`,
     ROLE_MENU_ERROR_REQUIREMENT_ROLE_NOT_ON_MENU: `{{0}} is __not__ on this Menu as a Requirement!`,

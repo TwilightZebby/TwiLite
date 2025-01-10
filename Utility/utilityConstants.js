@@ -37,13 +37,15 @@ export const RoleMentionRegEx = new RegExp(/<@&(\d{17,20})>/g);
 
 /** Endpoint for sending Messages (outside of Interactions)
  * @param channelId ID of the Channel to create a new Message in
+ * 
+ * @note Uses POST Calls
  */
 export const CreateMessageEndpoint = (channelId) => `https://discord.com/api/v10/channels/${channelId}/messages`;
 
-/** Endpoint for deleting Original Interaction Responses
- * @param applicationId ID of the App that sent the Interaction
- * @param interactionToken Token of the Interaction to delete its Response for
+/** Endpoint for getting, editing, or deleting ORIGINAL Interaction Responses
+ * @param applicationId ID of the Application that sent the Interaction Response
+ * @param interactionToken Token of the Interaction to get/edit/delete its Response of
  * 
- * @note Returns "204 No Content" on success
+ * @note Use GET to fetch - PATCH to edit - DELETE to delete
  */
-export const DeleteOriginalInteractionResponseEndpoint = (applicationId, interactionToken) => `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+export const OriginalInteractionResponseEndpoint = (applicationId, interactionToken) => `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}/messages/@original`;

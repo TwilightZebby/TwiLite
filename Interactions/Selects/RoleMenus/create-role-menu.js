@@ -30,15 +30,15 @@ export const Select = {
     async executeSelect(interaction, interactionUser) {
         // Construct needed Selects
         const AddRoleSelect = new ActionRowBuilder().addComponents([
-            new RoleSelectMenuBuilder().setCustomId(`create-menu-add-role`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_ROLE_ADD_SEARCH'))
+            new RoleSelectMenuBuilder().setCustomId(`menu-add-role`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_ROLE_ADD_SEARCH'))
         ]);
 
         const RemoveRoleSelect = new ActionRowBuilder().addComponents([
-            new RoleSelectMenuBuilder().setCustomId(`create-menu-remove-role`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_ROLE_REMOVE_SEARCH'))
+            new RoleSelectMenuBuilder().setCustomId(`menu-remove-role`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_ROLE_REMOVE_SEARCH'))
         ]);
 
         const SetMenuTypeSelect = new ActionRowBuilder().addComponents([
-            new StringSelectMenuBuilder().setCustomId(`create-menu-set-type`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_SELECT_MENU_TYPE')).setOptions([
+            new StringSelectMenuBuilder().setCustomId(`menu-set-type`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_SELECT_MENU_TYPE')).setOptions([
                 new StringSelectMenuOptionBuilder().setValue(`TOGGLE`).setLabel(localize(interaction.locale, 'ROLE_MENU_MENU_TYPE_TOGGLE')),
                 new StringSelectMenuOptionBuilder().setValue(`SWAP`).setLabel(localize(interaction.locale, 'ROLE_MENU_MENU_TYPE_SWAPPABLE')),
                 new StringSelectMenuOptionBuilder().setValue(`SINGLE`).setLabel(localize(interaction.locale, 'ROLE_MENU_MENU_TYPE_SINGLE'))
@@ -46,11 +46,11 @@ export const Select = {
         ]);
 
         const AddRequirementsSelect = new ActionRowBuilder().setComponents([
-            new RoleSelectMenuBuilder().setCustomId(`create-menu-add-requirement`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_ADD_SEARCH'))
+            new RoleSelectMenuBuilder().setCustomId(`menu-add-requirement`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_ADD_SEARCH'))
         ]);
 
         const RemoveRequirementsSelect = new ActionRowBuilder().setComponents([
-            new RoleSelectMenuBuilder().setCustomId(`create-menu-remove-requirement`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_REMOVE_SEARCH'))
+            new RoleSelectMenuBuilder().setCustomId(`menu-remove-requirement`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_REMOVE_SEARCH'))
         ]);
 
         // JSONify all the above for when ACKing responses!
@@ -86,7 +86,7 @@ export const Select = {
                 // Grab current Embed info to use in Modal
                 let currentEmbed = interaction.message.embeds.shift();
 
-                let embedModal = new ModalBuilder().setCustomId(`create-menu-embed`).setTitle(localize(interaction.locale, 'ROLE_MENU_CONFIGURE_MENU_EMBED')).addComponents([
+                let embedModal = new ModalBuilder().setCustomId(`menu-embed`).setTitle(localize(interaction.locale, 'ROLE_MENU_CONFIGURE_MENU_EMBED')).addComponents([
                     new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`title`).setLabel(localize(interaction.locale, 'ROLE_MENU_EMBED_TITLE')).setMaxLength(256).setStyle(TextInputStyle.Short).setRequired(true).setValue(!currentEmbed.title ? "" : currentEmbed.title) ]),
                     new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`description`).setLabel(localize(interaction.locale, 'ROLE_MENU_EMBED_DESCRIPTION')).setMaxLength(2000).setStyle(TextInputStyle.Paragraph).setRequired(false).setValue(!currentEmbed.description ? "" : currentEmbed.description) ]),
                     new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`hex-color`).setLabel(localize(interaction.locale, 'ROLE_MENU_EMBED_COLOR')).setMaxLength(7).setStyle(TextInputStyle.Short).setPlaceholder("#ab44ff").setRequired(false).setValue(!currentEmbed.color ? "" : `${typeof currentEmbed.color === 'number' ? `#${currentEmbed.color.toString(16).padStart(6, '0')}` : currentEmbed.color}`) ])
@@ -143,6 +143,20 @@ export const Select = {
 
             // Remove a Role from the Menu
             case "remove-role":
+                // **** Validate Menu does have Roles Added
+                let currentRoles = interaction.message.components;
+                currentRoles.pop(); // Delete last row from check, since that row is the Select Menu, not the Buttons!
+                // If no Buttons, throw error
+                if ( currentRoles.length === 0 ) {
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_NO_ROLES_ON_MENU')
+                        }
+                    });
+                }
+
                 // ACK to ask User which Role to remove from Menu
                 UtilityCollections.RoleMenuManagement.set(UserId, interaction.token);
 
@@ -158,6 +172,7 @@ export const Select = {
 
             // Add a Requirement to use the Menu
             case "add-requirement":
+                // TODO: Add check for Requirement Limit of 5
                 // ACK to ask User which Role to add as a Requirement
                 UtilityCollections.RoleMenuManagement.set(UserId, interaction.token);
 
@@ -173,6 +188,7 @@ export const Select = {
 
             // Remove a Requirement
             case "remove-requirement":
+                // TODO: Add check that there are Requirements to remove
                 // ACK to ask User which Requirement to remove
                 UtilityCollections.RoleMenuManagement.set(UserId, interaction.token);
 

@@ -13,14 +13,14 @@ export const SlashCommand = {
     /** Command's Description
      * @type {String}
      */
-    description: "Use to manage self-assignable Role Menus",
+    description: "Use to create or manage self-assignable Role Menus",
 
     /** Command's Localised Descriptions
      * @type {import('discord-api-types/v10').LocalizationMap}
      */
     localizedDescriptions: {
-        'en-GB': 'Use to manage self-assignable Role Menus',
-        'en-US': 'Use to manage self-assignable Role Menus'
+        'en-GB': 'Use to create or manage self-assignable Role Menus',
+        'en-US': 'Use to create or manage self-assignable Role Menus'
     },
 
     /** Command's cooldown, in seconds (whole number integers!)
@@ -35,9 +35,7 @@ export const SlashCommand = {
     //  For ease in handling cooldowns, this should also include the root Command name as a prefix
     // In either "rootCommandName_subcommandName" or "rootCommandName_groupName_subcommandName" formats
     subcommandCooldown: {
-        "rolemenu_create": 10,
-        "rolemenu_edit": 5,
-        "rolemenu_delete": 5
+        "rolemenu_placeholder": 10
     },
     
 
@@ -59,35 +57,6 @@ export const SlashCommand = {
         //  MUST include at least one. PRIVATE_CHANNEL can only be used if integration_types includes USER_INSTALL
         CommandData.contexts = [ InteractionContextType.Guild ];
         CommandData.default_member_permissions = `${PermissionFlagsBits.ManageGuild}`;
-        CommandData.options = [
-            {
-                type: ApplicationCommandOptionType.Subcommand,
-                name: "create",
-                description: "Create a new self-assignable Role Menu",
-                description_localizations: {
-                    'en-GB': "Create a new self-assignable Role Menu",
-                    'en-US': "Create a new self-assignable Role Menu"
-                }
-            },
-            {
-                type: ApplicationCommandOptionType.Subcommand,
-                name: "edit",
-                description: "Shows how to edit an existing Role Menu",
-                description_localizations: {
-                    'en-GB': "Shows how to edit an existing Role Menu",
-                    'en-US': "Shows how to edit an existing Role Menu"
-                }
-            },
-            {
-                type: ApplicationCommandOptionType.Subcommand,
-                name: "delete",
-                description: "Shows how to delete an existing Role Menu",
-                description_localizations: {
-                    'en-GB': "Shows how to delete an existing Role Menu",
-                    'en-US': "Shows how to delete an existing Role Menu"
-                }
-            }
-        ];
 
         return CommandData;
     },
@@ -138,68 +107,10 @@ export const SlashCommand = {
         // Grab Subcommand used
         const InputSubcommand = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Subcommand);
 
-        // ***** CREATE A NEW ROLE MENU
-        if ( InputSubcommand.name === "create" ) {
-            // First, ensure App has SEND_MESSAGES Permission
-            if ( !((appPerms & PermissionFlagsBits.SendMessages) == PermissionFlagsBits.SendMessages)) {
-                return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'ROLE_MENU_ERROR_MISSING_SEND_MESSAGES_PERMISSION')
-                    }
-                });
-            }
+        // ***** TODO: Output response detailing how to create/manage/delete Role Menus, providing a (yet to be made) link to TwiLite's Web Dashboard
+        //             which is where one goes to create or manage Role Menus.
 
-
-            // Create localized components
-            const EmptyEmbed = new EmbedBuilder().setDescription(localize(interaction.locale, 'ROLE_MENU_PREVIEW_EMPTY'));
-
-            const SelectMenu = new ActionRowBuilder().addComponents([
-                new StringSelectMenuBuilder().setCustomId(`create-role-menu`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_SELECT_AN_ACTION')).setOptions([
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE')).setValue("set-type").setDescription(localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_DESCRIPTION')).setEmoji({ name: `🔧` }),
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_CONFIGURE_EMBED')).setValue("configure-embed").setDescription(localize(interaction.locale, 'ROLE_MENU_CONFIGURE_EMBED_DESCRIPTION')).setEmoji({ name: `StatusRichPresence`, id: `842328614883295232` }),
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_ADD_ROLE')).setValue("add-role").setDescription(localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_DESCRIPTION')).setEmoji({ name: `RoleAdd`, id: `1201474746810904607` }),
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE')).setValue("remove-role").setDescription(localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_DESCRIPTION')).setEmoji({ name: `RoleRemove`, id: `1201476372997079040` }),
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT')).setValue("add-requirement").setDescription(localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT_DESCRIPTION')).setEmoji({ name: `RequirementAdd`, id: `1201477187522531348` }),
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT')).setValue("remove-requirement").setDescription(localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_DESCRIPTION')).setEmoji({ name: `RequirementRemove`, id: `1201477188306878540` }),
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_SAVE_AND_POST')).setValue("save").setDescription(localize(interaction.locale, 'ROLE_MENU_SAVE_AND_POST_DESCRIPTION')).setEmoji({ name: `IconActivity`, id: `815246970457161738` }),
-                    new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_CANCEL_CREATION')).setValue("cancel").setDescription(localize(interaction.locale, 'ROLE_MENU_CANCEL_CREATION_DESCRIPTION')).setEmoji({ name: `❌`})
-                ])
-            ]);
-
-            // JSONify for ACKing
-            let embedJson = EmptyEmbed.toJSON();
-            let selectJson = SelectMenu.toJSON();
-
-            // ACK
-            return new JsonResponse({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                    flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'ROLE_MENU_CREATE_INTRUCTIONS'),
-                    components: [selectJson],
-                    embeds: [embedJson]
-                }
-            });
-
-
-
-        }
-        // ***** EDIT AN EXISTING ROLE MENU
-        else if ( InputSubcommand.name === "edit" ) {
-            //.
-
-
-
-        }
-        // ***** DELETE AN EXISTING ROLE MENU
-        else {
-            //.
-
-
-            
-        }
+        // ***** TODO: Also, make said Web Dashboard!
 
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,

@@ -1,4 +1,4 @@
-import { InteractionResponseType, InteractionType } from 'discord-api-types/v10';
+import { ApplicationWebhookEventType, ApplicationWebhookType, InteractionResponseType, InteractionType } from 'discord-api-types/v10';
 import { isChatInputApplicationCommandInteraction, isContextMenuApplicationCommandInteraction, isMessageComponentButtonInteraction, isMessageComponentSelectMenuInteraction } from 'discord-api-types/utils';
 import { AutoRouter } from 'itty-router';
 import { verifyKey } from 'discord-interactions';
@@ -9,6 +9,7 @@ import { handleButton } from './Handlers/Interactions/buttonHandler.js';
 import { handleSelect } from './Handlers/Interactions/selectHandler.js';
 import { handleAutocomplete } from './Handlers/Interactions/autocompleteHandler.js';
 import { handleModal } from './Handlers/Interactions/modalHandler.js';
+import { handleAppAuthorized } from './Handlers/WebhookEvents/applicationAuthorized.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID } from './config.js';
 import { JsonResponse } from './Utility/utilityMethods.js';
 
@@ -78,6 +79,49 @@ router.post('/', async (request, env) => {
         return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
     }
 });
+
+
+
+
+
+
+
+
+
+// *******************************
+/** For incoming Webhook Events from Discord. They may include a JSON payload */
+router.post('/webhook', async (request, env, ctx) => {
+    // Verify request
+    const { isValid, interaction } = await server.verifyDiscordRequest(request, env, ctx);
+    
+    if ( !isValid || !interaction ) {
+        return new Response('Bad request signature.', { status: 401 });
+    }
+
+
+    // Handle PING Event
+    if ( interaction.type === ApplicationWebhookType.Ping ) {
+        return new Response(null, { status: 204 });
+    }
+    
+    // Handle Webhook Events
+    /** @type {import('discord-api-types/v10').APIWebhookEvent} */
+    const WebhookEvent = interaction;
+    
+    // APPLICATION_AUTHORIZED Event
+    if ( WebhookEvent.event.type === ApplicationWebhookEventType.ApplicationAuthorized ) {
+        return await handleAppAuthorized(WebhookEvent);
+    }
+    // Just in case
+    else {
+        return new Response(null, { status: 204 });
+    }
+});
+
+
+
+
+
 
 router.all('*', () => new Response('Not Found.', { status: 400 }));
 

@@ -29,7 +29,6 @@ export async function handleAppAuthorized(webhookEvent) {
         }
     });
     let appData = await fetchedApp.json();
-    console.log(appData);
     let guildInstallCount = appData["approximate_guild_count"];
     let userInstallCount = appData["approximate_user_install_count"];
 

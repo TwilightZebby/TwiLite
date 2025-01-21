@@ -26,8 +26,8 @@ export const UtilityCollections = {
      */
     SelectCooldowns: new Collection(),
 
-    /** Temp-stores Interaction Tokens for use in editing/deleting messages during Role Menu Management. Collection<userId, interactionToken>
-     * @type {Collection<String, String>}
+    /** Temp-stores Interaction IDs && Tokens for use in editing/deleting messages during Role Menu Management. Collection<userId, {interactionId: String, interactionToken: String}>
+     * @type {Collection<String, {interactionId: String, interactionToken: String}>}
      */
     RoleMenuManagement: new Collection()
 };
@@ -42,10 +42,26 @@ export const RoleMentionRegEx = new RegExp(/<@&(\d{17,20})>/g);
  */
 export const CreateMessageEndpoint = (channelId) => `https://discord.com/api/v10/channels/${channelId}/messages`;
 
+/** Endpoint for creating Interaction Responses
+ * @param interactionId {String} ID of the Interaction to respond to
+ * @param interactionToken {String} Token of the Interaction to respond to
+ * 
+ * @note Uses POST Calls
+ */
+export const CreateInteractionResponseEndpoint = (interactionId, interactionToken) => `https://discord.com/api/v10/interactions/${interactionId}/${interactionToken}/callback`;
+
 /** Endpoint for getting, editing, or deleting ORIGINAL Interaction Responses
- * @param applicationId ID of the Application that sent the Interaction Response
- * @param interactionToken Token of the Interaction to get/edit/delete its Response of
+ * @param applicationId {String} ID of the Application that sent the Interaction Response
+ * @param interactionToken {String} Token of the Interaction to get/edit/delete its Response of
  * 
  * @note Use GET to fetch - PATCH to edit - DELETE to delete
  */
 export const OriginalInteractionResponseEndpoint = (applicationId, interactionToken) => `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+
+/** Endpoint for creating a Followup Response to an Interaction
+ * @param applicationId {String} ID of the Application to send a Followup Response for
+ * @param interactionToken {String} Token of the original Interaction to followup
+ * 
+ * @note Uses POST Calls
+ */
+export const CreateInteractionFollowupEndpoint = (applicationId, interactionToken) => `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}`;

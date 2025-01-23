@@ -126,7 +126,7 @@ export const Modal = {
             }
 
             // If last Button, push back into Array
-            let checkIndex = originalResponse.menuButtons.findIndex(rButton => rButton.data.custom_id === `role_${RoleId}`);
+            let checkIndex = originalResponse.menuButtons.findIndex(rButton => rButton.data.custom_id === `role_${roleButton.data.custom_id.split("_").pop()}`);
             if ( originalResponse.menuButtons.length - 1 === checkIndex ) {
                 updatedComponents.push(temp.toJSON());
             }

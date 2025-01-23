@@ -243,6 +243,19 @@ async function saveAndDisplay(interaction) {
     // Remove Select Menu Component
     menuComponents.pop();
 
+    
+    // Validate Role Menu *does* have needed elements (ie: Embed Title, Menu Type, and at least one Role)
+    if ( MenuEmbed.footer == undefined || MenuEmbed.title == undefined || menuComponents.length === 0 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                flags: MessageFlags.Ephemeral,
+                content: localize(interaction.locale, 'ROLE_MENU_ERROR_MISSING_NEEDED_ELEMENTS')
+            }
+        });
+    }
+
+
     // Create Requirements String, if any are present
     let requirementString = "";
 
@@ -254,13 +267,35 @@ async function saveAndDisplay(interaction) {
     }
 
 
-    // JSONify everything
-    let componentJson = JSON.stringify(menuComponents);
-    let embedJson = JSON.stringify(MenuEmbed);
+    // Redo Buttons into Rows so that Discord's API won't give me a 400 response :S
+    const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+    const MenuCache = UtilityCollections.RoleMenuManagement.get(UserId);
+
+    let roleButtons = [];
+    let temp = new ActionRowBuilder();
+
+    MenuCache.menuButtons.forEach(rButton => {
+        if ( temp.components.length === 5 ) {
+            roleButtons.push(temp.toJSON());
+            temp.setComponents([ rButton ]);
+        }
+        else {
+            temp.addComponents([ rButton ]);
+        }
+
+        // If last Button, force-push back into Array
+        let checkIndex = MenuCache.menuButtons.findIndex(theButton => theButton.data.custom_id === `role_${rButton.data.custom_id.split("_").pop()}`);
+        if ( MenuCache.menuButtons.length - 1 === checkIndex ) {
+            roleButtons.push(temp.toJSON());
+        }
+    });
+
+    // Also redo Embed for same reason as the Buttons above :c
+    let embedJson = MenuCache.menuEmbed.toJSON();
 
 
     // Post Menu
-    let postMenu = await fetch(CreateMessageEndpoint(interaction.channel.id), {
+    await fetch(CreateMessageEndpoint(interaction.channel.id), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -269,7 +304,7 @@ async function saveAndDisplay(interaction) {
         body: JSON.stringify({
             content: requirementString,
             embeds: [embedJson],
-            components: componentJson,
+            components: roleButtons,
             allowed_mentions: { parse: [] }
         })
     });

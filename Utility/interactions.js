@@ -31,4 +31,5 @@ export const Selects = {
 
 export const Modals = {
     'menu-button-text': () => import('../Interactions/Modals/RoleMenus/menu-button-text.js'),
+    'menu-embed': () => import('../Interactions/Modals/RoleMenus/menu-embed.js'),
 }

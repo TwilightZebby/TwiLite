@@ -36,8 +36,12 @@ export const UtilityCollections = {
 
 /** RegEx for Role Mentions */
 export const RoleMentionRegEx = new RegExp(/<@&(\d{17,20})>/g);
+
 /** RegEx for Discord Custom Emoji */
 export const DiscordEmojiRegex = new RegExp(/<a?:(?<name>[a-zA-Z0-9\_]+):(?<id>\d{15,21})>/);
+
+/** RegEx for Hex Colour Codes */
+export const HexColourRegex = new RegExp(/#[0-9a-fA-F]{6}/);
 
 /** Endpoint for sending Messages (outside of Interactions)
  * @param channelId ID of the Channel to create a new Message in

@@ -143,10 +143,6 @@ export const SlashCommand = {
 
         // ***** CREATE A NEW ROLE MENU
         if ( InputSubcommand.name === "create" ) {
-            // Cache Interaction so we can refer back to the original response :)
-            const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
-            UtilityCollections.RoleMenuManagement.set(UserId, { interactionId: interaction.id, interactionToken: interaction.token });
-
             // Create a Timestamp for when the Interaction expires
             //   Mainly because we can't use that Interaction after it expires, so User has to be aware of the time limit :c
             let now = Date.now();
@@ -184,6 +180,10 @@ export const SlashCommand = {
             // JSONify for ACKing
             let embedJson = EmptyEmbed.toJSON();
             let selectJson = SelectMenu.toJSON();
+
+            // Cache Interaction so we can refer back to the original response :)
+            const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+            UtilityCollections.RoleMenuManagement.set(UserId, { interactionId: interaction.id, interactionToken: interaction.token, selectMenu: SelectMenu, menuEmbed: new EmbedBuilder(), menuButtons: [], roleRequirements: [] });
             
             // ACK
             return new JsonResponse({

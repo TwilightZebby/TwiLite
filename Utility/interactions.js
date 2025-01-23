@@ -25,8 +25,10 @@ export const Buttons = {
 export const Selects = {
     'create-role-menu': () => import('../Interactions/Selects/RoleMenus/create-role-menu.js'),
     'menu-set-type': () => import('../Interactions/Selects/RoleMenus/menu-set-type.js'),
+    'menu-add-role': () => import('../Interactions/Selects/RoleMenus/menu-add-role.js'),
+    'menu-add-button': () => import('../Interactions/Selects/RoleMenus/menu-add-button.js'),
 }
 
 export const Modals = {
-    //.
+    'menu-button-text': () => import('../Interactions/Modals/RoleMenus/menu-button-text.js'),
 }

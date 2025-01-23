@@ -1,4 +1,5 @@
 import { Collection } from '@discordjs/collection';
+import { EmbedBuilder, ButtonBuilder, ActionRowBuilder } from '@discordjs/builders';
 
 
 // *******************************
@@ -26,14 +27,17 @@ export const UtilityCollections = {
      */
     SelectCooldowns: new Collection(),
 
-    /** Temp-stores Interaction IDs && Tokens for use in editing/deleting messages during Role Menu Management. Collection<userId, {interactionId: String, interactionToken: String}>
-     * @type {Collection<String, {interactionId: String, interactionToken: String}>}
+    /** Temp-stores Interaction IDs && Tokens for use in editing/deleting messages during Role Menu Management. Also caches Buttons & Embed during Menu management.
+     *  Collection<userId, {interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements}>
+     * @type {Collection<String, {interactionId: String, interactionToken: String, selectMenu: ActionRowBuilder, menuEmbed: EmbedBuilder, menuButtons: Array<ButtonBuilder>, roleRequirements: Array<String>}>}
      */
     RoleMenuManagement: new Collection()
 };
 
 /** RegEx for Role Mentions */
 export const RoleMentionRegEx = new RegExp(/<@&(\d{17,20})>/g);
+/** RegEx for Discord Custom Emoji */
+export const DiscordEmojiRegex = new RegExp(/<a?:(?<name>[a-zA-Z0-9\_]+):(?<id>\d{15,21})>/);
 
 /** Endpoint for sending Messages (outside of Interactions)
  * @param channelId ID of the Channel to create a new Message in

@@ -1,9 +1,10 @@
-import { ComponentType, InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
+import { InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
 import { ActionRowBuilder, ModalBuilder, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextInputBuilder } from '@discordjs/builders';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
-import { CreateInteractionFollowupEndpoint, CreateInteractionResponseEndpoint, CreateMessageEndpoint, RoleMentionRegEx, UtilityCollections } from '../../../Utility/utilityConstants.js';
-import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from '../../../config.js';
+import { CreateMessageEndpoint, RoleMentionRegEx, UtilityCollections } from '../../../Utility/utilityConstants.js';
+import { DISCORD_TOKEN } from '../../../config.js';
+import { IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS } from '../../../Assets/Hyperlinks.js';
 
 
 export const Select = {
@@ -101,29 +102,15 @@ export const Select = {
             // Add a Role to the Menu
             case "add-role":
                 // **** Validate Menu doesn't already have max limit of 15 Roles added
-                let currentComponents = interaction.message.components;
-                currentComponents.pop(); // Delete last row from check, since that row is the Select Menu, not the Buttons!
-                // Only perform check if there are actually buttons!
-                if ( currentComponents.length !== 0 ) {
-                    // Now count the buttons
-                    let roleButtonCount = 0;
-                    currentComponents.forEach(row => {
-                        row.components.forEach(button => {
-                            // Sanity check
-                            if ( button.type === ComponentType.Button ) { roleButtonCount += 1; }
-                        });
+                let currentAddedRoles = UtilityCollections.RoleMenuManagement.get(UserId);
+                if ( currentAddedRoles.menuButtons.length === 15 ) {
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_BUTTON_LIMIT_EXCEEDED')
+                        }
                     });
-
-                    if ( roleButtonCount === 15 ) {
-                        // ACK!
-                        return new JsonResponse({
-                            type: InteractionResponseType.ChannelMessageWithSource,
-                            data: {
-                                flags: MessageFlags.Ephemeral,
-                                content: localize(interaction.locale, 'ROLE_MENU_ERROR_BUTTON_LIMIT_EXCEEDED')
-                            }
-                        });
-                    }
                 }
 
                 // There is still space for more Roles, so ask which should be added
@@ -140,10 +127,8 @@ export const Select = {
             // Remove a Role from the Menu
             case "remove-role":
                 // **** Validate Menu does have Roles Added
-                let currentRoles = interaction.message.components;
-                currentRoles.pop(); // Delete last row from check, since that row is the Select Menu, not the Buttons!
-                // If no Buttons, throw error
-                if ( currentRoles.length === 0 ) {
+                let currentRoles = UtilityCollections.RoleMenuManagement.get(UserId);
+                if ( currentRoles.menuButtons.length === 0 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
                         data: {
@@ -166,7 +151,18 @@ export const Select = {
 
             // Add a Requirement to use the Menu
             case "add-requirement":
-                // TODO: Add check for Requirement Limit of 5
+                // Check Menu hasn't reached max of 5 requirements
+                let currentAddedRequirements = UtilityCollections.RoleMenuManagement.get(UserId);
+                if ( currentAddedRequirements.roleRequirements.length === 5 ) {
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_REQUIREMENT_MAX_REACHED')
+                        }
+                    });
+                }
+
                 // ACK to ask User which Role to add as a Requirement
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
@@ -180,7 +176,18 @@ export const Select = {
 
             // Remove a Requirement
             case "remove-requirement":
-                // TODO: Add check that there are Requirements to remove
+                // Check Menu actually has Requirements on it
+                let currentRequirements = UtilityCollections.RoleMenuManagement.get(UserId);
+                if ( currentRequirements.roleRequirements.length === 0 ) {
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_NO_REQUIREMENTS_FOUND')
+                        }
+                    });
+                }
+
                 // ACK to ask User which Requirement to remove
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
@@ -272,10 +279,9 @@ async function saveAndDisplay(interaction) {
     return new JsonResponse({
         type: InteractionResponseType.UpdateMessage,
         data: {
-            flags: MessageFlags.Ephemeral,
             components: [],
             embeds: [],
-            content: localize(interaction.locale, 'ROLE_MENU_CREATION_SUCCESS', `PLACEHOLDER_URL`)
+            content: localize(interaction.locale, 'ROLE_MENU_CREATION_SUCCESS', IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS)
         }
     });
 }

@@ -1,5 +1,4 @@
-import { InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import { EmbedBuilder } from '@discordjs/builders';
+import { InteractionResponseType } from 'discord-api-types/v10';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { OriginalInteractionResponseEndpoint, UtilityCollections } from '../../../Utility/utilityConstants.js';
@@ -31,23 +30,11 @@ export const Select = {
         // Grab needed stuff
         const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
         let originalResponse = UtilityCollections.RoleMenuManagement.get(UserId);
-
-        let fetchOriginalResponse = await fetch(OriginalInteractionResponseEndpoint(DISCORD_APP_USER_ID, originalResponse.interactionToken), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bot ${DISCORD_TOKEN}`
-            }
-        });
-        let originalResponseJson = await fetchOriginalResponse.json();
-
-        let menuEmbed = originalResponseJson["embeds"][0];
         const InputMenuType = interaction.data.values.shift();
 
         // Set the type
-        let updateEmbed = new EmbedBuilder(menuEmbed);
-        updateEmbed.setFooter({ text: localize(interaction.locale, 'ROLE_MENU_TYPE_FOOTER', `${InputMenuType}`) });
-        let updateEmbedJson = updateEmbed.toJSON();
+        originalResponse.menuEmbed.setFooter({ text: localize(interaction.locale, 'ROLE_MENU_TYPE_FOOTER', `${InputMenuType}`) });
+        let updateEmbedJson = originalResponse.menuEmbed.toJSON();
 
         // Edit into main
         await fetch(OriginalInteractionResponseEndpoint(DISCORD_APP_USER_ID, originalResponse.interactionToken), {
@@ -61,10 +48,11 @@ export const Select = {
             })
         });
 
+        UtilityCollections.RoleMenuManagement.set(UserId, originalResponse);
+
         return new JsonResponse({
             type: InteractionResponseType.UpdateMessage,
             data: {
-                flags: MessageFlags.Ephemeral,
                 embeds: [],
                 components: [],
                 content: localize(interaction.locale, 'ROLE_MENU_SET_TYPE_SUCCESS')

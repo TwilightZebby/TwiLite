@@ -1,6 +1,9 @@
 module.exports = {
 
     // ******* GENERIC STUFF
+    DELETE: `Delete`,
+    CANCEL: `Cancel`,
+
     ERROR_GENERIC: `An error has occurred.`,
     ERROR_GENERIC_WITH_PREVIEW: `An error has occurred. A preview of the raw error is as follows:\n\`\`\`{{0}}\`\`\``,
     ERROR_INVALID_COLOR_HEX: `That wasn't a valid hex colour code! Please try again, using a valid hex colour code, including the \`#\` (hash) at the start. For example: \`#62af4d\``,

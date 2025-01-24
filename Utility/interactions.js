@@ -15,6 +15,7 @@ export const SlashCommands = {
 export const ContextCommands = {
     // ***** FOR ROLE MENUS
     'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),
+    'Delete Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Delete_Role_Menu.js'),
 }
 
 export const Autocompletes = {
@@ -23,7 +24,8 @@ export const Autocompletes = {
 
 export const Buttons = {
     // ***** FOR ROLE MENUS
-    'role': () => import('../Interactions/Buttons/role.js'),
+    'role': () => import('../Interactions/Buttons/RoleMenus/role.js'),
+    'menu-delete': () => import('../Interactions/Buttons/RoleMenus/menu-delete.js'),
 }
 
 export const Selects = {

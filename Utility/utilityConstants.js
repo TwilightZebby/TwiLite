@@ -28,8 +28,8 @@ export const UtilityCollections = {
     SelectCooldowns: new Collection(),
 
     /** Temp-stores Interaction IDs && Tokens for use in editing/deleting messages during Role Menu Management. Also caches Buttons & Embed during Menu management.
-     *  Collection<userId, {interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements}>
-     * @type {Collection<String, {interactionId: String, interactionToken: String, selectMenu: ActionRowBuilder, menuEmbed: EmbedBuilder, menuButtons: Array<ButtonBuilder>, roleRequirements: Array<String>}>}
+     *  Collection<userId, {interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements, mainInstructions}>
+     * @type {Collection<String, {interactionId: String, interactionToken: String, selectMenu: ActionRowBuilder, menuEmbed: EmbedBuilder, menuButtons: Array<ButtonBuilder>, roleRequirements: Array<String>, mainInstructions: String}>}
      */
     RoleMenuManagement: new Collection()
 };

@@ -52,9 +52,9 @@ All Role Menu management can be found under the `/rolemenu` Command - including 
 | `/yeet` | Yeets (throws) the specified User, Role, or everyone |
 
 ## Management Commands
-| Feature | Command | Description |
-|---------|------------|-------------|
-| Role Menus | `/rolemenu` | Create self-assignable Role Menus that your Server Members can use to grant or revoke Roles for themselves |
+| Command | Description |
+|------------|-------------|
+| `/rolemenu` | Create/Manage self-assignable Role Menus |
 
 ---
 

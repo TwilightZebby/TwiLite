@@ -27,6 +27,7 @@ export const Selects = {
     'menu-set-type': () => import('../Interactions/Selects/RoleMenus/menu-set-type.js'),
     'menu-add-role': () => import('../Interactions/Selects/RoleMenus/menu-add-role.js'),
     'menu-add-button': () => import('../Interactions/Selects/RoleMenus/menu-add-button.js'),
+    'menu-remove-role': () => import('../Interactions/Selects/RoleMenus/menu-remove-role.js'),
 }
 
 export const Modals = {

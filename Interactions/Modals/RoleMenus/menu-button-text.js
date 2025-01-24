@@ -77,8 +77,8 @@ export const Modal = {
             if ( EmojiRegex.default().test(inputEmoji) ) { NewRoleButton.setEmoji({ name: inputEmoji }); }
             else {
                 // It's a Discord Emoji. So App needs both the name and the ID
-                inputEmoji.replace('<', '');
-                inputEmoji.replace('>', '');
+                inputEmoji = inputEmoji.replace('<', '');
+                inputEmoji = inputEmoji.replace('>', '');
                 let splitEmoji = inputEmoji.split(":");
                 let emojiId = splitEmoji.pop();
                 let emojiName = splitEmoji.pop();
@@ -114,7 +114,7 @@ export const Modal = {
                     : roleButton.data.emoji != undefined && roleButton.data.emoji.id == undefined ? `${roleButton.data.emoji.name} ${roleButton.data.label != undefined ? roleButton.data.label : ''}`
                     : roleButton.data.label;
 
-                textFieldOne += `• <@&${tempId}> - ${tempLabel}`;
+                textFieldOne += `• <@&${tempId}> - ${tempLabel}\n`;
             }
             else {
                 let tempId = roleButton.data.custom_id.split("_").pop();
@@ -122,7 +122,7 @@ export const Modal = {
                     : roleButton.data.emoji != undefined && roleButton.data.emoji.id == undefined ? `${roleButton.data.emoji.name} ${roleButton.data.label != undefined ? roleButton.data.label : ''}`
                     : roleButton.data.label;
 
-                textFieldTwo += `• <@&${tempId}> - ${tempLabel}`;
+                textFieldTwo += `• <@&${tempId}> - ${tempLabel}\n`;
             }
 
             // If last Button, push back into Array

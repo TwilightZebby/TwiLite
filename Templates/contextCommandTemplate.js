@@ -13,14 +13,6 @@ export const ContextCommand = {
      */
     description: "Command Description",
 
-    /** Command's Localised Descriptions
-     * @type {import('discord-api-types/v10').LocalizationMap}
-     */
-    localizedDescriptions: {
-        'en-GB': 'British Description',
-        'en-US': 'American Description'
-    },
-
     /** Type of Context Command
      * @type {ApplicationCommandType}
      */
@@ -30,15 +22,6 @@ export const ContextCommand = {
      * @type {Number}
      */
     cooldown: 3,
-
-    /**
-     * Cooldowns for specific Subcommands
-     */
-    // Where "exampleName" is either the Subcommand's Name, or a combo of both Subcommand Group Name and Subcommand Name
-    // In either "subcommandName" or "groupName_subcommandName" formats
-    subcommandCooldown: {
-        "exampleName": 3
-    },
     
 
     /** Get the Command's data in a format able to be registered with via Discord's API
@@ -49,8 +32,7 @@ export const ContextCommand = {
         const CommandData = {};
 
         CommandData.name = this.name;
-        CommandData.description = this.description;
-        CommandData.description_localizations = this.localizedDescriptions;
+        CommandData.description = "";
         CommandData.type = this.commandType;
         // Integration Types - 0 for GUILD_INSTALL, 1 for USER_INSTALL.
         //  MUST include at least one. 
@@ -63,7 +45,7 @@ export const ContextCommand = {
     },
 
     /** Runs the Command
-     * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+     * @param {import('discord-api-types/v10').APIMessageApplicationCommandGuildInteraction|import('discord-api-types/v10').APIMessageApplicationCommandDMInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
      */
     async executeCommand(interaction, interactionUser) {

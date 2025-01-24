@@ -13,7 +13,8 @@ export const SlashCommands = {
 }
 
 export const ContextCommands = {
-    //.
+    // ***** FOR ROLE MENUS
+    'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),
 }
 
 export const Autocompletes = {
@@ -28,6 +29,7 @@ export const Buttons = {
 export const Selects = {
     // ***** FOR ROLE MENUS
     'create-role-menu': () => import('../Interactions/Selects/RoleMenus/create-role-menu.js'),
+    'configure-role-menu': () => import('../Interactions/Selects/RoleMenus/configure-role-menu.js'),
     'menu-set-type': () => import('../Interactions/Selects/RoleMenus/menu-set-type.js'),
     'menu-add-role': () => import('../Interactions/Selects/RoleMenus/menu-add-role.js'),
     'menu-add-button': () => import('../Interactions/Selects/RoleMenus/menu-add-button.js'),

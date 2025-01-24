@@ -28,8 +28,8 @@ export const UtilityCollections = {
     SelectCooldowns: new Collection(),
 
     /** Temp-stores Interaction IDs && Tokens for use in editing/deleting messages during Role Menu Management. Also caches Buttons & Embed during Menu management.
-     *  Collection<userId, {interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements, mainInstructions}>
-     * @type {Collection<String, {interactionId: String, interactionToken: String, selectMenu: ActionRowBuilder, menuEmbed: EmbedBuilder, menuButtons: Array<ButtonBuilder>, roleRequirements: Array<String>, mainInstructions: String}>}
+     *  Collection<userId, {sourceMessageId, interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements, mainInstructions}>
+     * @type {Collection<String, {sourceMessageId: ?String, interactionId: String, interactionToken: String, selectMenu: ActionRowBuilder, menuEmbed: EmbedBuilder, menuButtons: Array<ButtonBuilder>, roleRequirements: Array<String>, mainInstructions: String}>}
      */
     RoleMenuManagement: new Collection()
 };
@@ -49,6 +49,14 @@ export const HexColourRegex = new RegExp(/#[0-9a-fA-F]{6}/);
  * @note Uses POST Calls
  */
 export const CreateMessageEndpoint = (channelId) => `https://discord.com/api/v10/channels/${channelId}/messages`;
+
+/** Endpoint for editing Messages (outside of Interactions)
+ * @param channelId ID of the Channel the Message is in
+ * @param messageId ID of the Message to edit
+ * 
+ * @note Use PATCH to edit - DELETE to delete
+ */
+export const ManageMessageEndpoint = (channelId, messageId) => `https://discord.com/api/v10/channels/${channelId}/messages/${messageId}`;
 
 /** Endpoint for creating Interaction Responses
  * @param interactionId {String} ID of the Interaction to respond to

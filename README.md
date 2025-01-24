@@ -12,6 +12,52 @@ The License for this Project, and all of TwilightZebby's Projects, can be [found
 
 ---
 
+# Features List
+
+## Action Commands
+> [!NOTE]
+> Action Commands support being used in both Server-App and User-App contexts. So they can be used anywhere (including DMs/GroupDMs) depending on if you add TwiLite to a Server or to your account!
+
+Just some fun little roleplay-style Commands (such as `/bonk`, `/hug`, `/boop`, etc) that you can use on your friends.
+
+## Role Menus
+> [!NOTE]
+> The Role Menu management Commands can only be used within Servers, meaning TwiLite has to be added to the Server in question in order for its Role Menu Commands to function.
+
+Create self-assignable Role Menus for your Server Members to use.
+
+There are three types of Role Menus that TwiLite supports:
+- **Classic (aka Toggle) Role Menus** - The most basic Role Menu. Members can self-grant/revoke any and all Roles from a Toggle Role Menu.
+  - *Useful for notification Roles, for example*
+- **Swappable Role Menus** - Members can only have 1 Role per Swappable Menu. Attempting to select another Role on the same Swappable Menu will swap the two Roles for the Member instead.
+  - *Useful for colour Roles, for example*
+- **Single-use Role Menus** - Members can only use a Single-use Menu once. After use, Members cannot self-revoke or swap the selected Role from themselves from the same Menu.
+  - *Useful for team Roles in Events, for example*
+
+All Role Menu management can be found under the `/rolemenu` Command - including guides on how to edit or delete an existing Role Menu.
+
+---
+
+# Commands List
+
+## Action Commands
+| Command | Description |
+|------------|-------------|
+| `/bonk` | Bonks the specified User, Role, or everyone |
+| `/boop` | Boops the specified User, Role, or everyone |
+| `/cookie` | Gives the specified User, Role, or everyone a cookie! |
+| `/headpat` | Gives the specified User, Role, or everyone a headpat |
+| `/hug` | Gives the specified User, Role, or everyone a hug |
+| `/kiss` | Gives a kiss to the specified User, Role, or everyone |
+| `/yeet` | Yeets (throws) the specified User, Role, or everyone |
+
+## Management Commands
+| Feature | Command | Description |
+|---------|------------|-------------|
+| Role Menus | `/rolemenu` | Create self-assignable Role Menus that your Server Members can use to grant or revoke Roles for themselves |
+
+---
+
 # Notes
 ### Command Permissions in Servers
 All of these Slash and Context Commands can be restricted to only be used by specific Users/Roles, in specific Channels, or by everyone everywhere in Server Settings > Integerations.
@@ -33,29 +79,6 @@ __Message Context Commands__ are Commands used on a specific Message in Chat, an
 __User Context Commands__ are Commands used on a specific User in Servers, and can be found:
 - **Desktop/Web:** Right-click a Username or profile picture either in Chat or Member List -> Apps
 - **Mobile:** Long-press (press-and-hold) a Username or profile picture in Chat or Member List -> Apps
-
----
-
-# Features List
-
-## Action Commands
-| Command | Description |
-|------------|-------------|
-| `/bonk` | Bonks the specified User, Role, or everyone |
-| `/boop` | Boops the specified User, Role, or everyone |
-| `/cookie` | Gives the specified User, Role, or everyone a cookie! |
-| `/headpat` | Gives the specified User, Role, or everyone a headpat |
-| `/hug` | Gives the specified User, Role, or everyone a hug |
-| `/kiss` | Gives a kiss to the specified User, Role, or everyone |
-| `/yeet` | Yeets (throws) the specified User, Role, or everyone |
-
-## Management Features
-| Feature | Command | Description |
-|---------|------------|-------------|
-| Role Menus | - | Create self-assignable Role Menus that your Server Members can use to grant or revoke Roles for themselves |
-
-> [!NOTE]
-> Currently, Role Menus have to be manually created by TwiLite's developer - TwilightZebby. He is working on re-adding the Commands used to create/edit your own Role Menus without his assistance needed.
 
 ---
 

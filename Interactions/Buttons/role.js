@@ -1,7 +1,9 @@
-import { InteractionResponseType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
+import { InteractionResponseType, MessageFlags, PermissionFlagsBits, TextInputStyle } from 'discord-api-types/v10';
 import { JsonResponse } from '../../Utility/utilityMethods.js';
 import { localize } from '../../Utility/localizeResponses.js';
 import { DISCORD_TOKEN } from '../../config.js';
+import { UtilityCollections } from '../../Utility/utilityConstants.js';
+import { ActionRowBuilder, ModalBuilder, TextInputBuilder } from '@discordjs/builders';
 
 // RegEx
 const RoleMentionRegEx = new RegExp(/<@&(\d{17,20})>/g);
@@ -37,88 +39,148 @@ export const Button = {
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
      */
     async executeButton(interaction, interactionUser) {
-        // Make sure App has MANAGE_ROLES Perm :)
-        let appPerms = BigInt(interaction.app_permissions);
-        let hasManageRoles = (appPerms & PermissionFlagsBits.ManageRoles) == PermissionFlagsBits.ManageRoles;
-        if ( hasManageRoles === false ) {
-            return new JsonResponse({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                    flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'ROLE_MENU_ERROR_MISSING_MANAGE_ROLES_PERMISSION')
+        if ( (interaction.message.flags & MessageFlags.Ephemeral) == MessageFlags.Ephemeral ) {
+            // Button was pressed during Menu Management, thus trigger editing process
+            return await editRoleButton(interaction);
+        }
+        else {
+            // Button was pressed outside Menu Management, thus trigger Role grant/revoke process
+            return await grantRevokeRole(interaction);
+        }
+    }
+}
+
+
+
+
+
+/**
+ * Handles granting/revoking Roles (when Button is pressed outside of Menu Management)
+ * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
+ */
+async function grantRevokeRole(interaction) {
+    // Make sure App has MANAGE_ROLES Perm :)
+    let appPerms = BigInt(interaction.app_permissions);
+    let hasManageRoles = (appPerms & PermissionFlagsBits.ManageRoles) == PermissionFlagsBits.ManageRoles;
+    if ( hasManageRoles === false ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                flags: MessageFlags.Ephemeral,
+                content: localize(interaction.locale, 'ROLE_MENU_ERROR_MISSING_MANAGE_ROLES_PERMISSION')
+            }
+        });
+    }
+
+
+    // Check for menu requirements
+    let menuMessageContent = interaction.message.content;
+    /** @type {Array<String>} */
+    let menuRequirements = [];
+
+    if ( menuMessageContent.trim() != "" ) {
+        let findMentions = Array.from(menuMessageContent.matchAll(RoleMentionRegEx), (m) => m[0]);
+        findMentions.forEach(tempMention => { menuRequirements.push(`${tempMention.slice(3, -1)}`); });
+    }
+
+    if ( menuRequirements.length > 0 ) {
+        // First, check for "Admin" Perm or Owner status, since those will bypass Menu Requirements
+        if ( !interaction.member?.permissions.has(PermissionFlagsBits.Administrator) ) {
+            // Since User doesn't bypass, check against requirements
+            let meetsRequirements = false;
+            menuRequirements.forEach(roleId => {
+                if ( interaction.member?.roles.includes(roleId) ) {
+                    // DOES meet requirements!
+                    meetsRequirements = true;
                 }
             });
-        }
 
-
-        // Check for menu requirements
-        let menuMessageContent = interaction.message.content;
-        /** @type {Array<String>} */
-        let menuRequirements = [];
-
-        if ( menuMessageContent.trim() != "" ) {
-            let findMentions = Array.from(menuMessageContent.matchAll(RoleMentionRegEx), (m) => m[0]);
-            findMentions.forEach(tempMention => { menuRequirements.push(`${tempMention.slice(3, -1)}`); });
-        }
-
-        if ( menuRequirements.length > 0 ) {
-            // First, check for "Admin" Perm or Owner status, since those will bypass Menu Requirements
-            if ( !interaction.member?.permissions.has(PermissionFlagsBits.Administrator) ) {
-                // Since User doesn't bypass, check against requirements
-                let meetsRequirements = false;
-                menuRequirements.forEach(roleId => {
-                    if ( interaction.member?.roles.includes(roleId) ) {
-                        // DOES meet requirements!
-                        meetsRequirements = true;
-                    }
-                });
-
-                if ( !meetsRequirements ) {
-                    return new JsonResponse({
-                        type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'ROLE_BUTTON_ERROR_REQUIREMENTS_NOT_MET')
-                        }
-                    });
-                }
-            }
-        }
-
-
-        // Fetch Role ID
-        const RoleID = interaction.data.custom_id.split("_").pop();
-
-        // Check what Menu Type this is
-        const MessageEmbed = interaction.message.embeds.shift();
-        const MenuType = MessageEmbed.footer.text.split(": ").pop();
-
-        switch (MenuType) {
-            // Classic Role Menu. Grants Role if User doesn't have it, revokes Role if User does have it.
-            case "TOGGLE":
-                return await toggleRole(interaction, RoleID);
-
-
-            // Swappable Role Menu. Users can only have ONE Role at a time per SWAPPABLE Menu. Example use case: Colour Roles.
-            case "SWAP":
-                return await swapRole(interaction, RoleID);
-                
-
-            // Single-use Role Menu. Users can only use a SINGLE-USE Menu once, and cannot remove the Role they get nor swap it. Example use case: Team Roles for events.
-            case "SINGLE":
-                return await singleRole(interaction, RoleID);
-
-
-            default:
+            if ( !meetsRequirements ) {
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
                         flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'BUTTON_ERROR_GENERIC')
+                        content: localize(interaction.locale, 'ROLE_BUTTON_ERROR_REQUIREMENTS_NOT_MET')
                     }
                 });
+            }
         }
     }
+
+
+    // Fetch Role ID
+    const RoleID = interaction.data.custom_id.split("_").pop();
+
+    // Check what Menu Type this is
+    const MessageEmbed = interaction.message.embeds.shift();
+    const MenuType = MessageEmbed.footer.text.split(": ").pop();
+
+    switch (MenuType) {
+        // Classic Role Menu. Grants Role if User doesn't have it, revokes Role if User does have it.
+        case "TOGGLE":
+            return await toggleRole(interaction, RoleID);
+
+
+        // Swappable Role Menu. Users can only have ONE Role at a time per SWAPPABLE Menu. Example use case: Colour Roles.
+        case "SWAP":
+            return await swapRole(interaction, RoleID);
+            
+
+        // Single-use Role Menu. Users can only use a SINGLE-USE Menu once, and cannot remove the Role they get nor swap it. Example use case: Team Roles for events.
+        case "SINGLE":
+            return await singleRole(interaction, RoleID);
+
+
+        default:
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'BUTTON_ERROR_GENERIC')
+                }
+            });
+    }
+}
+
+
+
+
+
+/**
+ * Handles editing the Role Button (when Button is pressed during Menu Management)
+ * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
+ */
+async function editRoleButton(interaction) {
+    // Grab Role ID and cache
+    const RoleId = interaction.data.custom_id.split("_").pop();
+    const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+    let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
+    let currentLabel = undefined;
+    let currentEmoji = undefined;
+
+    // Grab current Label and/or Emoji
+    for ( let i = 0; i <= menuCache.menuButtons.length - 1; i++ ) {
+        if ( menuCache.menuButtons[i].data.custom_id.includes(RoleId) ) {
+            currentLabel = menuCache.menuButtons[i].data.label;
+            currentEmoji = menuCache.menuButtons[i].data.emoji != undefined && menuCache.menuButtons[i].data.emoji.id != undefined ? `<:${menuCache.menuButtons[i].data.emoji.name}:${menuCache.menuButtons[i].data.emoji.id}>`
+            : menuCache.menuButtons[i].data.emoji != undefined && menuCache.menuButtons[i].data.emoji.id == undefined ? `${menuCache.menuButtons[i].data.emoji.name}`
+            : undefined;
+            break;
+        }
+    }
+
+
+    // Construct & display Modal for editing Button
+    const EditButtonModal = new ModalBuilder().setCustomId(`menu-edit-button_${RoleId}`).setTitle(localize(interaction.locale, 'ROLE_MENU_EDIT_BUTTON_LABEL')).addComponents([
+        new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`label`).setLabel(localize(interaction.locale, 'ROLE_MENU_BUTTON_LABEL')).setMaxLength(80).setStyle(TextInputStyle.Short).setRequired(false).setValue(currentLabel != undefined ? currentLabel : "") ]),
+        new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`emoji`).setLabel(localize(interaction.locale, 'ROLE_MENU_BUTTON_EMOJI')).setMaxLength(200).setPlaceholder(`<:grass_block:601353406577246208>, ✨`).setStyle(TextInputStyle.Short).setRequired(false).setValue(currentEmoji != undefined ? currentEmoji : "") ])
+    ]);
+    let editButtonModalJson = EditButtonModal.toJSON();
+
+    return new JsonResponse({
+        type: InteractionResponseType.Modal,
+        data: editButtonModalJson
+    });
 }
 
 

@@ -228,6 +228,7 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
     ROLE_MENU_REMOVE_ROLE_SUCCESS: `Successfully removed that Role from your Role Menu.\nYou may now dismiss this Message.`,
     ROLE_MENU_ADD_REQUIREMENT_SUCCESS: `Successfully added that Role Requirement to your Role Menu.\nYou may now dismiss this Message.`,
     ROLE_MENU_REMOVE_REQUIREMENT_SUCCESS: `Successfully removed that Role Requirement from your Role Menu.\nYou may now dismiss this Message.`,
+    ROLE_MENU_EDIT_BUTTON_SUCCESS: `Successfully edited that Button for your Role Menu.\nYou may now dismiss this Message.`,
 
     ROLE_MENU_RESTRICTION_SINGLE: `Only those with the {{0}} Role can use this Role Menu.`,
     ROLE_MENU_RESTRICTION_MULTIPLE: `Only those with one of either {{0}} Roles can use this Role Menu.`,

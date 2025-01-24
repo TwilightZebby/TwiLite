@@ -54,6 +54,16 @@ export const Select = {
             });
         }
 
+        // Validate Role isn't already added as a Requirement (would be silly to have a self-assignable Role as a Requirement!)
+        if ( originalResponse.roleRequirements.includes(InputRoleId) ) {
+            return new JsonResponse({
+                type: InteractionResponseType.UpdateMessage,
+                data: {
+                    content: `${localize(interaction.locale, 'ROLE_MENU_ROLE_ADD_INSTRUCTIONS')}\n\n:warning: ${localize(interaction.locale, 'ROLE_MENU_ERROR_ROLE_IS_A_REQUIREMENT', `<@&${InputRoleId}>`)}`
+                }
+            });
+        }
+
 
         // ACK next step for adding a Role to this Menu
         const ButtonTypeSelect = new ActionRowBuilder().addComponents([

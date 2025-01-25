@@ -216,9 +216,15 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
 **An auto-updating preview of what your updated Role Menu will look like is shown below.**`,
 
     ROLE_MENU_SET_MENU_TYPE_INSTRUCTIONS: `Please use the Select Menu below to pick which type of Role Menu you want.
-• **Toggle** - Your standard Role Menu Type. Behaves like a classic Reaction Role Menu, but with Buttons instead.
-• **Swappable** - Users can only have 1 Role per **Swappable** Menu. Attempting to select another Role on the same **Swappable** Menu would swap the two Roles instead. Useful for Colour Role Menus!
-• **Single-use** - Users can only use a **Single-use** Menu once, and are unable to revoke or swap out the selected Role from themselves. Useful for Team Roles in Events.`,
+- **Toggle** - Your standard Role Menu Type. Behaves like a classic Reaction Role Menu, but with Buttons instead.
+- **Swappable** - Users can only have 1 Role per **Swappable** Menu. Attempting to select another Role on the same **Swappable** Menu would swap the two Roles instead. Useful for Colour Role Menus!
+- **Single-use** - Users can only use a **Single-use** Menu once, and are unable to revoke or swap out the selected Role from themselves. Useful for Team Roles in Events.`,
+
+    ROLE_MENU_EDIT_GUIDE: `To edit an existing Role Menu made with TwiLite, simply right-click/long-press on the Message containing the Role Menu -> "Apps" -> Select " [Edit Role Menu]({{0}}) ".`,
+
+    ROLE_MENU_DELETE_GUIDE: `To delete an existing Role Menu made with TwiLite, you can either:
+- Right-click/long-press on the Message containing the Role Menu -> "Apps" -> Select " [Delete Role Menu]({{0}}) "
+- OR simply delete the Message containing the Role Menu`,
 
     ROLE_MENU_ROLE_ADD_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role from this Server you would like to add to your Role Menu.\n\nEnsure the Role you select is *lower* than TwiLite's own highest Role. TwiLite is unable to grant/revoke Roles higher than its own highest Role.`,
     ROLE_MENU_ROLE_REMOVE_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role you would like to remove from your Role Menu.`,

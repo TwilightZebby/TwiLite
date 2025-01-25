@@ -4,7 +4,6 @@ import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { ManageMessageEndpoint, RoleMentionRegEx, UtilityCollections } from '../../../Utility/utilityConstants.js';
 import { DISCORD_TOKEN } from '../../../config.js';
-import { IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS } from '../../../Assets/Hyperlinks.js';
 
 
 export const Select = {
@@ -316,7 +315,7 @@ async function saveAndDisplay(interaction) {
         data: {
             components: [],
             embeds: [],
-            content: localize(interaction.locale, 'ROLE_MENU_CONFIGURATION_SUCCESS', IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS)
+            content: localize(interaction.locale, 'ROLE_MENU_CONFIGURATION_SUCCESS')
         }
     });
 }

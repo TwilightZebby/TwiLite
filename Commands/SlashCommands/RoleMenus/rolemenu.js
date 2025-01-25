@@ -3,6 +3,7 @@ import { ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMe
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { UtilityCollections } from '../../../Utility/utilityConstants.js';
+import { IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS } from '../../../Assets/Hyperlinks.js';
 
 
 export const SlashCommand = {
@@ -201,14 +202,26 @@ export const SlashCommand = {
         }
         // ***** EDIT AN EXISTING ROLE MENU
         else if ( InputSubcommand.name === "edit" ) {
-            //.
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'ROLE_MENU_EDIT_GUIDE', IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS)
+                }
+            });
             
             
             
         }
         // ***** DELETE AN EXISTING ROLE MENU
         else {
-            //.
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'ROLE_MENU_DELETE_GUIDE', IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS)
+                }
+            });
             
             
             

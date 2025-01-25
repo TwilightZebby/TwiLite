@@ -85,7 +85,8 @@ async function grantRevokeRole(interaction) {
 
     if ( menuRequirements.length > 0 ) {
         // First, check for "Admin" Perm or Owner status, since those will bypass Menu Requirements
-        if ( !interaction.member?.permissions.has(PermissionFlagsBits.Administrator) ) {
+        let memberPerms = BigInt(interaction.member?.permissions);
+        if ( !((memberPerms & PermissionFlagsBits.Administrator) == PermissionFlagsBits.Administrator) ) {
             // Since User doesn't bypass, check against requirements
             let meetsRequirements = false;
             menuRequirements.forEach(roleId => {

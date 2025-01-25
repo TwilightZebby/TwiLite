@@ -1,7 +1,7 @@
 # TwiLite - Privacy Policy
-Last Updated: 20th January 2025
+Last Updated: 25th January 2025
 
-Effective: 20th January 2025
+Effective: 25th January 2025
 
 ---
 
@@ -15,7 +15,10 @@ The developers of **TwiLite** firmly believes in a "we don't want your data keep
 
 ---
 
-# Logging
+## Data Collection & Purposes
+TwiLite currently does *not* collect or store *any* data or information from any Users or Servers that use or interact with TwiLite, apart from what is listed below.
+
+### Logging
 **TwiLite** will log when it has been added (otherwise referred to as authorized) as a Server App to a Discord Server or as a User App to a User's account.
 
 The only information included in this log are:

@@ -61,7 +61,7 @@ export const SlashCommand = {
         //  MUST include at least one. PRIVATE_CHANNEL can only be used if integration_types includes USER_INSTALL
         CommandData.contexts = [ InteractionContextType.Guild ];
         // Default Permission Requirements
-        CommandData.default_member_permissions = `${PermissionFlagsBits.ManageGuild}`;
+        CommandData.default_member_permissions = `${PermissionFlagsBits.ManageRoles}`;
         // Command Options
         CommandData.options = [
             {

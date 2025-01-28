@@ -293,4 +293,17 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
     ROLE_BUTTON_ERROR_SWAP_FAILED: `Sorry, something went wrong while trying to swap between the {{0}} and {{1}} Roles for you...`,
     ROLE_BUTTON_ERROR_SINGLE_USE_ONLY: `Sorry! You cannot swap or revoke Roles from yourself using Single-use Role Menus.\nThese Single-use Role Menus are designed to only be usable once per User per Menu.\n\nThe Role you already have from this Menu is the {{0}} Role.`,
     ROLE_BUTTON_ERROR_REQUIREMENTS_NOT_MET: `Sorry, you do not meet the Requirements to use this Role Menu.\nYou can see what this Menu's Requirements are above the Menu itself.`,
+
+
+
+    // ******* TEMPERATURE COMMANDS
+    TEMPERATURE_COMMAND_CONVERTED: `{{0}}{{1}} is about {{2}}{{3}} or {{4}}{{5}}`,
+    TEMPERATURE_COMMAND_SUCCESS_SINGLAR: `Here is your converted temperature:`,
+    TEMPERATURE_COMMAND_SUCCESS_MULTIPLE: `Here are your converted temperatures:`,
+
+    TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE: `:warning: {{0}}{{1}} is a temperature that cannot exist! (It is below Absolute Zero!)`,
+    TEMPERATURE_COMMAND_ERROR_TEMPERATURE_NOT_FOUND: `Sorry, but I couldn't find any temperatures to convert from that Message.`,
+    TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 10 temperatures per Message that I can convert.`,
+    TEMPERATURE_COMMAND_ERROR_POLLS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Polls.`,
+    TEMPERATURE_COMMAND_ERROR_FORWARDS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Forwarded Messages.`,
 }

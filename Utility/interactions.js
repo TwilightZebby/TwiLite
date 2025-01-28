@@ -10,6 +10,9 @@ export const SlashCommands = {
 
     // ***** FOR ROLE MENUS
     'rolemenu': () => import('../Commands/SlashCommands/RoleMenus/rolemenu.js'),
+
+    // ***** FOR GENERAL COMMANDS
+    'temperature': () => import('../Commands/SlashCommands/General/temperature.js'),
 }
 
 export const ContextCommands = {

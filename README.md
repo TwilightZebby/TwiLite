@@ -34,13 +34,29 @@ There are three types of Role Menus that TwiLite supports:
 - **Single-use Role Menus** - Members can only use a Single-use Menu once. After use, Members cannot self-revoke or swap the selected Role from themselves from the same Menu.
   - *Useful for team Roles in Events, for example*
 
+You can even add Requirements to Menus you make, restricting their use to those with specific Roles. An example use for this may be restricting a Role Menu to only your Supporters!
+(The Server Owner, and those with the Admin Permission, will bypass any Role Menu Requirements set).
+
 All Role Menu management can be found under the `/rolemenu` Command - including guides on how to edit or delete an existing Role Menu.
+
+## Miscellaneous Features
+TwiLite may sometimes be added to add some general-purpose, utility, or other miscellaneous features. Currently added ones are as follows:
+
+### Temperature Conversion
+> [!NOTE]
+> Temperature Conversion Commands support being used in both Server-App and User-App contexts. So they can be used anywhere (including DMs/GroupDMs) depending on if you add TwiLite to a Server or to your account!
+
+Useful for converting American temperatures (Degrees F) into more globally understood temperatures (Degrees C or K).
+There are two ways to convert temperatures using TwiLite:
+
+- `/temperature` - the Slash Command which can be used to manually convert a single temperature
+- "`Convert Temperatures`" - the [Message Context Command](https://github.com/TwilightZebby/TwiLite?tab=readme-ov-file#context-commands--where-to-find-them) which can be used to convert up to 10 temperatures from most Messages sent by Users
 
 ---
 
 # Commands List
 
-## Action Commands
+## Action Slash Commands
 | Command | Description |
 |------------|-------------|
 | `/bonk` | Bonks the specified User, Role, or everyone |
@@ -52,9 +68,23 @@ All Role Menu management can be found under the `/rolemenu` Command - including 
 | `/yeet` | Yeets (throws) the specified User, Role, or everyone |
 
 ## Management Commands
-| Command | Description |
-|------------|-------------|
-| `/rolemenu` | Create/Manage self-assignable Role Menus |
+| Command Name | Command Type | Description |
+|------------|-------------|-------------|
+| `/rolemenu` | Slash | Create/Manage self-assignable Role Menus |
+| "`Edit Role Menu`" | Message | Edit an existing Role Menu |
+| "`Delete Role Menu`" | Message | Delete an existing Role Menu |
+
+## General/Miscellaneous Commands
+| Command Name | Command Type | Description |
+|------------|-------------|-------------|
+| `/temperature` | Slash | Convert a single temperature between degrees C, F, and K |
+| "`Convert Temperature`" | Message | Convert up to 10 temperatures at once from a single Message |
+
+## Command Type Notes
+- "Message" refers to Message Context Commands
+- "User" refers to User Context Commands
+
+For more information on Context Commands, including where to find them, please see the [below section](https://github.com/TwilightZebby/TwiLite?tab=readme-ov-file#context-commands--where-to-find-them).
 
 ---
 

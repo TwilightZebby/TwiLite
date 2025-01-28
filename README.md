@@ -46,7 +46,7 @@ TwiLite may sometimes be updated to add some general-purpose, utility, or other 
 > [!NOTE]
 > Temperature Conversion Commands support being used in both Server-App and User-App contexts. So they can be used anywhere (including DMs/GroupDMs) depending on if you add TwiLite to a Server or to your account!
 
-Useful for converting American temperatures (Degrees F) into more globally understood temperatures (Degrees C or K).
+Useful for converting American temperatures (Degrees F) into more globally understood temperatures (Degrees C or K), or indeed the other way around.
 There are two ways to convert temperatures using TwiLite:
 
 - `/temperature` - the Slash Command which can be used to manually convert a single temperature

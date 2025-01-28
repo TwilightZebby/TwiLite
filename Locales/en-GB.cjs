@@ -3,6 +3,7 @@ module.exports = {
     // ******* GENERIC STUFF
     DELETE: `Delete`,
     CANCEL: `Cancel`,
+    JUMP_TO_SOURCE_MESSAGE: `Jump to source Message`,
 
     ERROR_GENERIC: `An error has occurred.`,
     ERROR_GENERIC_WITH_PREVIEW: `An error has occurred. A preview of the raw error is as follows:\n\`\`\`{{0}}\`\`\``,
@@ -23,6 +24,8 @@ module.exports = {
 
     // ******* GENERIC CONTEXT COMMAND STUFF
     CONTEXT_COMMAND_ERROR_GENERIC: `Sorry, an error occurred while trying to run this Context Command...`,
+    CONTEXT_COMMAND_ERROR_SYSTEM_AND_BOT_MESSAGES_UNSUPPORTED: `Sorry, but this Context Command cannot be used on a System or Bot Message.`,
+    CONTEXT_COMMAND_ERROR_MISSING_CONTENT: `Sorry, but that Message doesn't have any content! (Attachments aren't checked by this Context Command).`,
 
     CONTEXT_COMMAND_ERROR_COOLDOWN_SECONDS: `Please wait {{0}} more seconds before using this Context Command again.`,
     CONTEXT_COMMAND_ERROR_COOLDOWN_MINUTES: `Please wait {{0}} more minutes before using this Context Command again.`,

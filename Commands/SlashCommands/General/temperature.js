@@ -135,18 +135,18 @@ export const SlashCommand = {
 
 
         // Convert
-        switch (InputScale)
+        switch (InputScale.value)
         {
             // C TO F/K
             case "CELSIUS":
-                const CToF = (InputValue * 9/5) + 32;
-                const CToK = InputValue + 273.15;
+                const CToF = (InputValue.value * 9/5) + 32;
+                const CToK = InputValue.value + 273.15;
                 if ( CToK < 0 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
                         data: {
                             flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE', `${InputValue}`, 'C')
+                            content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE', `${InputValue.value}`, 'C')
                         }
                     });
                 }
@@ -155,20 +155,20 @@ export const SlashCommand = {
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
                         flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_CONVERTED', `${InputValue}`, 'C', `${CToF.toFixed(0)}`, 'F', `${CToK.toFixed(0)}`, 'K')
+                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_CONVERTED', `${InputValue.value}`, 'C', `${CToF.toFixed(0)}`, 'F', `${CToK.toFixed(0)}`, 'K')
                     }
                 });
 
             // F TO C/K
             case "FAHERNHEIT":
-                const FToC = (InputValue - 32) * 5/9;
-                const FToK = (InputValue - 32) * 5/9 + 273.15;
+                const FToC = (InputValue.value - 32) * 5/9;
+                const FToK = (InputValue.value - 32) * 5/9 + 273.15;
                 if ( FToK < 0 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
                         data: {
                             flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE', `${InputValue}`, 'F')
+                            content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE', `${InputValue.value}`, 'F')
                         }
                     });
                 }
@@ -177,20 +177,20 @@ export const SlashCommand = {
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
                         flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_CONVERTED', `${InputValue}`, 'F', `${FToC.toFixed(0)}`, 'C', `${FToK.toFixed(0)}`, 'K')
+                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_CONVERTED', `${InputValue.value}`, 'F', `${FToC.toFixed(0)}`, 'C', `${FToK.toFixed(0)}`, 'K')
                     }
                 });
 
             // K TO C/F
             case "KELVIN":
-                const KToC = InputValue - 273.15;
-                const KToF = (InputValue - 273.15) * 9/5 + 32;
-                if ( InputValue < 0 ) {
+                const KToC = InputValue.value - 273.15;
+                const KToF = (InputValue.value - 273.15) * 9/5 + 32;
+                if ( InputValue.value < 0 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
                         data: {
                             flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE', `${InputValue}`, 'K')
+                            content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE', `${InputValue.value}`, 'K')
                         }
                     });
                 }
@@ -199,7 +199,7 @@ export const SlashCommand = {
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
                         flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_CONVERTED', `${InputValue}`, 'K', `${KToC.toFixed(0)}`, 'C', `${KToF.toFixed(0)}`, 'F')
+                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_CONVERTED', `${InputValue.value}`, 'K', `${KToC.toFixed(0)}`, 'C', `${KToF.toFixed(0)}`, 'F')
                     }
                 });
 

@@ -40,7 +40,7 @@ You can even add Requirements to Menus you make, restricting their use to those 
 All Role Menu management can be found under the `/rolemenu` Command - including guides on how to edit or delete an existing Role Menu.
 
 ## Miscellaneous Features
-TwiLite may sometimes be added to add some general-purpose, utility, or other miscellaneous features. Currently added ones are as follows:
+TwiLite may sometimes be updated to add some general-purpose, utility, or other miscellaneous features. Currently added ones are as follows:
 
 ### Temperature Conversion
 > [!NOTE]

@@ -20,7 +20,7 @@
   "dependencies": {
     "@discordjs/builders": "^1.10.0",
     "@discordjs/collection": "^2.1.1",
-    "discord-api-types": "^0.37.117",
+    "discord-api-types": "^0.37.118",
     "discord-interactions": "^4.1.0",
     "emoji-regex": "^10.4.0",
     "itty-router": "^5.0.18",

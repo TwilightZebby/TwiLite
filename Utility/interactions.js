@@ -10,12 +10,18 @@ export const SlashCommands = {
 
     // ***** FOR ROLE MENUS
     'rolemenu': () => import('../Commands/SlashCommands/RoleMenus/rolemenu.js'),
+
+    // ***** FOR GENERAL COMMANDS
+    'temperature': () => import('../Commands/SlashCommands/General/temperature.js'),
 }
 
 export const ContextCommands = {
     // ***** FOR ROLE MENUS
     'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),
     'Delete Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Delete_Role_Menu.js'),
+
+    // ***** FOR GENERAL COMMANDS
+    'Convert Temperature': () => import('../Commands/ContextCommands/General/Convert_Temperature.js'),
 }
 
 export const Autocompletes = {

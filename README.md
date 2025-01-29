@@ -20,6 +20,8 @@ The License for this Project, and all of TwilightZebby's Projects, can be [found
 
 Just some fun little roleplay-style Commands (such as `/bonk`, `/hug`, `/boop`, etc) that you can use on your friends.
 
+Some Action Commands can also be used via right-clicking/long-pressing on a User! These "User Command" variants exist for those who just want a quicker way of giving someone a Bonk, Boop, or Headpat. :)
+
 ## Role Menus
 > [!NOTE]
 > The Role Menu management Commands can only be used within Servers, meaning TwiLite has to be added to the Server in question in order for its Role Menu Commands to function.
@@ -66,6 +68,13 @@ There are two ways to convert temperatures using TwiLite:
 | `/hug` | Gives the specified User, Role, or everyone a hug |
 | `/kiss` | Gives a kiss to the specified User, Role, or everyone |
 | `/yeet` | Yeets (throws) the specified User, Role, or everyone |
+
+## Action User Commands
+| Command | Description |
+|------------|-------------|
+| "`Bonk User`" | Bonks the target User |
+| "`Boop User`" | Boops the target User |
+| "`Headpat User`" | Gives the target User a headpat |
 
 ## Management Commands
 | Command Name | Command Type | Description |

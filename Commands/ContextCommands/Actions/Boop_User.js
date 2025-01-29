@@ -54,10 +54,13 @@ export const ContextCommand = {
         // Grab data
         const TargetUser = interaction.data.resolved.users[interaction.data.target_id];
         const TargetMember = interaction.data.resolved.members != undefined ? interaction.data.resolved.members[interaction.data.target_id] : undefined;
+
         // Get highest-level display name for Target
         const TargetDisplayName = TargetMember != undefined && TargetMember.nick != null ? TargetMember.nick
+            : TargetMember != undefined && TargetMember.nick == null && TargetUser.global_name != null ? TargetUser.global_name
             : TargetMember == undefined && TargetUser.global_name != null ? TargetUser.global_name
             : TargetUser.username;
+
         // Do the same, but for User who triggered this Command
         const SenderDisplayName = interaction.member != undefined && interaction.member.nick != null ? interaction.member.nick
             : interaction.member != undefined && interaction.member.nick == null && interaction.member.user.global_name != null ? interaction.member.user.global_name
@@ -83,7 +86,7 @@ export const ContextCommand = {
             displayMessage = localize(interaction.locale, 'ACTION_COMMAND_MEE6_BOOP', SenderDisplayName, `<@159985870458322944>`);
         }
         // Used on any other App
-        else if ( TargetUser.bot || TargetMember.user.bot ) {
+        else if ( TargetUser.bot || TargetMember?.user?.bot ) {
             displayMessage = localize(interaction.locale, 'ACTION_COMMAND_OTHER_APPS_BOOP', SenderDisplayName, TargetDisplayName)
         }
         // Used on any non-App User

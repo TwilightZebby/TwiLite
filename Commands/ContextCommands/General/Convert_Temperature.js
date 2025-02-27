@@ -151,7 +151,7 @@ export const ContextCommand = {
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'CONTEXT_COMMAND_ERROR_MISSING_CONTENT')
+                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_MISSING_CONTENT')
                 }
             });
         }

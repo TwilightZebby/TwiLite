@@ -9,3 +9,6 @@ export const IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS = "https://us-east-1.tixte.
 // ***** URIs
 /** URI to Emojipedia */
 export const EMOJIPEDIA_URI = "https://emojipedia.org";
+
+export const TWILITE_ADD_APP_URI = "https://discord.com/oauth2/authorize?client_id=784058687412633601";
+export const TWILITE_GITHUB_URI = "https://github.com/TwilightZebby/TwiLite";

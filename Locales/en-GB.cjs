@@ -310,4 +310,25 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
     TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 10 temperatures per Message that I can convert.`,
     TEMPERATURE_COMMAND_ERROR_POLLS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Polls.`,
     TEMPERATURE_COMMAND_ERROR_FORWARDS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Forwarded Messages.`,
+
+
+
+    // ******* ADD APP COMMAND
+    ADD_APP_COMMAND_RESPONSE: `Use the below link to add TwiLite to either your Server or your Profile!\n\n[Add TwiLite]( {{0}} )`,
+
+    
+    
+    // ******* SUPPORT COMMAND
+    SUPPORT_COMMAND_RESPONSE: `Need help/support with using TwiLite? Or maybe you want to report an issue or suggest an idea for TwiLite?\nFeel free to ask/post on the Issues or Discussions tab of TwiLite's GitHub (linked below).`,
+    SUPPORT_COMMAND_BUTTON_GITHUB_LABEL: `Open GitHub`,
+
+
+
+    // ******* SUBSCRIBE COMMAND
+    NEWS_SUBSCRIBE_COMMAND_SUCCESS: `Successfully followed this Channel ( {{0}} ) to TwiLite's Announcements Feed!\n\nYou can edit and/or unfollow this Feed at any time by going into **Server Settings > Integrations > Channels Followed**.`,
+
+    NEWS_SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_VIEW_CHANNEL: `Sorry, TwiLite needs the "**View Channel**" Permission in this Channel to be able to follow its Announcements Feed here.`,
+    NEWS_SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_MANAGE_WEBHOOKS: `Sorry, TwiLite needs the "**Manage Webhooks**" Permission in this Channel to be able to follow its Announcements Feed here.\n\n*(This Permission can be revoked from TwiLite again afterwards)*`,
+    NEWS_SUBSCRIBE_COMMAND_ERROR_NOT_A_TEXT_CHANNEL: `Sorry, you can only follow a regular Text Channel to TwiLite's Announcements Feed.\nPlease try using this Channel again in a Text Channel.`,
+    NEWS_SUBSCRIBE_COMMAND_ERROR_GENERIC: `Sorry, something went wrong while trying to follow this Channel to TwiLite's Announcements Feed.`,
 }

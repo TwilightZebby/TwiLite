@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, InteractionResponseType } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType, ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
 import { EmbedBuilder } from '@discordjs/builders';
 import { ActionGifs } from '../Assets/ActionGifLinks.js';
 import { localize } from '../Utility/localizeResponses.js';
@@ -141,17 +141,41 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     }
 
     if ( wasGifRequested ) {
-        const GifEmbed = new EmbedBuilder()
+        /* const GifEmbed = new EmbedBuilder()
             .setDescription(displayMessage)
             .setImage(ActionGifs[interaction.data.name][Math.floor(( Math.random() * ActionGifs[interaction.data.name].length ) + 0)])
             .setColor(interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null);
 
-        let embedJson = GifEmbed.toJSON();
+        let embedJson = GifEmbed.toJSON(); */
+
+        // Try out Components v2
+        let gifComponent = {
+            "id": 1,
+            "type": ComponentType.Section,
+            "components": [
+                {
+                    "id": 2,
+                    "type": ComponentType.TextDisplay,
+                    "content": displayMessage
+                }
+            ],
+            "accessory": {
+                "id": 3,
+                "type": ComponentType.Thumbnail,
+                "media": {
+                    "url": ActionGifs[interaction.data.name][Math.floor(( Math.random() * ActionGifs[interaction.data.name].length ) + 0)]
+                },
+                "spoiler": false
+            }
+        };
 
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                embeds: [embedJson]
+                //embeds: [embedJson]
+                flags: MessageFlags.IsComponentsV2,
+                components: [gifComponent],
+                allowed_mentions: { parse: [], users: ['159985870458322944'] }
             }
         });
     }
@@ -159,17 +183,26 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     else {
         // Embed was force-enabled
         if ( forceDisplayEmbed ) {
-            const ActionEmbed = new EmbedBuilder()
+            /* const ActionEmbed = new EmbedBuilder()
                 .setDescription(displayMessage)
                 .setColor(interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null);
             
-            let actionEmbedJson = ActionEmbed.toJSON();
+            let actionEmbedJson = ActionEmbed.toJSON(); */
+
+            // Try out Components v2
+            let actionComponent = {
+                "id": 1,
+                "type": ComponentType.TextDisplay,
+                "content": displayMessage
+            }
 
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    allowed_mentions: { parse: [], users: ['159985870458322944'] },
-                    embeds: [actionEmbedJson]
+                    //embeds: [actionEmbedJson],
+                    flags: MessageFlags.IsComponentsV2,
+                    components: [actionComponent],
+                    allowed_mentions: { parse: [], users: ['159985870458322944'] }
                 }
             });
         }
@@ -178,8 +211,8 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    allowed_mentions: { parse: [], users: ['159985870458322944'] },
-                    content: displayMessage
+                    content: displayMessage,
+                    allowed_mentions: { parse: [], users: ['159985870458322944'] }
                 }
             });
         }

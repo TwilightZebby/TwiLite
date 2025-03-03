@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
+import { ApplicationCommandOptionType, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
 import { EmbedBuilder } from '@discordjs/builders';
 import { ActionGifs } from '../Assets/ActionGifLinks.js';
 import { localize } from '../Utility/localizeResponses.js';
@@ -69,8 +69,12 @@ function TestForRoleMention(string, slice) {
 export async function handleActionSlashCommand(interaction, interactionUser, usedCommandName) {
     // Grab input options
     const InputTarget = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Mentionable);
-    const InputIncludeGif = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Boolean);
+    //const InputIncludeGif = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Boolean);
+    /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataBooleanOption|undefined}*/
+    const InputIncludeGif = interaction.data.options.find(option => option.name === "include-gif");
     const InputReason = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.String);
+    /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataBooleanOption|undefined}*/
+    const InputBlockReturn = interaction.data.options.find(option => option.name === "block-return");
 
     // Just for ease
     const InteractionTriggeringUserId = interaction.member != undefined ? interaction.member.user.id : interaction.user.id;
@@ -85,6 +89,19 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     let forceDisplayEmbed = false;
     // For assembling the displayed message content
     let displayMessage = "";
+
+    // Create Return Action button, for when it is allowed to be included in response
+    let returnActionComponent = {
+        "id": 10,
+        "type": ComponentType.ActionRow,
+        "components": [{
+            "id": 11,
+            "type": ComponentType.Button,
+            "style": ButtonStyle.Primary,
+            "label": localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_BUTTON_LABEL_${interaction.data.name.toUpperCase()}`),
+            "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${interaction.InteractionTriggeringUserId}_${InputTarget.value}`
+        }]
+    };
 
 
     // atEveryone
@@ -151,23 +168,36 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         // Try out Components v2
         let gifComponent = {
             "id": 1,
-            "type": ComponentType.Section,
+            "type": ComponentType.Container,
+            "accent_color": interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null,
+            "spoiler": false,
             "components": [
                 {
                     "id": 2,
-                    "type": ComponentType.TextDisplay,
-                    "content": displayMessage
+                    "type": ComponentType.Section,
+                    "components": [
+                        {
+                            "id": 3,
+                            "type": ComponentType.TextDisplay,
+                            "content": displayMessage
+                        }
+                    ],
+                    "accessory": {
+                        "id": 4,
+                        "type": ComponentType.Thumbnail,
+                        "media": {
+                            "url": ActionGifs[interaction.data.name][Math.floor(( Math.random() * ActionGifs[interaction.data.name].length ) + 0)]
+                        },
+                        "spoiler": false
+                    }
                 }
-            ],
-            "accessory": {
-                "id": 3,
-                "type": ComponentType.Thumbnail,
-                "media": {
-                    "url": ActionGifs[interaction.data.name][Math.floor(( Math.random() * ActionGifs[interaction.data.name].length ) + 0)]
-                },
-                "spoiler": false
-            }
+            ]
         };
+
+        // Check for Return Action button allowance
+        if ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) {
+            gifComponent.components.push(returnActionComponent);
+        }
 
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
@@ -192,8 +222,21 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
             // Try out Components v2
             let actionComponent = {
                 "id": 1,
-                "type": ComponentType.TextDisplay,
-                "content": displayMessage
+                "type": ComponentType.Container,
+                "accent_color": interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null,
+                "spoiler": false,
+                "components": [
+                    {
+                        "id": 2,
+                        "type": ComponentType.TextDisplay,
+                        "content": displayMessage
+                    }
+                ]
+            };
+
+            // Check for Return Action button allowance
+            if ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) {
+                actionComponent.components.push(returnActionComponent);
             }
 
             return new JsonResponse({
@@ -212,7 +255,8 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     content: displayMessage,
-                    allowed_mentions: { parse: [], users: ['159985870458322944'] }
+                    allowed_mentions: { parse: [], users: ['159985870458322944'] },
+                    components: ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) ? [returnActionComponent] : undefined
                 }
             });
         }

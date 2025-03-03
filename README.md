@@ -88,6 +88,9 @@ There are two ways to convert temperatures using TwiLite:
 |------------|-------------|-------------|
 | `/temperature` | Slash | Convert a single temperature between degrees C, F, and K |
 | "`Convert Temperature`" | Message | Convert up to 10 temperatures at once from a single Message |
+| `/add-app` | Slash | Shows you the Add App/Invite link you can use to add TwiLite to either your Server(s) or your Account |
+| `/support` | Slash | Shows you where you can gain support from TwiLite's developer, or post ideas/bug reports for TwiLite |
+| `/follow-news` | Slash | Adds TwiLite's Updates & Announcements Feed to the Channel you used this Command in |
 
 ## Command Type Notes
 - "Message" refers to Message Context Commands

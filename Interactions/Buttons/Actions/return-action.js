@@ -74,6 +74,7 @@ export const Button = {
                 'Content-Type': 'application/json',
                 Authorization: `Bot ${DISCORD_TOKEN}`
             },
+            method: "POST",
             body: {
                 "type": InteractionResponseType.UpdateMessage,
                 "data": {
@@ -88,12 +89,10 @@ export const Button = {
                     'Content-Type': 'application/json',
                     Authorization: `Bot ${DISCORD_TOKEN}`
                 },
+                method: "POST",
                 body: {
-                    "type": InteractionResponseType.UpdateMessage,
-                    "data": {
-                        "allowed_mentions": { "parse": [] },
-                        "content": displayMessage
-                    }
+                    "allowed_mentions": { "parse": [] },
+                    "content": displayMessage
                 }
             });
         }

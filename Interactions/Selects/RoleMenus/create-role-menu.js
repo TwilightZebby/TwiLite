@@ -1,4 +1,4 @@
-import { InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
+import { ComponentType, InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
 import { ActionRowBuilder, ModalBuilder, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextInputBuilder } from '@discordjs/builders';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
@@ -290,8 +290,45 @@ async function saveAndDisplay(interaction) {
         }
     });
 
-    // Also redo Embed for same reason as the Buttons above :c
-    let embedJson = MenuCache.menuEmbed.toJSON();
+    // Convert Embed into using Components v2, for displaying Menu in :)
+    //    NOTE: I'm not converting the Preview shown during editing yet as I figure that would be easier to do via a web dashboard in future
+    
+    // Menu Details
+    let menuDetailsComponents = [
+        // Menu Title
+        {
+            "id": 2,
+            "type": ComponentType.TextDisplay,
+            "content": `## ${MenuCache.menuEmbed.data.title}`
+        }
+    ];
+    // Menu Description
+    if ( MenuCache.menuEmbed.data.description != undefined ) {
+        menuDetailsComponents.push({ "id": 3, "type": ComponentType.TextDisplay, "content": MenuCache.menuEmbed.data.description });
+    }
+    // Menu Role List
+    let menuRoleList = "";
+    menuRoleList += MenuCache.menuEmbed.data.fields.shift().value;
+    if ( MenuCache.menuEmbed.data.fields?.length > 0 ) { menuRoleList += `\n${MenuCache.menuEmbed.data.fields.shift().value}`; }
+    menuDetailsComponents.push({ "id": 4, "type": ComponentType.TextDisplay, "content": menuRoleList });
+    // Menu Requirements
+    if ( menuRequirements.length > 0 ) {
+        menuDetailsComponents.push({ "id": 5, "type": ComponentType.TextDisplay, "content": `-# ${requirementString}` });
+    }
+    // Menu Type
+    menuDetailsComponents.push({ "id": 6, "type": ComponentType.TextDisplay, "content": `-# ${MenuCache.menuEmbed.data.footer?.text}` });
+
+    // Add Action Row with Role Buttons
+    menuDetailsComponents.push(roleButtons);
+    
+
+    let convertToComponents = {
+        "id": 1,
+        "type": ComponentType.Container,
+        "accent_color": MenuCache.menuEmbed.data.color != undefined ? MenuCache.menuEmbed.data.color : null,
+        "spoiler": false,
+        "components": menuDetailsComponents
+    };
 
 
     // Post Menu
@@ -302,8 +339,7 @@ async function saveAndDisplay(interaction) {
             Authorization: `Bot ${DISCORD_TOKEN}`
         },
         body: JSON.stringify({
-            content: requirementString,
-            embeds: [embedJson],
+            flags: MessageFlags.IsComponentsV2,
             components: roleButtons,
             allowed_mentions: { parse: [] }
         })

@@ -23,6 +23,7 @@ export const ContextCommands = {
     'Bonk User': () => import('../Commands/ContextCommands/Actions/Bonk_User.js'),
     'Boop User': () => import('../Commands/ContextCommands/Actions/Boop_User.js'),
     'Headpat User': () => import('../Commands/ContextCommands/Actions/Headpat_User.js'),
+    'Kiss User': () => import('../Commands/ContextCommands/Actions/Kiss_User.js'),
 
     // ***** FOR ROLE MENUS
     'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),

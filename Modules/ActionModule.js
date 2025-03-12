@@ -69,7 +69,6 @@ function TestForRoleMention(string, slice) {
 export async function handleActionSlashCommand(interaction, interactionUser, usedCommandName) {
     // Grab input options
     const InputTarget = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Mentionable);
-    //const InputIncludeGif = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Boolean);
     /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataBooleanOption|undefined}*/
     const InputIncludeGif = interaction.data.options.find(option => option.name === "include-gif");
     const InputReason = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.String);
@@ -158,14 +157,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     }
 
     if ( wasGifRequested ) {
-        /* const GifEmbed = new EmbedBuilder()
-            .setDescription(displayMessage)
-            .setImage(ActionGifs[interaction.data.name][Math.floor(( Math.random() * ActionGifs[interaction.data.name].length ) + 0)])
-            .setColor(interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null);
-
-        let embedJson = GifEmbed.toJSON(); */
-
-        // Try out Components v2
+        // Create Components v2 response
         let gifComponent = {
             "id": 1,
             "type": ComponentType.Container,
@@ -202,7 +194,6 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                //embeds: [embedJson]
                 flags: MessageFlags.IsComponentsV2,
                 components: [gifComponent],
                 allowed_mentions: { parse: [], users: ['159985870458322944'] }
@@ -213,13 +204,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     else {
         // Embed was force-enabled
         if ( forceDisplayEmbed ) {
-            /* const ActionEmbed = new EmbedBuilder()
-                .setDescription(displayMessage)
-                .setColor(interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null);
-            
-            let actionEmbedJson = ActionEmbed.toJSON(); */
-
-            // Try out Components v2
+            // Create Components v2 response
             let actionComponent = {
                 "id": 1,
                 "type": ComponentType.Container,
@@ -242,7 +227,6 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    //embeds: [actionEmbedJson],
                     flags: MessageFlags.IsComponentsV2,
                     components: [actionComponent],
                     allowed_mentions: { parse: [], users: ['159985870458322944'] }

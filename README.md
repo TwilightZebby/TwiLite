@@ -22,6 +22,8 @@ Just some fun little roleplay-style Commands (such as `/bonk`, `/hug`, `/boop`, 
 
 Some Action Commands can also be used via right-clicking/long-pressing on a User! These "User Command" variants exist for those who just want a quicker way of giving someone a Bonk, Boop, or Headpat. :)
 
+The Action Slash Commands also display a "return action" button when used. This can be prevented by setting the "`block-return`" option to `True` when using the Slash Command.
+
 ## Role Menus
 > [!NOTE]
 > The Role Menu management Commands can only be used within Servers, meaning TwiLite has to be added to the Server in question in order for its Role Menu Commands to function.

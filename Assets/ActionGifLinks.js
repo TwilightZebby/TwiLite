@@ -62,7 +62,6 @@ export const ActionGifs = {
         "https://twilite.is-from.space/r/action-boop-0004.gif",
         "https://twilite.is-from.space/r/action-boop-0005.gif",
         "https://twilite.is-from.space/r/action-boop-0006.gif",
-        "https://twilite.is-from.space/r/action-boop-0007.gif",
         "https://twilite.is-from.space/r/action-boop-0008.gif",
         "https://twilite.is-from.space/r/action-boop-0009.gif",
         "https://twilite.is-from.space/r/action-boop-0010.gif",
@@ -80,7 +79,8 @@ export const ActionGifs = {
         "https://twilite.is-from.space/r/action-kiss-0007.gif",
         "https://twilite.is-from.space/r/action-kiss-0008.gif",
         "https://twilite.is-from.space/r/action-kiss-0009.gif",
-        "https://twilite.is-from.space/r/action-kiss-0010.gif"
+        "https://twilite.is-from.space/r/action-kiss-0010.gif",
+        "https://twilite.is-from.space/r/action-kiss-0011.gif",
     ],
 
     "yeet": [
@@ -97,5 +97,16 @@ export const ActionGifs = {
         "https://twilite.is-from.space/r/action-cookie-0004.gif",
         "https://twilite.is-from.space/r/action-cookie-0005.gif",
         "https://twilite.is-from.space/r/action-cookie-0006.gif"
+    ],
+
+    "slap": [
+        "https://twilite.is-from.space/r/action-slap-0001.gif",
+        "https://twilite.is-from.space/r/action-slap-0002.gif",
+        "https://twilite.is-from.space/r/action-slap-0003.gif",
+        "https://twilite.is-from.space/r/action-slap-0004.gif",
+        "https://twilite.is-from.space/r/action-slap-0005.gif",
+        "https://twilite.is-from.space/r/action-slap-0006.gif",
+        "https://twilite.is-from.space/r/action-slap-0007.gif",
+        "https://twilite.is-from.space/r/action-slap-0008.gif"
     ]
 };

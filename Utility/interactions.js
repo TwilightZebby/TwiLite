@@ -7,6 +7,7 @@ export const SlashCommands = {
     'hug': () => import('../Commands/SlashCommands/Actions/hug.js'),
     'kiss': () => import('../Commands/SlashCommands/Actions/kiss.js'),
     'yeet': () => import('../Commands/SlashCommands/Actions/yeet.js'),
+    'slap': () => import('../Commands/SlashCommands/Actions/slap.js'),
 
     // ***** FOR ROLE MENUS
     'rolemenu': () => import('../Commands/SlashCommands/RoleMenus/rolemenu.js'),

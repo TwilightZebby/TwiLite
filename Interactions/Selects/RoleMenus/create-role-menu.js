@@ -340,7 +340,7 @@ async function saveAndDisplay(interaction) {
         },
         body: JSON.stringify({
             flags: MessageFlags.IsComponentsV2,
-            components: roleButtons,
+            components: convertToComponents,
             allowed_mentions: { parse: [] }
         })
     });

@@ -31,7 +31,7 @@ export const Select = {
         const InputRoleId = interaction.data.values.shift();
 
         // Validate Role isn't already added as a Requirement
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
         let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
 
         if ( menuCache.roleRequirements.includes(InputRoleId) ) {

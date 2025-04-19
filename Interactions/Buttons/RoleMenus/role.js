@@ -74,13 +74,16 @@ async function grantRevokeRole(interaction) {
 
 
     // Check for menu requirements
-    let menuMessageContent = interaction.message.content;
+    const SourceComponents = SourceMessage.components;
+    let findMenuType = SourceComponents[0].components.find(component => component.id === 6);
+    const SourceMenuType = findMenuType != undefined ? findMenuType.content.split(": ").pop() : undefined;
+    let menuRequirementComponent = SourceComponents[0].components.find(component => component.id === 5);
+
     /** @type {Array<String>} */
     let menuRequirements = [];
 
-    if ( menuMessageContent.trim() != "" ) {
-        let findMentions = Array.from(menuMessageContent.matchAll(RoleMentionRegEx), (m) => m[0]);
-        findMentions.forEach(tempMention => { menuRequirements.push(`${tempMention.slice(3, -1)}`); });
+    if ( menuRequirementComponent != undefined && menuRequirementComponent.content != "" ) {
+        menuRequirements = Array.from(menuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
     }
 
     if ( menuRequirements.length > 0 ) {
@@ -112,11 +115,7 @@ async function grantRevokeRole(interaction) {
     // Fetch Role ID
     const RoleID = interaction.data.custom_id.split("_").pop();
 
-    // Check what Menu Type this is
-    const MessageEmbed = interaction.message.embeds.shift();
-    const MenuType = MessageEmbed.footer.text.split(": ").pop();
-
-    switch (MenuType) {
+    switch (SourceMenuType) {
         // Classic Role Menu. Grants Role if User doesn't have it, revokes Role if User does have it.
         case "TOGGLE":
             return await toggleRole(interaction, RoleID);
@@ -154,7 +153,7 @@ async function grantRevokeRole(interaction) {
 async function editRoleButton(interaction) {
     // Grab Role ID and cache
     const RoleId = interaction.data.custom_id.split("_").pop();
-    const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+    const UserId = interaction.member.user.id;
     let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
     let currentLabel = undefined;
     let currentEmoji = undefined;

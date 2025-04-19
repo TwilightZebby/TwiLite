@@ -65,7 +65,7 @@ export const Modal = {
 
         // New Button details are validated. Now, construct the new Button and add to Menu!
         // ...after fetching the current Menu's details first
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
         let originalResponse = UtilityCollections.RoleMenuManagement.get(UserId);
 
         

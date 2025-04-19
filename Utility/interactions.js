@@ -37,6 +37,9 @@ export const Autocompletes = {
 }
 
 export const Buttons = {
+    // ***** FOR ACTION MODULE
+    'return-action': () => import('../Interactions/Buttons/Actions/return-action.js'),
+
     // ***** FOR ROLE MENUS
     'role': () => import('../Interactions/Buttons/RoleMenus/role.js'),
     'menu-delete': () => import('../Interactions/Buttons/RoleMenus/menu-delete.js'),

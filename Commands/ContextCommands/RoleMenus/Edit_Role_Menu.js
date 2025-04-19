@@ -1,4 +1,4 @@
-import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, PermissionFlagsBits } from 'discord-api-types/v10';
+import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, PermissionFlagsBits, ComponentType } from 'discord-api-types/v10';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { DISCORD_APP_USER_ID } from '../../../config.js';
@@ -60,9 +60,9 @@ export const ContextCommand = {
     async executeCommand(interaction, interactionUser) {
         // Grab data
         const SourceMessage = interaction.data.resolved.messages[interaction.data.target_id];
-        const SourceEmbed = SourceMessage.embeds.shift();
-        const SourceMenuType = SourceEmbed?.footer?.text.split(": ").pop();
         const SourceComponents = SourceMessage.components;
+        let findMenuType = SourceComponents[0].components.find(component => component.id === 6);
+        const SourceMenuType = findMenuType != undefined ? findMenuType.content.split(": ").pop() : undefined;
 
         // Validate Message this was used on *does* contain one of TwiLite's Role Menus
         if ( SourceMessage.author.id !== DISCORD_APP_USER_ID ) {
@@ -110,7 +110,7 @@ export const ContextCommand = {
         }
 
         // For later
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
 
         // Create localised components
         const SelectMenu = new ActionRowBuilder().addComponents([
@@ -128,15 +128,28 @@ export const ContextCommand = {
         
 
         // ***** Setup for Menu Configuration
+        // Convert Component v2-based menu into Embed-based preview (Menu Type was already done above)
+        let menuTitleComponent = SourceComponents[0].components.find(component => component.id === 2);
+        let menuDescriptionComponent = SourceComponents[0].components.find(component => component.id === 3);
+        let menuRequirementComponent = SourceComponents[0].components.find(component => component.id === 5);
+        
+        // Pull Action Rows out
+        let menuActionRowComponents = SourceComponents[0].components.filter(component => component.type === ComponentType.ActionRow);
+
+
         // Make the Embed Builder
-        let menuEmbedBuilder = new EmbedBuilder(SourceEmbed);
+        let menuEmbedBuilder = new EmbedBuilder();
+        menuEmbedBuilder.setTitle(menuTitleComponent.content);
+        if ( menuDescriptionComponent != undefined && menuDescriptionComponent.content != "" ) {
+            menuEmbedBuilder.setDescription(menuDescriptionComponent.content);
+        }
 
         // Make the Button Builders
         let menuButtonBuilders = [];
         let menuComponentsJson = [];
         let temp = new ActionRowBuilder();
 
-        SourceComponents.forEach(menuRow => {
+        menuActionRowComponents.forEach(menuRow => {
             menuRow.components.forEach(roleButton => {
                 let tempButton = new ButtonBuilder(roleButton);
                 menuButtonBuilders.push(tempButton);
@@ -159,7 +172,10 @@ export const ContextCommand = {
         });
 
         // Grab Requirements
-        let menuRequirements = Array.from(SourceMessage.content.matchAll(RoleMentionRegEx), (m) => m[0]);
+        let menuRequirements = [];
+        if ( menuRequirementComponent != undefined && menuRequirementComponent.content != "" ) {
+            menuRequirements = Array.from(menuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
+        }
 
         // Create timestamp for when Interaction expires
         //   Mainly because we can't use the Interaction after it expires

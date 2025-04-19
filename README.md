@@ -22,6 +22,8 @@ Just some fun little roleplay-style Commands (such as `/bonk`, `/hug`, `/boop`, 
 
 Some Action Commands can also be used via right-clicking/long-pressing on a User! These "User Command" variants exist for those who just want a quicker way of giving someone a Bonk, Boop, or Headpat. :)
 
+The Action Slash Commands also display a "return action" button when used. This can be prevented by setting the "`block-return`" option to `True` when using the Slash Command.
+
 ## Role Menus
 > [!NOTE]
 > The Role Menu management Commands can only be used within Servers, meaning TwiLite has to be added to the Server in question in order for its Role Menu Commands to function.
@@ -88,6 +90,9 @@ There are two ways to convert temperatures using TwiLite:
 |------------|-------------|-------------|
 | `/temperature` | Slash | Convert a single temperature between degrees C, F, and K |
 | "`Convert Temperature`" | Message | Convert up to 10 temperatures at once from a single Message |
+| `/add-app` | Slash | Shows you the Add App/Invite link you can use to add TwiLite to either your Server(s) or your Account |
+| `/support` | Slash | Shows you where you can gain support from TwiLite's developer, or post ideas/bug reports for TwiLite |
+| `/follow-news` | Slash | Adds TwiLite's Updates & Announcements Feed to the Channel you used this Command in |
 
 ## Command Type Notes
 - "Message" refers to Message Context Commands

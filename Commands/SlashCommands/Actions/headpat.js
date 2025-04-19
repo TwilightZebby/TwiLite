@@ -79,6 +79,16 @@ export const SlashCommand = {
                 required: false
             },
             {
+                type: ApplicationCommandOptionType.Boolean,
+                name: "block-return",
+                description: "Set to TRUE to prevent the \"Return Headpat\" Button from being included in the response",
+                description_localizations: {
+                    'en-GB': "Set to TRUE to prevent the \"Return Headpat\" Button from being included in the response",
+                    'en-US': "Set to TRUE to prevent the \"Return Headpat\" Button from being included in the response"
+                },
+                required: false
+            },
+            {
                 type: ApplicationCommandOptionType.String,
                 name: "reason",
                 description: "An optional custom reason to be added onto the end of the displayed message",

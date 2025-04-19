@@ -59,9 +59,9 @@ export const ContextCommand = {
     async executeCommand(interaction, interactionUser) {
         // Grab data
         const SourceMessage = interaction.data.resolved.messages[interaction.data.target_id];
-        const SourceEmbed = SourceMessage.embeds.shift();
-        const SourceMenuType = SourceEmbed?.footer?.text.split(": ").pop();
         const SourceComponents = SourceMessage.components;
+        let findMenuType = SourceComponents[0].components.find(component => component.id === 6);
+        const SourceMenuType = findMenuType != undefined ? findMenuType.content.split(": ").pop() : undefined;
 
         // Validate Message this was used on *does* contain one of TwiLite's Role Menus
         if ( SourceMessage.author.id !== DISCORD_APP_USER_ID ) {

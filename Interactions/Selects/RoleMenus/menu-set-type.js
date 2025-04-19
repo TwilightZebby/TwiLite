@@ -28,7 +28,7 @@ export const Select = {
      */
     async executeSelect(interaction, interactionUser) {
         // Grab needed stuff
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
         let originalResponse = UtilityCollections.RoleMenuManagement.get(UserId);
         const InputMenuType = interaction.data.values.shift();
 

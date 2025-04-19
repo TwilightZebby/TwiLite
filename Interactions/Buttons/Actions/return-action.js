@@ -1,4 +1,4 @@
-import { InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
+import { ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from '../../../config.js';
@@ -31,6 +31,12 @@ export const Button = {
         const ActionName = CustomParams[1].toUpperCase();
         const OriginalUserId = CustomParams[2];
         const OriginalTargetId = CustomParams[3];
+
+        // Grab Components so we can edit Button out of it
+        let messageComponents = interaction.message.components;
+        /** Is the Button inside a Container Component (for when GIF is included), or not (when no GIF is included) */
+        let isButtonInsideContainer = false;
+        if ( messageComponents[0].type === ComponentType.Container ) { isButtonInsideContainer = true; }
 
 
         // Ensure User who pressed Button isn't the original sender of the Action
@@ -69,6 +75,25 @@ export const Button = {
         let displayMessage = localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_${ActionName}`, originalTargetUserName, originalTriggeringUserName);
 
         // ACK & remove Button
+        let updatedComponents = [];
+
+        if ( isButtonInsideContainer ) {
+            /** @type {import('discord-api-types/v10').APIContainerComponent} */
+            let newContainer = messageComponents[0];
+            let actionGifUri = messageComponents[0].components[0].accessory.media.url;
+
+            newContainer.components[0].accessory = {
+                "id": 4,
+                "type": ComponentType.Thumbnail,
+                "media": { "url": actionGifUri },
+                "spoiler": false
+            };
+
+            updatedComponents.push(newContainer);
+        }
+
+        let updatedComponentsJson = JSON.stringify(updatedComponents);
+
         let patchOutButton = await fetch(`https://discord.com/api/v10/interactions/${interaction.id}/${interaction.token}/callback`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -78,7 +103,7 @@ export const Button = {
             body: {
                 "type": InteractionResponseType.UpdateMessage,
                 "data": {
-                    "components": []
+                    "components": updatedComponentsJson
                 }
             }
         });

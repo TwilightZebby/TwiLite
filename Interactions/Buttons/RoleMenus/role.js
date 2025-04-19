@@ -1,4 +1,4 @@
-import { InteractionResponseType, MessageFlags, PermissionFlagsBits, TextInputStyle } from 'discord-api-types/v10';
+import { ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits, TextInputStyle } from 'discord-api-types/v10';
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder } from '@discordjs/builders';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
@@ -74,6 +74,7 @@ async function grantRevokeRole(interaction) {
 
 
     // Check for menu requirements
+    const SourceMessage = interaction.message;
     const SourceComponents = SourceMessage.components;
     let findMenuType = SourceComponents[0].components.find(component => component.id === 6);
     const SourceMenuType = findMenuType != undefined ? findMenuType.content.split(": ").pop() : undefined;
@@ -82,7 +83,7 @@ async function grantRevokeRole(interaction) {
     /** @type {Array<String>} */
     let menuRequirements = [];
 
-    if ( menuRequirementComponent != undefined && menuRequirementComponent.content != "" ) {
+    if ( menuRequirementComponent != undefined && menuRequirementComponent.content != "" && menuRequirementComponent.components == undefined ) {
         menuRequirements = Array.from(menuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
     }
 
@@ -194,7 +195,7 @@ async function editRoleButton(interaction) {
  */
 async function toggleRole(interaction, RoleID) {
     // Check if Member already has Role
-    if ( interaction.member?.roles.includes(RoleID) ) {
+    if ( interaction.member.roles.includes(RoleID) ) {
         // Member already has Role, so REVOKE
         try {
             let revokeRoleRequest = await fetch(GuildMemberRoleEndpoint(interaction.guild_id, interaction.member.user.id, RoleID), {
@@ -290,7 +291,8 @@ async function toggleRole(interaction, RoleID) {
  */
 async function swapRole(interaction, RoleID) {
     // Grab all the Roles on the Menu, to check if the Member already has any of them
-    const MenuButtons = interaction.message.components;
+    const MenuComponents = interaction.message.components;
+    const MenuButtons = MenuComponents[0].components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
     let menuRoleIds = [];
     MenuButtons.forEach(row => {
         row.components.forEach(button => {
@@ -301,7 +303,7 @@ async function swapRole(interaction, RoleID) {
     let memberHasRole = false;
     let roleAlreadyHave = null;
     menuRoleIds.forEach(idToCheck => {
-        if ( interaction.member?.roles.includes(idToCheck) ) {
+        if ( interaction.member.roles.includes(idToCheck) ) {
             memberHasRole = true;
             roleAlreadyHave = idToCheck;
             return;
@@ -331,6 +333,7 @@ async function swapRole(interaction, RoleID) {
                 });
             }
             else {
+                console.log(`${grantRoleRequest.status} ${grantRoleRequest.statusText}`);
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
@@ -341,6 +344,7 @@ async function swapRole(interaction, RoleID) {
             }
         }
         catch (err) {
+            console.log(err);
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
@@ -353,7 +357,7 @@ async function swapRole(interaction, RoleID) {
     // Member DOES have a Role from this Menu already
     else {
         // If Member already has requested Role, revoke it
-        if ( interaction.member?.roles.includes(RoleID) ) {
+        if ( interaction.member.roles.includes(RoleID) ) {
             try {
                 let revokeRoleRequest = await fetch(GuildMemberRoleEndpoint(interaction.guild_id, interaction.member.user.id, RoleID), {
                     headers: {
@@ -460,7 +464,8 @@ async function swapRole(interaction, RoleID) {
  */
 async function singleRole(interaction, RoleID) {
     // Grab all the Roles on the Menu, to check if the Member already has any of them
-    const MenuButtons = interaction.message.components;
+    const MenuComponents = interaction.message.components;
+    const MenuButtons = MenuComponents[0].components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
     let menuRoleIds = [];
     MenuButtons.forEach(row => {
         row.components.forEach(button => {
@@ -471,7 +476,7 @@ async function singleRole(interaction, RoleID) {
     let memberHasRole = false;
     let roleAlreadyHave = null;
     menuRoleIds.forEach(idToCheck => {
-        if ( interaction.member?.roles.includes(idToCheck) ) {
+        if ( interaction.member.roles.includes(idToCheck) ) {
             memberHasRole = true;
             roleAlreadyHave = idToCheck;
             return;

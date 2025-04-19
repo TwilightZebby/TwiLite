@@ -98,7 +98,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
             "type": ComponentType.Button,
             "style": ButtonStyle.Primary,
             "label": localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_BUTTON_LABEL_${interaction.data.name.toUpperCase()}`),
-            "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${interaction.InteractionTriggeringUserId}_${InputTarget.value}`
+            "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${InteractionTriggeringUserId}_${InputTarget.value}`
         }]
     };
 

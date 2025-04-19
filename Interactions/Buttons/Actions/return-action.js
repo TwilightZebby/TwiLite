@@ -1,5 +1,5 @@
 import { InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import { JsonResponse } from '../Utility/utilityMethods.js';
+import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from '../../../config.js';
 

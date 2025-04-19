@@ -110,7 +110,7 @@ export const ContextCommand = {
         }
 
         // For later
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
 
         // Create localised components
         const SelectMenu = new ActionRowBuilder().addComponents([

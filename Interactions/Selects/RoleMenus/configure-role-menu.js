@@ -63,7 +63,7 @@ export const Select = {
 
         // Grab selected value & User ID
         const InputOption = interaction.data.values.shift();
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
 
         switch (InputOption) {
             // Set Menu Type
@@ -267,7 +267,7 @@ async function saveAndDisplay(interaction) {
 
 
     // Redo Buttons into Rows so that Discord's API won't give me a 400 response :S
-    const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+    const UserId = interaction.member.user.id;
     const MenuCache = UtilityCollections.RoleMenuManagement.get(UserId);
 
     let roleButtons = [];

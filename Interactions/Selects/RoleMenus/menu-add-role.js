@@ -33,7 +33,7 @@ export const Select = {
         const InputRoleId = interaction.data.values.pop();
 
         // Fetch current Menu
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
         let originalResponse = UtilityCollections.RoleMenuManagement.get(UserId);
         
         // Validate selected Role isn't already on this Menu

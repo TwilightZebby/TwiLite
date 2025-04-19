@@ -153,7 +153,7 @@ async function grantRevokeRole(interaction) {
 async function editRoleButton(interaction) {
     // Grab Role ID and cache
     const RoleId = interaction.data.custom_id.split("_").pop();
-    const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+    const UserId = interaction.member.user.id;
     let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
     let currentLabel = undefined;
     let currentEmoji = undefined;

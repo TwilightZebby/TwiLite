@@ -33,7 +33,7 @@ export const Modal = {
             });
         });
 
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
         let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
 
         // Set new Embed values

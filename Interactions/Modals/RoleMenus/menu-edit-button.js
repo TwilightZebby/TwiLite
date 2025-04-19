@@ -65,7 +65,7 @@ export const Modal = {
 
 
         // Update Button in cache
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
         let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
 
         for ( let i = 0; i <= menuCache.menuButtons.length - 1; i++ ) {

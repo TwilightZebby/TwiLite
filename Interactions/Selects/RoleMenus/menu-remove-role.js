@@ -32,7 +32,7 @@ export const Select = {
         const InputRoleId = interaction.data.values.shift();
 
         // Validate selected Role *is* on Menu
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
         let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
         let doesRoleExistOnMenu = false;
 

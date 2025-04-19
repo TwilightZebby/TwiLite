@@ -183,7 +183,7 @@ export const SlashCommand = {
             let selectJson = SelectMenu.toJSON();
 
             // Cache Interaction so we can refer back to the original response :)
-            const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+            const UserId = interaction.member.user.id;
             UtilityCollections.RoleMenuManagement.set(UserId, { interactionId: interaction.id, interactionToken: interaction.token, selectMenu: SelectMenu, menuEmbed: new EmbedBuilder(), menuButtons: [], roleRequirements: [], mainInstructions: localize(interaction.locale, 'ROLE_MENU_CREATE_INTRUCTIONS', timestampFor15Minutes) });
             
             // ACK

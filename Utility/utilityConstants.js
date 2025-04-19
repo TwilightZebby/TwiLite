@@ -29,7 +29,7 @@ export const UtilityCollections = {
     SelectCooldowns: new Collection(),
 
     /** Temp-stores Interaction IDs && Tokens for use in editing/deleting messages during Role Menu Management. Also caches Buttons & Embed during Menu management.
-     *  Collection<userId, {sourceMessageId, interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements, mainInstructions}>
+     *  `Collection<userId, {sourceMessageId, interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements, mainInstructions}>`
      * @type {Collection<String, {sourceMessageId: ?String, interactionId: String, interactionToken: String, selectMenu: ActionRowBuilder, menuEmbed: EmbedBuilder, menuButtons: Array<ButtonBuilder>, roleRequirements: Array<String>, mainInstructions: String}>}
      */
     RoleMenuManagement: new Collection()
@@ -71,12 +71,12 @@ export const SystemMessageTypes = [
     45, // VOICE_HANGOUT_INVITE - Either deprecated or was a scrapped experiment?
     47, // CHANGELOG - Used only TWICE before being scrapped due to r/discordapp complaints. Zebby liked having Discord Changelogs in System DMs, but whatever...
     48, // NITRO_NOTIFICATION - Has this ever been used? 
-    49, // CHANNEL_LINKED_TO_LOBBY - Behind an experiment currently
+    49, // CHANNEL_LINKED_TO_LOBBY - Behind an experiment currently (SocialSDK)
     50, // GIFTING_PROMPT - Part of the Friendship Anniversary Experiment
-    51, // IN_GAME_MESSAGE_NUX - Behind an experiment currently
-    52, // GUILD_JOIN_REQUEST_ACCEPT_NOTIFICATION - Not yet added to D-API-Types (part of Membership Screening v2, which was revived for Gaming Guilds)
-    53, // GUILD_JOIN_REQUEST_REJECT_NOTIFICATION - Not yet added to D-API-Types (part of Membership Screening v2, which was revived for Gaming Guilds)
-    54, // GUILD_JOIN_REQUEST_WITHDRAWN_NOTIFICATION - Not yet added to D-API-Types (part of Membership Screening v2, which was revived for Gaming Guilds)
+    51, // IN_GAME_MESSAGE_NUX - Behind an experiment currently (SocialSDK)
+    52, // GUILD_JOIN_REQUEST_ACCEPT_NOTIFICATION - Not yet added to D-API-Types (part of Server Membership Applications)
+    53, // GUILD_JOIN_REQUEST_REJECT_NOTIFICATION - Not yet added to D-API-Types (part of Server Membership Applications)
+    54, // GUILD_JOIN_REQUEST_WITHDRAWN_NOTIFICATION - Not yet added to D-API-Types (part of Server Membership Applications)
     55, // HD_STREAMING_UPGRADED - Part of the HD Splash Potion Experiment (or has it fully released now?)
 ];
 

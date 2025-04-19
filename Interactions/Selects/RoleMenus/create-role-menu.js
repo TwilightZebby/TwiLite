@@ -1,4 +1,4 @@
-import { InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
+import { ComponentType, InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
 import { ActionRowBuilder, ModalBuilder, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextInputBuilder } from '@discordjs/builders';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
@@ -64,7 +64,7 @@ export const Select = {
 
         // Grab selected value & User ID
         const InputOption = interaction.data.values.shift();
-        const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+        const UserId = interaction.member.user.id;
 
         switch (InputOption) {
             // Set Menu Type
@@ -267,16 +267,43 @@ async function saveAndDisplay(interaction) {
     }
 
 
-    // Redo Buttons into Rows so that Discord's API won't give me a 400 response :S
-    const UserId = interaction.member != undefined ? interaction.member?.user.id : interaction.user?.id;
+    const UserId = interaction.member.user.id;
     const MenuCache = UtilityCollections.RoleMenuManagement.get(UserId);
 
-    let roleButtons = [];
+    // Convert Embed into using Components v2, for displaying Menu in :)
+    //    NOTE: I'm not converting the Preview shown during editing yet as I figure that would be easier to do via a web dashboard in future
+    
+    // Menu Details
+    let menuDetailsComponents = [
+        // Menu Title
+        {
+            "id": 2,
+            "type": ComponentType.TextDisplay,
+            "content": `## ${MenuCache.menuEmbed.data.title}`
+        }
+    ];
+    // Menu Description
+    if ( MenuCache.menuEmbed.data.description != undefined ) {
+        menuDetailsComponents.push({ "id": 3, "type": ComponentType.TextDisplay, "content": MenuCache.menuEmbed.data.description });
+    }
+    // Menu Role List
+    let menuRoleList = "";
+    menuRoleList += MenuCache.menuEmbed.data.fields.shift().value;
+    if ( MenuCache.menuEmbed.data.fields?.length > 0 ) { menuRoleList += `\n${MenuCache.menuEmbed.data.fields.shift().value}`; }
+    menuDetailsComponents.push({ "id": 4, "type": ComponentType.TextDisplay, "content": menuRoleList });
+    // Menu Requirements
+    if ( menuRequirements.length > 0 ) {
+        menuDetailsComponents.push({ "id": 5, "type": ComponentType.TextDisplay, "content": `-# ${requirementString}` });
+    }
+    // Menu Type
+    menuDetailsComponents.push({ "id": 6, "type": ComponentType.TextDisplay, "content": `-# ${MenuCache.menuEmbed.data.footer?.text}` });
+
+    // Redo Buttons into Rows so that Discord's API won't give me a 400 response :S
     let temp = new ActionRowBuilder();
 
     MenuCache.menuButtons.forEach(rButton => {
         if ( temp.components.length === 5 ) {
-            roleButtons.push(temp.toJSON());
+            menuDetailsComponents.push(temp.toJSON());
             temp.setComponents([ rButton ]);
         }
         else {
@@ -286,12 +313,18 @@ async function saveAndDisplay(interaction) {
         // If last Button, force-push back into Array
         let checkIndex = MenuCache.menuButtons.findIndex(theButton => theButton.data.custom_id === `role_${rButton.data.custom_id.split("_").pop()}`);
         if ( MenuCache.menuButtons.length - 1 === checkIndex ) {
-            roleButtons.push(temp.toJSON());
+            menuDetailsComponents.push(temp.toJSON());
         }
     });
+    
 
-    // Also redo Embed for same reason as the Buttons above :c
-    let embedJson = MenuCache.menuEmbed.toJSON();
+    let convertToComponents = {
+        "id": 1,
+        "type": ComponentType.Container,
+        "accent_color": MenuCache.menuEmbed.data.color != undefined ? MenuCache.menuEmbed.data.color : null,
+        "spoiler": false,
+        "components": menuDetailsComponents
+    };
 
 
     // Post Menu
@@ -302,9 +335,8 @@ async function saveAndDisplay(interaction) {
             Authorization: `Bot ${DISCORD_TOKEN}`
         },
         body: JSON.stringify({
-            content: requirementString,
-            embeds: [embedJson],
-            components: roleButtons,
+            flags: MessageFlags.IsComponentsV2,
+            components: [convertToComponents],
             allowed_mentions: { parse: [] }
         })
     });

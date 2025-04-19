@@ -74,54 +74,57 @@ export const Button = {
         // Construct display message
         let displayMessage = localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_${ActionName}`, originalTargetUserName, originalTriggeringUserName);
 
-        // ACK & remove Button
+        // ACK & remove Button (while editing *in* the new message because CF Workers is annoying by not allowing me to use Follow-ups after Patching edits :S)
         let updatedComponents = [];
 
         if ( isButtonInsideContainer ) {
-            /** @type {import('discord-api-types/v10').APIContainerComponent} */
-            let newContainer = messageComponents[0];
             let actionGifUri = messageComponents[0].components[0].accessory.media.url;
+            let contentText = messageComponents[0].components[0].components[0].content;
 
-            newContainer.components[0].accessory = {
-                "id": 4,
-                "type": ComponentType.Thumbnail,
-                "media": { "url": actionGifUri },
-                "spoiler": false
+            /** @type {import('discord-api-types/v10').APIContainerComponent} */
+            let newContainer = {
+                "id": 1,
+                "type": ComponentType.Container,
+                "accent_color": messageComponents[0].accent_color,
+                "spoiler": false,
+                "components": [{
+                    "id": 2,
+                    "type": ComponentType.Section,
+                    "components": [{
+                        "id": 3,
+                        "type": ComponentType.TextDisplay,
+                        "content": `${contentText}\n\n${displayMessage}`
+                    }],
+                    "accessory": {
+                        "id": 4,
+                        "type": ComponentType.Thumbnail,
+                        "media": {
+                            "url": actionGifUri
+                        },
+                        "spoiler": false
+                    }
+                }]
             };
 
             updatedComponents.push(newContainer);
         }
 
-        let updatedComponentsJson = JSON.stringify(updatedComponents);
-
-        let patchOutButton = await fetch(`https://discord.com/api/v10/interactions/${interaction.id}/${interaction.token}/callback`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bot ${DISCORD_TOKEN}`
-            },
-            method: "POST",
-            body: {
-                "type": InteractionResponseType.UpdateMessage,
-                "data": {
-                    "components": updatedComponentsJson
-                }
-            }
-        });
-
-        if ( patchOutButton.status === 204 ) {
-            await fetch(`https://discord.com/api/v10/webhooks/${DISCORD_APP_USER_ID}/${interaction.token}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bot ${DISCORD_TOKEN}`
-                },
-                method: "POST",
-                body: {
-                    "allowed_mentions": { "parse": [] },
-                    "content": displayMessage
-                }
-            });
+        let updatedMessageBody = {
+            "type": InteractionResponseType.UpdateMessage
+        };
+        if ( isButtonInsideContainer ) {
+            updatedMessageBody.data = {
+                "flags": MessageFlags.IsComponentsV2,
+                "components": updatedComponents
+            };
+        }
+        else {
+            updatedMessageBody.data = {
+                "content": `${interaction.message.content}\n\n${displayMessage}`,
+                "components": updatedComponents
+            };
         }
 
-        return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
+        return new JsonResponse(updatedMessageBody);
     }
 }

@@ -187,7 +187,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         };
 
         // Check for Return Action button allowance
-        if ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) {
+        if ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === false) ) {
             gifComponent.components.push(returnActionComponent);
         }
 

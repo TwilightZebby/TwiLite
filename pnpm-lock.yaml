@@ -19,8 +19,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       discord-api-types:
-        specifier: 0.38.0-next-1740095508888
-        version: 0.38.0-next-1740095508888
+        specifier: 0.38.1
+        version: 0.38.1
       discord-interactions:
         specifier: ^4.1.0
         version: 4.1.1
@@ -425,8 +425,8 @@ packages:
   discord-api-types@0.37.119:
     resolution: {integrity: sha512-WasbGFXEB+VQWXlo6IpW3oUv73Yuau1Ig4AZF/m13tXcTKnMpc/mHjpztIlz4+BM9FG9BHQkEXiPto3bKduQUg==, tarball: https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.119.tgz}
 
-  discord-api-types@0.38.0-next-1740095508888:
-    resolution: {integrity: sha512-J9ZpbCe8sO/TJIhjUdrfZmR+VPqD/x0WzkiAv4u6H/4Cazo0nE3lYU31wRFbaiXDKcw6+hUjkVVfp5dWLrGdNA==, tarball: https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.38.0-next-1740095508888.tgz}
+  discord-api-types@0.38.1:
+    resolution: {integrity: sha512-vsjsqjAuxsPhiwbPjTBeGQaDPlizFmSkU0mTzFGMgRxqCDIRBR7iTY74HacpzrDV0QtERHRKQEk1tq7drZUtHg==, tarball: https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.38.1.tgz}
 
   discord-interactions@4.1.1:
     resolution: {integrity: sha512-dCrdJFSHQrEHXB8tk+LpIhAL7/+/UXCFDzooYmB6jj7b/zuhdbETpcZXLYQpSfcSRpF5wjmnu1XwuHlvdF1KpQ==, tarball: https://registry.npmjs.org/discord-interactions/-/discord-interactions-4.1.1.tgz}
@@ -833,7 +833,7 @@ snapshots:
 
   discord-api-types@0.37.119: {}
 
-  discord-api-types@0.38.0-next-1740095508888: {}
+  discord-api-types@0.38.1: {}
 
   discord-interactions@4.1.1: {}
 

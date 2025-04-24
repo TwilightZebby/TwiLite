@@ -116,7 +116,7 @@ export const SlashCommand = {
 
 
         // Do the request to follow the Announcement Channel here!
-        let followFeed = await fetch(`https://discord.com/api/v10/channels/1265231805858975808/followers`, {
+        let followFeed = await fetch(`https://discord.com/api/v10/channels/1265287246240813077/followers`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bot ${DISCORD_TOKEN}`

@@ -1,4 +1,4 @@
-import { InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
+import { ComponentType, InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
 import { ActionRowBuilder, ModalBuilder, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextInputBuilder } from '@discordjs/builders';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
@@ -239,6 +239,9 @@ async function saveAndDisplay(interaction) {
     let menuMessageContent = interaction.message.content;
     let menuRequirements = Array.from(menuMessageContent.matchAll(RoleMentionRegEx), (m) => m[0]);
 
+    const UserId = interaction.member.user.id;
+    const MenuCache = UtilityCollections.RoleMenuManagement.get(UserId);
+
     // Remove Select Menu Component
     menuComponents.pop();
 
@@ -265,29 +268,6 @@ async function saveAndDisplay(interaction) {
         requirementString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_MULTIPLE', `${menuRequirements.join(" / ")}`);
     }
 
-
-    // Redo Buttons into Rows so that Discord's API won't give me a 400 response :S
-    const UserId = interaction.member.user.id;
-    const MenuCache = UtilityCollections.RoleMenuManagement.get(UserId);
-
-    let roleButtons = [];
-    let temp = new ActionRowBuilder();
-
-    MenuCache.menuButtons.forEach(rButton => {
-        if ( temp.components.length === 5 ) {
-            roleButtons.push(temp.toJSON());
-            temp.setComponents([ rButton ]);
-        }
-        else {
-            temp.addComponents([ rButton ]);
-        }
-
-        // If last Button, force-push back into Array
-        let checkIndex = MenuCache.menuButtons.findIndex(theButton => theButton.data.custom_id === `role_${rButton.data.custom_id.split("_").pop()}`);
-        if ( MenuCache.menuButtons.length - 1 === checkIndex ) {
-            roleButtons.push(temp.toJSON());
-        }
-    });
 
     // Convert Embed into using Components v2, for displaying Menu in :)
     //    NOTE: I'm not converting the Preview shown during editing yet as I figure that would be easier to do via a web dashboard in future
@@ -317,8 +297,24 @@ async function saveAndDisplay(interaction) {
     // Menu Type
     menuDetailsComponents.push({ "id": 6, "type": ComponentType.TextDisplay, "content": `-# ${MenuCache.menuEmbed.data.footer?.text}` });
     
-    // Add Action Row with Role Buttons
-    menuDetailsComponents.push(roleButtons);
+    // Redo Buttons into Rows so that Discord's API won't give me a 400 response :S
+    let temp = new ActionRowBuilder();
+
+    MenuCache.menuButtons.forEach(rButton => {
+        if ( temp.components.length === 5 ) {
+            menuDetailsComponents.push(temp.toJSON());
+            temp.setComponents([ rButton ]);
+        }
+        else {
+            temp.addComponents([ rButton ]);
+        }
+
+        // If last Button, force-push back into Array
+        let checkIndex = MenuCache.menuButtons.findIndex(theButton => theButton.data.custom_id === `role_${rButton.data.custom_id.split("_").pop()}`);
+        if ( MenuCache.menuButtons.length - 1 === checkIndex ) {
+            menuDetailsComponents.push(temp.toJSON());
+        }
+    });
         
     
     let convertToComponents = {
@@ -331,7 +327,7 @@ async function saveAndDisplay(interaction) {
 
 
     // Post Menu
-    await fetch(ManageMessageEndpoint(interaction.channel.id, MenuCache.sourceMessageId), {
+    let editMenuFetch = await fetch(ManageMessageEndpoint(interaction.channel.id, MenuCache.sourceMessageId), {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -339,10 +335,12 @@ async function saveAndDisplay(interaction) {
         },
         body: JSON.stringify({
             flags: MessageFlags.IsComponentsV2,
-            components: convertToComponents,
+            components: [convertToComponents],
             allowed_mentions: { parse: [] }
         })
     });
+
+    console.log(`${editMenuFetch.status} ${editMenuFetch.statusText}`);
 
 
     // Now ACK Interaction

@@ -4,6 +4,7 @@ A general-purpose Discord App made by TwilightZebby.
 
 - [Add TwiLite to your Server](https://discord.com/api/oauth2/authorize?client_id=784058687412633601&permissions=274878221312&scope=applications.commands%20bot)
 - [Add TwiLite as a User App to your Account](https://discord.com/api/oauth2/authorize?client_id=784058687412633601&scope=applications.commands&integration_type=1)
+- Or use this [Fancy Add App link](https://discord.com/api/oauth2/authorize?client_id=784058687412633601) which includes both of the above options
 
 ---
 
@@ -20,7 +21,7 @@ The License for this Project, and all of TwilightZebby's Projects, can be [found
 
 Just some fun little roleplay-style Commands (such as `/bonk`, `/hug`, `/boop`, etc) that you can use on your friends.
 
-Some Action Commands can also be used via right-clicking/long-pressing on a User! These "User Command" variants exist for those who just want a quicker way of giving someone a Bonk, Boop, or Headpat. :)
+Some Action Commands can also be used via right-clicking/long-pressing on a User! These "User Command" variants exist for those who just want a quicker way of giving someone a Bonk, Boop, Headpat, or Kiss. :)
 
 The Action Slash Commands also display a "return action" button when used. This can be prevented by setting the "`block-return`" option to `True` when using the Slash Command.
 
@@ -69,6 +70,7 @@ There are two ways to convert temperatures using TwiLite:
 | `/headpat` | Gives the specified User, Role, or everyone a headpat |
 | `/hug` | Gives the specified User, Role, or everyone a hug |
 | `/kiss` | Gives a kiss to the specified User, Role, or everyone |
+| `/slap` | Slaps the target User, Role, or everyone |
 | `/yeet` | Yeets (throws) the specified User, Role, or everyone |
 
 ## Action User Commands
@@ -77,6 +79,7 @@ There are two ways to convert temperatures using TwiLite:
 | "`Bonk User`" | Bonks the target User |
 | "`Boop User`" | Boops the target User |
 | "`Headpat User`" | Gives the target User a headpat |
+| "`Kiss User`" | Gives the target User a kiss |
 
 ## Management Commands
 | Command Name | Command Type | Description |
@@ -161,3 +164,8 @@ __User Context Commands__ are Commands used on a specific User in Servers, and c
 > I, TwilightZebby, was initially on the fence about adhering to Discord's rebranding of "Bots" into "Apps". However, I have since decided to follow suit as to not have that negative connotation with my own Discord Server/User Apps.
 > 
 > Hopefully, one day we will be able to reclaim the term "Bot" without its negative connotation. For now, I guess we have to stick with either "App" or "Robot". :c
+
+## Do you have a support Server for TwiLite?
+> No, I do not. However, I do have a [personal Server](https://discord.gg/nM7fJ8ZqnK) which I *guess* you could use?
+> 
+> **Though I'd prefer it if you kept any bug reports, support requests, and feature requests for TwiLite to this GitHub page.**

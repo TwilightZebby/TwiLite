@@ -139,10 +139,14 @@ export const ContextCommand = {
 
         // Make the Embed Builder
         let menuEmbedBuilder = new EmbedBuilder();
-        menuEmbedBuilder.setTitle(menuTitleComponent.content);
+        menuEmbedBuilder.setTitle(`${menuTitleComponent.content.slice(3)}`); // Remove the "##" header markdown too!
         if ( menuDescriptionComponent != undefined && menuDescriptionComponent.content != "" ) {
             menuEmbedBuilder.setDescription(menuDescriptionComponent.content);
         }
+        if ( SourceComponents[0].accent_color ) {
+            menuEmbedBuilder.setColor(SourceComponents[0].accent_color);
+        }
+        menuEmbedBuilder.setFooter({ text: `${findMenuType.content.slice(3)}` });
 
         // Make the Button Builders
         let menuButtonBuilders = [];
@@ -173,7 +177,7 @@ export const ContextCommand = {
 
         // Grab Requirements
         let menuRequirements = [];
-        if ( menuRequirementComponent != undefined && menuRequirementComponent.content != "" ) {
+        if ( menuRequirementComponent != undefined && menuRequirementComponent.content != "" && menuRequirementComponent.components == undefined ) {
             menuRequirements = Array.from(menuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
         }
 

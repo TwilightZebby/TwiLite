@@ -36,7 +36,7 @@ export const Select = {
         let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
         let doesRoleExistOnMenu = false;
 
-        for ( let i = 0; i < menuCache.menuButtons.length - 1; i++ ) {
+        for ( let i = 0; i <= menuCache.menuButtons.length - 1; i++ ) {
             if ( menuCache.menuButtons[i].data.custom_id.includes(InputRoleId) ) {
                 doesRoleExistOnMenu = true;
                 let catchDeletion = menuCache.menuButtons.splice(i, 1);

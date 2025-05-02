@@ -78,8 +78,8 @@ export const Button = {
         let updatedComponents = [];
 
         if ( isButtonInsideContainer ) {
-            let actionGifUri = messageComponents[0].components[0].accessory.media.url;
-            let contentText = messageComponents[0].components[0].components[0].content;
+            let actionGifUri = messageComponents[0].components[1].items[0].media.url;
+            let contentText = messageComponents[0].components[0].content;
 
             /** @type {import('discord-api-types/v10').APIContainerComponent} */
             let newContainer = {
@@ -87,23 +87,23 @@ export const Button = {
                 "type": ComponentType.Container,
                 "accent_color": messageComponents[0].accent_color,
                 "spoiler": false,
-                "components": [{
-                    "id": 2,
-                    "type": ComponentType.Section,
-                    "components": [{
-                        "id": 3,
+                "components": [
+                    {
+                        "id": 2,
                         "type": ComponentType.TextDisplay,
                         "content": `${contentText}\n\n${displayMessage}`
-                    }],
-                    "accessory": {
-                        "id": 4,
-                        "type": ComponentType.Thumbnail,
-                        "media": {
-                            "url": actionGifUri
-                        },
-                        "spoiler": false
+                    },
+                    {
+                        "id": 3,
+                        "type": ComponentType.MediaGallery,
+                        "items": [{
+                            "media": {
+                                "url": actionGifUri
+                            },
+                            "spoiler": false
+                        }]
                     }
-                }]
+                ]
             };
 
             updatedComponents.push(newContainer);

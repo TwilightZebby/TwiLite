@@ -83,23 +83,16 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         : interaction.member == undefined && interaction.user.global_name != null ? interaction.user.global_name
         : interaction.user.username;
 
-    // Override for GIF-less responses - such as when target is a Role, as to prevent accidental Role Pings should the `allow_mentions` field break.
-    //   Also, prevents Server Modmins from freaking out even though the Role wasn't actually pinged, just mentioned, since it'll be in an embed NOT in the content field.
-    let forceDisplayEmbed = false;
     // For assembling the displayed message content
     let displayMessage = "";
 
     // Create Return Action button, for when it is allowed to be included in response
-    let returnActionComponent = {
-        "id": 10,
-        "type": ComponentType.ActionRow,
-        "components": [{
-            "id": 11,
-            "type": ComponentType.Button,
-            "style": ButtonStyle.Primary,
-            "label": localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_BUTTON_LABEL_${interaction.data.name.toUpperCase()}`),
-            "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${InteractionTriggeringUserId}_${InputTarget.value}`
-        }]
+    let returnActionButton = {
+        "id": 11,
+        "type": ComponentType.Button,
+        "style": ButtonStyle.Primary,
+        "label": localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_BUTTON_LABEL_${interaction.data.name.toUpperCase()}`),
+        "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${InteractionTriggeringUserId}_${InputTarget.value}`
     };
 
 
@@ -142,10 +135,8 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     }
 
 
-    // If a custom message is given, check for sneaky atMentions!
+    // If a custom message is given, add to display message!
     if ( InputReason != undefined ) {
-        if ( TestForEveryoneMention(InputReason.value) ) { forceDisplayEmbed = true; }
-        if ( TestForRoleMention(InputReason.value) ) { forceDisplayEmbed = true; }
         displayMessage += ` ${InputReason.value}`;
     }
 
@@ -163,32 +154,33 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
             "type": ComponentType.Container,
             "accent_color": interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null,
             "spoiler": false,
-            "components": [
-                {
-                    "id": 2,
-                    "type": ComponentType.Section,
-                    "components": [
-                        {
-                            "id": 3,
-                            "type": ComponentType.TextDisplay,
-                            "content": displayMessage
-                        }
-                    ],
-                    "accessory": {
-                        "id": 4,
-                        "type": ComponentType.Thumbnail,
-                        "media": {
-                            "url": ActionGifs[interaction.data.name][Math.floor(( Math.random() * ActionGifs[interaction.data.name].length ) + 0)]
-                        },
-                        "spoiler": false
-                    }
-                }
-            ]
+            "components": [{
+                "id": 2,
+                "type": ComponentType.TextDisplay,
+                "content": displayMessage
+            }]
         };
 
-        // Check for Return Action button allowance
+        // Add GIF
+        gifComponent.components.push({
+            "id": 3,
+            "type": ComponentType.MediaGallery,
+            "items": [{
+                "media": {
+                    "url": ActionGifs[interaction.data.name][Math.floor(( Math.random() * ActionGifs[interaction.data.name].length ) + 0)]
+                },
+                "spoiler": false
+            }]
+        });
+
+        // Add Button if allowed
         if ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === false) ) {
-            gifComponent.components.push(returnActionComponent);
+            // Return Action Button IS included
+            gifComponent.components.push({
+                "id": 6,
+                "type": ComponentType.ActionRow,
+                "components": [returnActionButton]
+            });
         }
 
         return new JsonResponse({
@@ -202,47 +194,13 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     }
     // GIF was NOT requested
     else {
-        // Embed was force-enabled
-        if ( forceDisplayEmbed ) {
-            // Create Components v2 response
-            let actionComponent = {
-                "id": 1,
-                "type": ComponentType.Container,
-                "accent_color": interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null,
-                "spoiler": false,
-                "components": [
-                    {
-                        "id": 2,
-                        "type": ComponentType.TextDisplay,
-                        "content": displayMessage
-                    }
-                ]
-            };
-
-            // Check for Return Action button allowance
-            if ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) {
-                actionComponent.components.push(returnActionComponent);
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                content: displayMessage,
+                allowed_mentions: { parse: [], users: ['159985870458322944'] },
+                components: ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) ? [{ "id": 6, "type": ComponentType.ActionRow, "components": [returnActionButton] }] : undefined
             }
-
-            return new JsonResponse({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                    flags: MessageFlags.IsComponentsV2,
-                    components: [actionComponent],
-                    allowed_mentions: { parse: [], users: ['159985870458322944'] }
-                }
-            });
-        }
-        // Embed not force-enabled
-        else {
-            return new JsonResponse({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                    content: displayMessage,
-                    allowed_mentions: { parse: [], users: ['159985870458322944'] },
-                    components: ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) ? [returnActionComponent] : undefined
-                }
-            });
-        }
+        });
     }
 }

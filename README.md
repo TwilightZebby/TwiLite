@@ -14,10 +14,13 @@ The License for this Project, and all of TwilightZebby's Projects, can be [found
 ---
 
 # Features List
+- Note: All listed features will note if they can be used in a User App context, or a Server App context (or both!).
+  - "User App context" means features that can be used anywhere (in Servers, DMs, & GroupDMs) when TwiLite is added to your account.
+  - "Server App context" means features that can only be used within Servers that have added TwiLite.
 
 ## Action Commands
 > [!NOTE]
-> Action Commands support being used in both Server-App and User-App contexts. So they can be used anywhere (including DMs/GroupDMs) depending on if you add TwiLite to a Server or to your account!
+> Action Commands support being used in both Server App and User App contexts.
 
 Just some fun little roleplay-style Commands (such as `/bonk`, `/hug`, `/boop`, etc) that you can use on your friends.
 
@@ -27,7 +30,7 @@ The Action Slash Commands also display a "return action" button when used. This 
 
 ## Role Menus
 > [!NOTE]
-> The Role Menu management Commands can only be used within Servers, meaning TwiLite has to be added to the Server in question in order for its Role Menu Commands to function.
+> Role Menus can only be used within the Server App context.
 
 Create self-assignable Role Menus for your Server Members to use.
 
@@ -49,7 +52,7 @@ TwiLite may sometimes be updated to add some general-purpose, utility, or other 
 
 ### Temperature Conversion
 > [!NOTE]
-> Temperature Conversion Commands support being used in both Server-App and User-App contexts. So they can be used anywhere (including DMs/GroupDMs) depending on if you add TwiLite to a Server or to your account!
+> Temperature Conversion commands supports being used in both Server App and User App contexts.
 
 Useful for converting American temperatures (Degrees F) into more globally understood temperatures (Degrees C or K), or indeed the other way around.
 There are two ways to convert temperatures using TwiLite:
@@ -139,7 +142,7 @@ __User Context Commands__ are Commands used on a specific User in Servers, and c
 
 ## Why was the App renamed from "Actions Bot" to "MooBot"?
 > The original name, "Actions Bot", was picked because of the simple nature of the App - to add action-based Slash Commands.
-> Now that the App is being used for more features, which are less action-based (such as Button-Roles or the Temperature Convertor), TwilightZebby thought a name change was in order since "Actions Bot" isn't accurate anymore.
+> Now that the App is being used for more features, which are less action-based (such as Button Role Menus or the Temperature Convertor), TwilightZebby thought a name change was in order since "Actions Bot" isn't accurate anymore.
 >
 > "MooBot" became the name picked as a reference to an *old* meme in [Dr1fterX's](https://www.twitch.tv/Dr1fterX) community, in which TwilightZebby was a cow (yes, as in the animal).
 > That meme has long since vanished as per TwilightZebby's request. He humbly requests no one refer to him as a cow anymore because of the expiry of that meme. :)

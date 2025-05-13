@@ -52,3 +52,12 @@
 - name: will not fix/do
   description: This will not be worked on
   color: 'ffffff'
+- name: feature:actions
+  description: Affects or relates to Action Commands
+  color: 'FBCA04'
+- name: feature:misc
+  description: Affects or relates to miscellaneous features
+  color: 'FBCA04'
+- name: feature:role menus
+  description: Affects or relates to the Role Menu module
+  color: 'FBCA04'

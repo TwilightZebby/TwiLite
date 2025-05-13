@@ -72,6 +72,7 @@ There are two ways to convert temperatures using TwiLite:
 | `/cookie` | Gives the specified User, Role, or everyone a cookie! |
 | `/headpat` | Gives the specified User, Role, or everyone a headpat |
 | `/hug` | Gives the specified User, Role, or everyone a hug |
+| `/jail` | Sends the target User to jail. |
 | `/kiss` | Gives a kiss to the specified User, Role, or everyone |
 | `/slap` | Slaps the target User, Role, or everyone |
 | `/yeet` | Yeets (throws) the specified User, Role, or everyone |

@@ -76,6 +76,7 @@ module.exports = {
     ACTION_COMMAND_OTHER_USER_YEET: `**{{0}}** yeeted **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_COOKIE: `**{{0}}** gave a cookie to **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_SLAP: `**{{0}}** slapped **{{1}}**`,
+    ACTION_COMMAND_OTHER_USER_JAIL: `**{{0}}** was sent to jail by **{{1}}**`,
 
     ACTION_COMMAND_SELF_USER_HEADPAT: `**{{0}}** gave themself a headpat`,
     ACTION_COMMAND_SELF_USER_HUG: `**{{0}}** gave themself a cuddle`,
@@ -149,6 +150,10 @@ module.exports = {
     ACTION_ERROR_CANNOT_RETURN_TO_SENDER: `You cannot return the Action you sent!`,
     ACTION_ERROR_RETURN_CANNOT_FETCH_ORIGINAL_SENDER: `Sorry, there was an error trying to fetch the original sender of that Action.`,
     ACTION_ERROR_RETURN_CANNOT_FETCH_TARGET: `Sorry, but there was an error trying to fetch the original target of that Action.`,
+    // JAIL ACTION COMMAND
+    ACTION_ERROR_CANNOT_JAIL_SELF: `You cannot send yourself to jail!`,
+    ACTION_ERROR_JAIL_MISSING_ATTACH_FILES_PERMISSION_ON_GUILD: `Whoops, this command cannot be used as I am missing the "**Attach Files**" Permission here!`,
+    ACTION_ERROR_JAIL_MISSING_ATTACH_FILES_PERMISSION_ON_USER: `Whoops, this command cannot be used as *you* are missing the "**Attach Files**" Permission here!`,
 
 
 

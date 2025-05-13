@@ -5,6 +5,9 @@ export const IMAGE_BUTTON_COLORS = "https://us-east-1.tixte.net/uploads/twilite.
 /** Image of TwiLite's Context Commands (for Role Menu Commands) */
 export const IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS = "https://us-east-1.tixte.net/uploads/twilite.is-from.space/TwiLiteRoleMenuCtxCmds.png";
 
+/** PNG Image of Cellbars for the Jail Action Command */
+export const IMAGE_JAIL_CELLBARS = "https://us-east-1.tixte.net/uploads/twilite.is-from.space/action-jail-cellbars.png"
+
 
 // ***** URIs
 /** URI to Emojipedia */

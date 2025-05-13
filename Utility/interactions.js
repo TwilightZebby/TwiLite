@@ -5,18 +5,19 @@ export const SlashCommands = {
     'cookie': () => import('../Commands/SlashCommands/Actions/cookie.js'),
     'headpat': () => import('../Commands/SlashCommands/Actions/headpat.js'),
     'hug': () => import('../Commands/SlashCommands/Actions/hug.js'),
+    'jail': () => import('../Commands/SlashCommands/Actions/jail.js'),
     'kiss': () => import('../Commands/SlashCommands/Actions/kiss.js'),
-    'yeet': () => import('../Commands/SlashCommands/Actions/yeet.js'),
     'slap': () => import('../Commands/SlashCommands/Actions/slap.js'),
+    'yeet': () => import('../Commands/SlashCommands/Actions/yeet.js'),
 
     // ***** FOR ROLE MENUS
     'rolemenu': () => import('../Commands/SlashCommands/RoleMenus/rolemenu.js'),
 
     // ***** FOR GENERAL COMMANDS
-    'temperature': () => import('../Commands/SlashCommands/General/temperature.js'),
-    'support': () => import('../Commands/SlashCommands/General/support.js'),
     'add-app': () => import('../Commands/SlashCommands/General/add-app.js'),
     'follow-news': () => import('../Commands/SlashCommands/General/follow-news.js'),
+    'support': () => import('../Commands/SlashCommands/General/support.js'),
+    'temperature': () => import('../Commands/SlashCommands/General/temperature.js'),
 }
 
 export const ContextCommands = {
@@ -27,8 +28,8 @@ export const ContextCommands = {
     'Kiss User': () => import('../Commands/ContextCommands/Actions/Kiss_User.js'),
 
     // ***** FOR ROLE MENUS
-    'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),
     'Delete Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Delete_Role_Menu.js'),
+    'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),
 
     // ***** FOR GENERAL COMMANDS
     'Convert Temperature': () => import('../Commands/ContextCommands/General/Convert_Temperature.js'),

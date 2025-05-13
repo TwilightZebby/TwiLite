@@ -121,6 +121,7 @@ export const SlashCommand = {
                 'Content-Type': 'application/json',
                 Authorization: `Bot ${DISCORD_TOKEN}`
             },
+            method: 'POST',
             body: {
                 webhook_channel_id: interaction.channel.id
             }

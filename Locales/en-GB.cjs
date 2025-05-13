@@ -340,4 +340,8 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
     NEWS_SUBSCRIBE_COMMAND_ERROR_MISSING_PERMISSION_MANAGE_WEBHOOKS: `Sorry, TwiLite needs the "**Manage Webhooks**" Permission in this Channel to be able to follow its Announcements Feed here.\n\n*(This Permission can be revoked from TwiLite again afterwards)*`,
     NEWS_SUBSCRIBE_COMMAND_ERROR_NOT_A_TEXT_CHANNEL: `Sorry, you can only follow a regular Text Channel to TwiLite's Announcements Feed.\nPlease try using this Channel again in a Text Channel.`,
     NEWS_SUBSCRIBE_COMMAND_ERROR_GENERIC: `Sorry, something went wrong while trying to follow this Channel to TwiLite's Announcements Feed.`,
+
+
+
+    // ******* PLACEHOLDER
 }

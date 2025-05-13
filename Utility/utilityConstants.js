@@ -49,6 +49,7 @@ export const HexColourRegex = new RegExp(/#[0-9a-fA-F]{6}/);
 
 
 
+/** System Message types */
 export const SystemMessageTypes = [
     MessageType.RecipientAdd, MessageType.RecipientRemove, MessageType.Call, MessageType.ChannelNameChange,
     MessageType.ChannelIconChange, MessageType.ChannelPinnedMessage, MessageType.UserJoin, MessageType.GuildBoost,

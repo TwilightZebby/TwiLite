@@ -50,6 +50,15 @@ All Role Menu management can be found under the `/rolemenu` Command - including 
 ## Miscellaneous Features
 TwiLite may sometimes be updated to add some general-purpose, utility, or other miscellaneous features. Currently added ones are as follows:
 
+### Role-locking Custom Emojis
+> [!NOTE]
+> Ability to upload Role-locked Custom Emojis can only be done when TwiLite is added to your Server.
+
+Twilite offers a `/lock-emoji` Command, that can be used by Server Admins to upload role-locked custom emojis to your Server.
+This makes use of a lesser-known feature within Discord, mostly used by Discord's Twitch Integration.
+
+When an Emoji is Role-locked, only those in the Server with the specific Role can use that Emoji in their messages. Even the Server's Owner needs to have that Role to use that Emoji!
+
 ### Temperature Conversion
 > [!NOTE]
 > Temperature Conversion commands supports being used in both Server App and User App contexts.
@@ -91,6 +100,7 @@ There are two ways to convert temperatures using TwiLite:
 | `/rolemenu` | Slash | Create/Manage self-assignable Role Menus |
 | "`Edit Role Menu`" | Message | Edit an existing Role Menu |
 | "`Delete Role Menu`" | Message | Delete an existing Role Menu |
+| `/lock-emoji` | Slash | Upload a Role-locked Custom Emoji, only allowing a specific Role to use the Emoji |
 
 ## General/Miscellaneous Commands
 | Command Name | Command Type | Description |

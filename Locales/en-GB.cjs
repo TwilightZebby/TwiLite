@@ -348,5 +348,13 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
 
 
 
-    // ******* PLACEHOLDER
+    // ******* LOCK EMOJI COMMAND
+    LOCKEMOJI_COMMAND_AUDIT_LOG_EMOJI_UPLOADED: `Role-locked Custom Emoji uploaded by {{0}} using TwiLite`,
+    LOCKEMOJI_COMMAND_UPLOAD_SUCCESS: `Successfully uploaded your new Role-locked Custom Emoji to this Server.\nYou can rename and/or delete your Emoji, much like others, in Server Settings > Emojis, providing you have the **Manage Expressions** Permission.`,
+
+    //LOCKEMOJI_COMMAND_ERROR_MISSING_CREATE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Create Expressions** Permission.\nPlease try again, once I have been granted that Permission!`, // Unused while Discord's API still has Apps use Manage Expressions instead of Create Expressions
+    LOCKEMOJI_COMMAND_ERROR_MISSING_MANAGE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Manage Expressions** Permission.\nPlease try again, once I have been granted that Permission!`,
+    LOCKEMOJI_COMMAND_ERROR_INVALID_FILE_TYPE: `Sorry, but that Emoji file wasn't a **PNG**, **JPEG**, or **GIF** file type.\nPlease try again, ensuring you use either a \`.png\`, \`.jpeg\`, or \`.gif\` file for your Custom Emoji.`,
+    LOCKEMOJI_COMMAND_ERROR_FILE_TOO_LARGE: `Sorry, but that Emoji file is too large to be uploaded as a Custom Emoji.\nDiscord requires Custom Emojis to be smaller than 256kb in file size. Please try again, once you have a smaller file size for your Custom Emoji.`,
+    LOCKEMOJI_COMMAND_ERROR_GENERIC: `Whoops, an error occurred while trying to upload that Role-locked Custom Emoji.`,
 }

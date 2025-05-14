@@ -140,24 +140,20 @@ export const SlashCommand = {
         /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
         let displayComponents = [{
             "id": 1,
-            "type": ComponentType.Container,
-            "accent_color": null,
-            "spoiler": false,
-            "components": [
-                {
-                    "id": 2,
-                    "type": ComponentType.Section,
-                    "accessory": {
-                        "type": ComponentType.Thumbnail,
-                        "media": { "url": IMAGE_JAIL_CELLBARS }
-                    },
-                    "components": [{
-                        "id": 3,
-                        "type": ComponentType.TextDisplay,
-                        "content": `${localize(interaction.locale, 'ACTION_COMMAND_OTHER_USER_JAIL', targetDisplayName, senderDisplayName)}${InputReason != undefined ? ` ${InputReason.value}` : ''}`
-                    }]
-                }
-            ]
+            "type": ComponentType.Section,
+            "accessory": {
+                "type": ComponentType.Thumbnail,
+                "media": { "url": IMAGE_JAIL_CELLBARS }
+            },
+            "components": [{
+                "id": 2,
+                "type": ComponentType.TextDisplay,
+                "content": `\u200B`
+            }, {
+                "id": 3,
+                "type": ComponentType.TextDisplay,
+                "content": `${localize(interaction.locale, 'ACTION_COMMAND_OTHER_USER_JAIL', targetDisplayName, senderDisplayName)}${InputReason != undefined ? ` ${InputReason.value}` : ''}`
+            }]
         }];
 
         // ACK

@@ -166,12 +166,13 @@ export const ContextCommand = {
                 }
                 else {
                     temp.addComponents(tempButton);
-                }
-                
-                // If last Button, force-push back into Array
-                let checkIndex = menuRow.components.findIndex(theButton => theButton.custom_id === `role_${roleButton.custom_id.split("_").pop()}`);
-                if ( menuRow.components.length - 1 === checkIndex ) {
-                    menuComponentsJson.push(temp.toJSON());
+
+                    // If last Button, force-push back into Array
+                    let checkIndex = menuRow.components.findIndex(theButton => theButton.custom_id === `role_${roleButton.custom_id.split("_").pop()}`);
+                    if ( menuRow.components.length - 1 === checkIndex ) {
+                        menuComponentsJson.push(temp.toJSON());
+                        temp = new ActionRowBuilder(); // Reset so rows don't duplicate!
+                    }
                 }
             });
         });

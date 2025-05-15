@@ -56,6 +56,8 @@ export const SlashCommand = {
         // Contexts - 0 for GUILD, 1 for BOT_DM (DMs with the App), 2 for PRIVATE_CHANNEL (DMs/GDMs that don't include the App).
         //  MUST include at least one. PRIVATE_CHANNEL can only be used if integration_types includes USER_INSTALL
         CommandData.contexts = [ InteractionContextType.Guild ];
+        // Default permissions
+        CommandData.default_member_permissions = String(PermissionFlagsBits.ManageWebhooks);
 
         return CommandData;
     },

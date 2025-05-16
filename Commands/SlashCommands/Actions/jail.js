@@ -1,5 +1,5 @@
-import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, ApplicationCommandOptionType, PermissionFlagsBits, ComponentType } from 'discord-api-types/v10';
-import { getInteractionContext, JsonResponse } from '../../../Utility/utilityMethods.js';
+import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, ApplicationCommandOptionType, ComponentType, ButtonStyle } from 'discord-api-types/v10';
+import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { IMAGE_JAIL_CELLBARS } from '../../../Assets/Hyperlinks.js';
 
@@ -78,7 +78,17 @@ export const SlashCommand = {
                 },
                 required: false,
                 max_length: 500
-            }
+            },
+            {
+                type: ApplicationCommandOptionType.Boolean,
+                name: "include-minigame",
+                description: "Set to true to include the \"break free from jail\" buttons",
+                description_localizations: {
+                    'en-GB': "Set to true to include the \"break free from jail\" buttons",
+                    'en-US': "Set to true to include the \"break free from jail\" buttons"
+                },
+                required: false
+            },
         ];
 
         return CommandData;
@@ -106,6 +116,7 @@ export const SlashCommand = {
         // Grab Inputs
         const InputTarget = interaction.data.options.find(option => option.name === "target");
         const InputReason = interaction.data.options.find(option => option.name === "reason");
+        const InputIncludeMinigame = interaction.data.options.find(option => option.name === "include-minigame");
 
         // Prevent usage on self
         if ( InputTarget.value === interactionUser.id ) {
@@ -156,12 +167,59 @@ export const SlashCommand = {
             }]
         }];
 
+        // Version with minigame buttons included
+        /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
+        let displayMinigameComponents = [{
+            "id": 1,
+            "type": ComponentType.Container,
+            "spoiler": false,
+            "components": [
+                {
+                    "id": 2,
+                    "type": ComponentType.Section,
+                    "accessory": {
+                        "type": ComponentType.Thumbnail,
+                        "media": { "url": IMAGE_JAIL_CELLBARS }
+                    },
+                    "components": [{
+                        "id": 3,
+                        "type": ComponentType.TextDisplay,
+                        "content": `\u200B`
+                    }, {
+                        "id": 4,
+                        "type": ComponentType.TextDisplay,
+                        "content": `${localize(interaction.locale, 'ACTION_COMMAND_OTHER_USER_JAIL', targetDisplayName, senderDisplayName)}${InputReason != undefined ? ` ${InputReason.value}` : ''}`
+                    }]
+                },
+                {
+                    "id": 5,
+                    "type": ComponentType.ActionRow,
+                    "components": [
+                        {
+                            "id": 6,
+                            "type": ComponentType.Button,
+                            "style": ButtonStyle.Secondary,
+                            "custom_id": `jail_ba_${targetDisplayName}_${InputTarget.value}_${senderDisplayName}`,
+                            "label": localize(interaction.locale, 'ACTION_JAIL_MINIGAME_BAIL_BUTTON_LABEL')
+                        },
+                        {
+                            "id": 7,
+                            "type": ComponentType.Button,
+                            "style": ButtonStyle.Secondary,
+                            "custom_id": `jail_br_${targetDisplayName}_${InputTarget.value}_${senderDisplayName}`,
+                            "label": localize(interaction.locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_BUTTON_LABEL')
+                        }
+                    ]
+                }
+            ]
+        }];
+
         // ACK
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
                 flags: MessageFlags.IsComponentsV2,
-                components: displayComponents,
+                components: InputIncludeMinigame.value === true ? displayMinigameComponents : displayComponents,
                 allowed_mentions: { parse: [] }
             }
         });

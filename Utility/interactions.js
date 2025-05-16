@@ -45,6 +45,7 @@ export const Autocompletes = {
 export const Buttons = {
     // ***** FOR ACTION MODULE
     'return-action': () => import('../Interactions/Buttons/Actions/return-action.js'),
+    'jail': () => import('../Interactions/Buttons/Actions/jail.js'),
 
     // ***** FOR ROLE MENUS
     'role': () => import('../Interactions/Buttons/RoleMenus/role.js'),

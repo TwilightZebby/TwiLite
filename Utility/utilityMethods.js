@@ -78,6 +78,17 @@ export function hexToRgb(hex) {
     ] : null;
 }
 
+/**
+ * Returns a random integer within the range specified (inclusive)
+ * @param {Number} minimumValue
+ * @param {Number} maximumValue
+ * 
+ * @returns {Number}
+ */
+export function randomNumberInRange(minimumValue, maximumValue) {
+  return Math.floor(( Math.random() * maximumValue ) + minimumValue);
+}
+
 // Json Response Class
 export class JsonResponse extends Response {
     constructor(body, init) {

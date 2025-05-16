@@ -150,10 +150,27 @@ module.exports = {
     ACTION_ERROR_CANNOT_RETURN_TO_SENDER: `You cannot return the Action you sent!`,
     ACTION_ERROR_RETURN_CANNOT_FETCH_ORIGINAL_SENDER: `Sorry, there was an error trying to fetch the original sender of that Action.`,
     ACTION_ERROR_RETURN_CANNOT_FETCH_TARGET: `Sorry, but there was an error trying to fetch the original target of that Action.`,
+    
     // JAIL ACTION COMMAND
+    ACTION_JAIL_MINIGAME_BAIL_BUTTON_LABEL: `Bail Freedom`,
+    ACTION_JAIL_MINIGAME_BREAKOUT_BUTTON_LABEL: `Attempt Jailbreak`,
+
+    ACTION_JAIL_MINIGAME_BAIL_SENDER_SUCCESSFUL: `-# **{{0}}** felt bad for sending **{{1}}** to jail and paid their bail to free them!`,
+    ACTION_JAIL_MINIGAME_BAIL_SENDER_FAILURE: `-# **{{0}}** felt bad for sending **{{1}}** to jail, but couldn't afford their bail to free them!`,
+    ACTION_JAIL_MINIGAME_BAIL_OTHER_SUCCESSFUL: `-# **{{0}}** paid **{{1}}**'s bail to free them!`,
+    ACTION_JAIL_MINIGAME_BAIL_OTHER_FAILURE: `-# **{{0}}** wanted to pay **{{1}}**'s bail to free them, but couldn't afford it!`,
+
+    ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_SUCCESSFUL: `-# **{{0}}** successfully broke themselves out of jail!`,
+    ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_FAILURE: `-# **{{0}}** failed to break themselves out of jail, and extended their jail sentence!`,
+    ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_SUCCESSFUL: `-# **{{0}}** felt bad for sending **{{1}}** to jail, and broke them out of jail!`,
+    ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_FAILURE: `-# **{{0}}** felt bad for sending **{{1}}** to jail, and decided to join them in jail!`,
+    ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_SUCCESSFUL: `-# **{{0}}** successfully broke **{{1}}** out of jail!`,
+    ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_FAILURE: `-# **{{0}}** failed to break **{{1}}** out of jail, and ended up sending themselves to jail instead!`,
+
     ACTION_ERROR_CANNOT_JAIL_SELF: `You cannot send yourself to jail!`,
     ACTION_ERROR_JAIL_MISSING_ATTACH_FILES_PERMISSION_ON_GUILD: `Whoops, this command cannot be used as I am missing the "**Attach Files**" Permission here!`,
     ACTION_ERROR_JAIL_MISSING_ATTACH_FILES_PERMISSION_ON_USER: `Whoops, this command cannot be used as *you* are missing the "**Attach Files**" Permission here!`,
+    ACTION_ERROR_JAIL_MINIGAME_CANNOT_BAIL_SELF: `You cannot pay your own bail to free yourself!`,
 
 
 

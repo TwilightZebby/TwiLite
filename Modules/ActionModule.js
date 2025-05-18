@@ -92,7 +92,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         "type": ComponentType.Button,
         "style": ButtonStyle.Primary,
         "label": localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_BUTTON_LABEL_${interaction.data.name.toUpperCase()}`),
-        "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${InteractionTriggeringUserId}_${InputTarget.value}`
+        "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${InteractionTriggeringUserId}_${InputTarget.value}_${InteractionTriggeringUserDisplayName}` // Add names to the end so we don't need to be limited to not having nicknames
     };
 
 

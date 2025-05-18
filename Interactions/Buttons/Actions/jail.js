@@ -27,7 +27,6 @@ export const Button = {
      */
     async executeButton(interaction, interactionUser) {
         // Grab data
-        console.log(interaction.data.custom_id);
         let splitCustomData = interaction.data.custom_id.split("_");
         const OriginalSenderId = interaction.message.interaction_metadata.user.id;
         const OriginalSenderDisplayName = splitCustomData.pop();

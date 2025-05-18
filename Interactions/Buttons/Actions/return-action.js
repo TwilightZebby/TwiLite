@@ -1,7 +1,6 @@
 import { ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
-import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from '../../../config.js';
 
 
 export const Button = {
@@ -19,7 +18,7 @@ export const Button = {
     /** Button's cooldown, in seconds (whole number integers!)
      * @type {Number}
      */
-    cooldown: 5,
+    cooldown: 3,
 
     /** Runs the Button
      * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
@@ -27,10 +26,11 @@ export const Button = {
      */
     async executeButton(interaction, interactionUser) {
         // Parse params out of Custom ID
-        const CustomParams = interaction.data.custom_id.split("_");
-        const ActionName = CustomParams[1].toUpperCase();
-        const OriginalUserId = CustomParams[2];
-        const OriginalTargetId = CustomParams[3];
+        let CustomParams = interaction.data.custom_id.split("_");
+        const OriginalUserDisplayName = CustomParams.pop();
+        const OriginalTargetId = CustomParams.pop();
+        const OriginalUserId = CustomParams.pop();
+        const ActionName = CustomParams.pop().toUpperCase();
 
         // Grab Components so we can edit Button out of it
         let messageComponents = interaction.message.components;
@@ -63,7 +63,6 @@ export const Button = {
 
 
         // Grab display names
-        let originalTriggeringUserName = interaction.message.interaction_metadata?.user.global_name != null ? interaction.message.interaction_metadata?.user.global_name : interaction.message.interaction_metadata?.user.username;
         let originalTargetUserName = interaction.member != undefined && interaction.member?.nick != null ? interaction.member.nick
             : interaction.member != undefined && interaction.member?.nick == null && interaction.member?.user.global_name != null ? interaction.member.user.global_name
             : interaction.member != undefined && interaction.member?.nick == null && interaction.member?.user.global_name == null ? interaction.member.user.username
@@ -72,7 +71,7 @@ export const Button = {
 
         
         // Construct display message
-        let displayMessage = localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_${ActionName}`, originalTargetUserName, originalTriggeringUserName);
+        let displayMessage = localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_${ActionName}`, originalTargetUserName, OriginalUserDisplayName);
 
         // ACK & remove Button (while editing *in* the new message because CF Workers is annoying by not allowing me to use Follow-ups after Patching edits :S)
         let updatedComponents = [];
@@ -115,13 +114,15 @@ export const Button = {
         if ( isButtonInsideContainer ) {
             updatedMessageBody.data = {
                 "flags": MessageFlags.IsComponentsV2,
-                "components": updatedComponents
+                "components": updatedComponents,
+                "allowed_mentions": { parse: [] }
             };
         }
         else {
             updatedMessageBody.data = {
                 "content": `${interaction.message.content}\n\n${displayMessage}`,
-                "components": updatedComponents
+                "components": updatedComponents,
+                "allowed_mentions": { parse: [] }
             };
         }
 

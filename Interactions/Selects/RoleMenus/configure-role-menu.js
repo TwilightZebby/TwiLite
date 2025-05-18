@@ -340,8 +340,6 @@ async function saveAndDisplay(interaction) {
         })
     });
 
-    console.log(`${editMenuFetch.status} ${editMenuFetch.statusText}`);
-
 
     // Now ACK Interaction
     return new JsonResponse({

@@ -333,7 +333,6 @@ async function swapRole(interaction, RoleID) {
                 });
             }
             else {
-                console.log(`${grantRoleRequest.status} ${grantRoleRequest.statusText}`);
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {

@@ -116,7 +116,7 @@ export const Button = {
 
             // Responses for when original sender presses button
             if ( interactionUser.id === OriginalSenderId ) {
-                if ( randomPhrase <= 30 ) {
+                if ( randomPhrase <= 28 ) {
                     // Successful bail
                     editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BAIL_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
                 }
@@ -127,7 +127,7 @@ export const Button = {
             }
             // Responses for when other users press the button
             else {
-                if ( randomPhrase <= 30 ) {
+                if ( randomPhrase <= 28 ) {
                     // Successful bail
                     editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BAIL_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
                 }
@@ -140,7 +140,7 @@ export const Button = {
         else if ( MinigameAction === "br" ) {
             // Responses for when original target presses the button
             if ( interactionUser.id === OriginalTargetId ) {
-                if ( randomPhrase <= 30 ) {
+                if ( randomPhrase <= 28 ) {
                     // Successful breakout
                     editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_SUCCESSFUL', OriginalTargetDisplayName);
                 }
@@ -151,7 +151,7 @@ export const Button = {
             }
             // Responses for when original sender presses button
             else if ( interactionUser.id === OriginalSenderId ) {
-                if ( randomPhrase <= 30 ) {
+                if ( randomPhrase <= 28 ) {
                     // Successful breakout
                     editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
                 }
@@ -162,7 +162,7 @@ export const Button = {
             }
             // Responses for when other users press the button
             else {
-                if ( randomPhrase <= 30 ) {
+                if ( randomPhrase <= 28 ) {
                     // Successful breakout
                     editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
                 }

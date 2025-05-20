@@ -1,5 +1,6 @@
 const appLocales = {
-    'en-GB': await import('../Locales/en-GB.cjs')
+    'en-GB': await import('../Locales/en-GB.cjs'),
+    'en-US': await import('../Locales/en-US.cjs')
 };
 // Why the fuck is that import dumping the stuff under an extra DEFAULT object
 

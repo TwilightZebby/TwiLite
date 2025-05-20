@@ -87,7 +87,7 @@ export const Button = {
                 "type": ComponentType.Button,
                 "style": ButtonStyle.Primary,
                 "label": localize(CurrentLocale, `ACTION_RETURN_BUTTON_LABEL_${ActionName}`),
-                "custom_id": `return-action_${ActionName}_${InteractionTriggeringUserId}_${InputTarget.value}_${InteractionTriggeringUserDisplayName}`,
+                "custom_id": `return-action_${ActionName}_${OriginalUserId}_${OriginalTargetId}_${OriginalUserDisplayName}`,
                 "disabled": true
             }]
         };

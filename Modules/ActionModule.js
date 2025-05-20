@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, ButtonStyle, ComponentType, InteractionRe
 import { EmbedBuilder } from '@discordjs/builders';
 import { ActionGifs } from '../Assets/ActionGifLinks.js';
 import { localize } from '../Utility/localizeResponses.js';
-import { JsonResponse } from '../Utility/utilityMethods.js';
+import { getInteractionLocale, JsonResponse } from '../Utility/utilityMethods.js';
 import { DISCORD_APP_USER_ID } from '../config.js';
 
 // REGEXS
@@ -82,6 +82,8 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         : interaction.member != undefined && interaction.member.nick == null && interaction.member.user.global_name == null ? interaction.member.user.username
         : interaction.member == undefined && interaction.user.global_name != null ? interaction.user.global_name
         : interaction.user.username;
+    
+    const CurrentLocale = getInteractionLocale(interaction);
 
     // For assembling the displayed message content
     let displayMessage = "";
@@ -91,35 +93,35 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         "id": 11,
         "type": ComponentType.Button,
         "style": ButtonStyle.Primary,
-        "label": localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_BUTTON_LABEL_${interaction.data.name.toUpperCase()}`),
+        "label": localize(CurrentLocale, `ACTION_RETURN_BUTTON_LABEL_${interaction.data.name.toUpperCase()}`),
         "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${InteractionTriggeringUserId}_${InputTarget.value}_${InteractionTriggeringUserDisplayName}` // Add names to the end so we don't need to be limited to not having nicknames
     };
 
 
     // atEveryone
     if ( InputTarget.value === interaction.guild_id ) {
-        displayMessage = localize('en-GB', `ACTION_COMMAND_EVERYONE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_EVERYONE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
     }
     // atRole
     else if ( interaction.data.resolved.roles?.[InputTarget.value] != undefined ) {
         forceDisplayEmbed = true;
-        displayMessage = localize('en-GB', `ACTION_COMMAND_ROLE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@&${InputTarget.value}>`);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_ROLE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@&${InputTarget.value}>`);
     }
     // atUser (used on self)
     else if ( InputTarget.value === InteractionTriggeringUserId ) {
-        displayMessage = localize('en-GB', `ACTION_COMMAND_SELF_USER_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_SELF_USER_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
     }
     // atUser (used on this app)
     else if ( InputTarget.value === DISCORD_APP_USER_ID ) {
-        displayMessage = localize('en-GB', `ACTION_COMMAND_TWILITE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_TWILITE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
     }
     // atUser (used on the yucky Mee6 app)
     else if ( InputTarget.value === '159985870458322944' ) {
-        displayMessage = localize('en-GB', `ACTION_COMMAND_MEE6_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@159985870458322944>`);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_MEE6_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@159985870458322944>`);
     }
     // atUser (used on any app that isn't TwiLite or Mee6)
     else if ( interaction.data.resolved.users?.[InputTarget.value]?.bot === true ) {
-        displayMessage = localize('en-GB', `ACTION_COMMAND_OTHER_APPS_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@${InputTarget.value}>`);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_OTHER_APPS_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@${InputTarget.value}>`);
     }
     // atUser (used on any human User)
     else {
@@ -131,7 +133,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         else if ( interaction.data.resolved.members == undefined && interaction.data.resolved.users[InputTarget.value].global_name != null ) { targetDisplayName = interaction.data.resolved.users[InputTarget.value].global_name; }
         else { targetDisplayName = interaction.data.resolved.users[InputTarget.value].username; }
 
-        displayMessage = localize('en-GB', `ACTION_COMMAND_OTHER_USER_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, targetDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_OTHER_USER_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, targetDisplayName);
     }
 
 

@@ -1,5 +1,5 @@
 import { ButtonStyle, ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import { JsonResponse, randomNumberInRange } from '../../../Utility/utilityMethods.js';
+import { getInteractionLocale, JsonResponse, randomNumberInRange } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { IMAGE_JAIL_CELLBARS } from '../../../Assets/Hyperlinks.js';
 
@@ -43,6 +43,8 @@ export const Button = {
             : interaction.member == undefined && interaction.user.global_name != null ? interaction.user.global_name
             : interaction.user.username;
         
+        const CurrentLocale = getInteractionLocale(interaction);
+        
         // Just to set a default
         /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
         let editComponents = [{
@@ -80,7 +82,7 @@ export const Button = {
                             "type": ComponentType.Button,
                             "style": ButtonStyle.Secondary,
                             "custom_id": `jail_ba_${OriginalTargetDisplayName}_${OriginalTargetId}_${OriginalSenderDisplayName}`,
-                            "label": localize(interaction.locale, 'ACTION_JAIL_MINIGAME_BAIL_BUTTON_LABEL'),
+                            "label": localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BAIL_BUTTON_LABEL'),
                             "disabled": true
                         },
                         {
@@ -88,7 +90,7 @@ export const Button = {
                             "type": ComponentType.Button,
                             "style": ButtonStyle.Secondary,
                             "custom_id": `jail_br_${OriginalTargetDisplayName}_${OriginalTargetId}_${OriginalSenderDisplayName}`,
-                            "label": localize(interaction.locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_BUTTON_LABEL'),
+                            "label": localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_BUTTON_LABEL'),
                             "disabled": true
                         }
                     ]
@@ -116,22 +118,22 @@ export const Button = {
             if ( interactionUser.id === OriginalSenderId ) {
                 if ( randomPhrase <= 30 ) {
                     // Successful bail
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BAIL_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
                 }
                 else {
                     // Failed bail
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_SENDER_FAILURE', OriginalSenderDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BAIL_SENDER_FAILURE', OriginalSenderDisplayName, OriginalTargetDisplayName);
                 }
             }
             // Responses for when other users press the button
             else {
                 if ( randomPhrase <= 30 ) {
                     // Successful bail
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BAIL_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
                 }
                 else {
                     // Failed bail
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_OTHER_FAILURE', InteractionUserDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BAIL_OTHER_FAILURE', InteractionUserDisplayName, OriginalTargetDisplayName);
                 }
             }
         }
@@ -140,33 +142,33 @@ export const Button = {
             if ( interactionUser.id === OriginalTargetId ) {
                 if ( randomPhrase <= 30 ) {
                     // Successful breakout
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_SUCCESSFUL', OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_SUCCESSFUL', OriginalTargetDisplayName);
                 }
                 else {
                     // Failed breakout
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_FAILURE', OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_FAILURE', OriginalTargetDisplayName);
                 }
             }
             // Responses for when original sender presses button
             else if ( interactionUser.id === OriginalSenderId ) {
                 if ( randomPhrase <= 30 ) {
                     // Successful breakout
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
                 }
                 else {
                     // Failed breakout
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_FAILURE', OriginalSenderDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_FAILURE', OriginalSenderDisplayName, OriginalTargetDisplayName);
                 }
             }
             // Responses for when other users press the button
             else {
                 if ( randomPhrase <= 30 ) {
                     // Successful breakout
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
                 }
                 else {
                     // Failed breakout
-                    editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_FAILURE', InteractionUserDisplayName, OriginalTargetDisplayName);
+                    editComponents[0].components[0].components[2].content = localize(CurrentLocale, 'ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_FAILURE', InteractionUserDisplayName, OriginalTargetDisplayName);
                 }
             }
         }

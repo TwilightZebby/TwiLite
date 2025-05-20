@@ -89,6 +89,16 @@ export function randomNumberInRange(minimumValue, maximumValue) {
   return Math.floor(( Math.random() * maximumValue ) + minimumValue);
 }
 
+/**
+ * Returns the public locale from the interaction. Tries to return `guild_locale` if possible, otherwise returns `locale`
+ * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * 
+ * @returns {import('discord-api-types/v10').Locale}
+ */
+export function getInteractionLocale(interaction) {
+  return interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale;
+}
+
 // Json Response Class
 export class JsonResponse extends Response {
     constructor(body, init) {

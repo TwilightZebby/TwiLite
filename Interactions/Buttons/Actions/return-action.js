@@ -1,5 +1,5 @@
-import { ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import { JsonResponse } from '../../../Utility/utilityMethods.js';
+import { ButtonStyle, ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
+import { getInteractionLocale, JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 
 
@@ -31,6 +31,8 @@ export const Button = {
         const OriginalTargetId = CustomParams.pop();
         const OriginalUserId = CustomParams.pop();
         const ActionName = CustomParams.pop().toUpperCase();
+
+        const CurrentLocale = getInteractionLocale(interaction);
 
         // Grab Components so we can edit Button out of it
         let messageComponents = interaction.message.components;
@@ -71,10 +73,24 @@ export const Button = {
 
         
         // Construct display message
-        let displayMessage = localize(interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale, `ACTION_RETURN_${ActionName}`, originalTargetUserName, OriginalUserDisplayName);
+        let displayMessage = localize(CurrentLocale, `ACTION_RETURN_${ActionName}`, originalTargetUserName, OriginalUserDisplayName);
 
         // ACK & remove Button (while editing *in* the new message because CF Workers is annoying by not allowing me to use Follow-ups after Patching edits :S)
         let updatedComponents = [];
+
+        // Create disabled version of Button
+        let disabledButton = {
+            "id": 6,
+            "type": ComponentType.ActionRow,
+            "components": [{
+                "id": 11,
+                "type": ComponentType.Button,
+                "style": ButtonStyle.Primary,
+                "label": localize(CurrentLocale, `ACTION_RETURN_BUTTON_LABEL_${ActionName}`),
+                "custom_id": `return-action_${ActionName}_${InteractionTriggeringUserId}_${InputTarget.value}_${InteractionTriggeringUserDisplayName}`,
+                "disabled": true
+            }]
+        };
 
         if ( isButtonInsideContainer ) {
             let actionGifUri = messageComponents[0].components[1].items[0].media.url;
@@ -101,11 +117,15 @@ export const Button = {
                             },
                             "spoiler": false
                         }]
-                    }
+                    },
+                    disabledButton
                 ]
             };
 
             updatedComponents.push(newContainer);
+        }
+        else {
+            updatedComponents.push(disabledButton);
         }
 
         let updatedMessageBody = {

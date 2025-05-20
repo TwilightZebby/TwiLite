@@ -81,7 +81,7 @@ export const Button = {
                             "style": ButtonStyle.Secondary,
                             "custom_id": `jail_ba_${OriginalTargetDisplayName}_${OriginalTargetId}_${OriginalSenderDisplayName}`,
                             "label": localize(interaction.locale, 'ACTION_JAIL_MINIGAME_BAIL_BUTTON_LABEL'),
-                            "disabled": false
+                            "disabled": true
                         },
                         {
                             "id": 8,
@@ -89,7 +89,7 @@ export const Button = {
                             "style": ButtonStyle.Secondary,
                             "custom_id": `jail_br_${OriginalTargetDisplayName}_${OriginalTargetId}_${OriginalSenderDisplayName}`,
                             "label": localize(interaction.locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_BUTTON_LABEL'),
-                            "disabled": false
+                            "disabled": true
                         }
                     ]
                 }
@@ -117,14 +117,10 @@ export const Button = {
                 if ( randomPhrase <= 30 ) {
                     // Successful bail
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[0].disabled = true;
-                    editComponents[0].components[1].components[1].disabled = true;
                 }
                 else {
                     // Failed bail
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_SENDER_FAILURE', OriginalSenderDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[0].disabled = true;
-                    editComponents[0].components[1].components[1].disabled = true;
                 }
             }
             // Responses for when other users press the button
@@ -132,14 +128,10 @@ export const Button = {
                 if ( randomPhrase <= 30 ) {
                     // Successful bail
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[0].disabled = true;
-                    editComponents[0].components[1].components[1].disabled = true;
                 }
                 else {
                     // Failed bail
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BAIL_OTHER_FAILURE', InteractionUserDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[0].disabled = true;
-                    editComponents[0].components[1].components[1].disabled = true;
                 }
             }
         }
@@ -149,14 +141,10 @@ export const Button = {
                 if ( randomPhrase <= 30 ) {
                     // Successful breakout
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_SUCCESSFUL', OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[1].disabled = true;
-                    editComponents[0].components[1].components[0].disabled = true;
                 }
                 else {
                     // Failed breakout
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_TARGET_FAILURE', OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[1].disabled = true;
-                    editComponents[0].components[1].components[0].disabled = true;
                 }
             }
             // Responses for when original sender presses button
@@ -164,14 +152,10 @@ export const Button = {
                 if ( randomPhrase <= 30 ) {
                     // Successful breakout
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_SUCCESSFUL', OriginalSenderDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[1].disabled = true;
-                    editComponents[0].components[1].components[0].disabled = true;
                 }
                 else {
                     // Failed breakout
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_SENDER_FAILURE', OriginalSenderDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[1].disabled = true;
-                    editComponents[0].components[1].components[0].disabled = true;
                 }
             }
             // Responses for when other users press the button
@@ -179,14 +163,10 @@ export const Button = {
                 if ( randomPhrase <= 30 ) {
                     // Successful breakout
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_SUCCESSFUL', InteractionUserDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[1].disabled = true;
-                    editComponents[0].components[1].components[0].disabled = true;
                 }
                 else {
                     // Failed breakout
                     editComponents[0].components[0].components[2].content = localize(interaction.guild_locale, 'ACTION_JAIL_MINIGAME_BREAKOUT_OTHER_FAILURE', InteractionUserDisplayName, OriginalTargetDisplayName);
-                    editComponents[0].components[1].components[1].disabled = true;
-                    editComponents[0].components[1].components[0].disabled = true;
                 }
             }
         }

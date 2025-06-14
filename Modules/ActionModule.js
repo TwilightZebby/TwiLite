@@ -209,7 +209,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
             data: {
                 content: displayMessage,
                 allowed_mentions: { parse: [], users: ['159985870458322944'] },
-                components: ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === true) ) ? [{ "id": 6, "type": ComponentType.ActionRow, "components": [returnActionButton] }] : undefined
+                components: ( InputBlockReturn == undefined || (InputBlockReturn != undefined && InputBlockReturn.value === false) ) ? [{ "id": 6, "type": ComponentType.ActionRow, "components": [returnActionButton] }] : undefined
             }
         });
     }

@@ -10,6 +10,7 @@ import { handleSelect } from './Handlers/Interactions/selectHandler.js';
 import { handleAutocomplete } from './Handlers/Interactions/autocompleteHandler.js';
 import { handleModal } from './Handlers/Interactions/modalHandler.js';
 import { handleAppAuthorized } from './Handlers/WebhookEvents/applicationAuthorized.js';
+import { handleAppDeauthorized } from './Handlers/WebhookEvents/applicationDeauthorized.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID } from './config.js';
 import { JsonResponse } from './Utility/utilityMethods.js';
 
@@ -111,6 +112,10 @@ router.post('/webhook', async (request, env, ctx) => {
     // APPLICATION_AUTHORIZED Event
     if ( WebhookEvent.event.type === ApplicationWebhookEventType.ApplicationAuthorized ) {
         return await handleAppAuthorized(WebhookEvent);
+    }
+    // APPLICATION_DEAUTHORIZED Event
+    else if ( WebhookEvent.event.type === ApplicationWebhookEventType.ApplicationDeauthorized ) {
+        return await handleAppDeauthorized(WebhookEvent);
     }
     // Just in case
     else {

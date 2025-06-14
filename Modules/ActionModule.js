@@ -9,6 +9,9 @@ import { DISCORD_APP_USER_ID } from '../config.js';
 const MentionEveryoneRegex = new RegExp(/@(everyone|here)/g);
 const MentionRoleRegex = new RegExp(/<@&(\d{17,20})>/g);
 
+/** Actions that should NEVER include the Return Action Button */
+const NoReturnActions = [ "JAIL", "YEET", "COOKIE" ];
+
 
 /**
  * Tests for the Everyone/Here Mentions in a string. Optionally returns the result if slice is True
@@ -73,7 +76,12 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     const InputIncludeGif = interaction.data.options.find(option => option.name === "include-gif");
     const InputReason = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.String);
     /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataBooleanOption|undefined}*/
-    const InputBlockReturn = interaction.data.options.find(option => option.name === "block-return");
+    const InputBlockReturn = interaction.data.options.find(option => option.name === "block-return") ?? { name: "block-return", type: ApplicationCommandOptionType.Boolean, value: true };
+
+    // To hide Return Action Button when specific Action doesn't support it
+    if ( NoReturnActions.includes(interaction.data.name.toUpperCase()) ) {
+        InputBlockReturn.value = true; // Overrides `value` field
+    }
 
     // Just for ease
     const InteractionTriggeringUserId = interaction.member != undefined ? interaction.member.user.id : interaction.user.id;

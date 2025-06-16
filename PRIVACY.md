@@ -1,7 +1,7 @@
 # TwiLite - Privacy Policy
-Last Updated: 25th January 2025
+Last Updated: 16th June 2025
 
-Effective: 25th January 2025
+Effective: 1st July 2025
 
 ---
 
@@ -19,7 +19,7 @@ The developers of **TwiLite** firmly believes in a "we don't want your data keep
 TwiLite currently does *not* collect or store *any* data or information from any Users or Servers that use or interact with TwiLite, apart from what is listed below.
 
 ### Logging
-**TwiLite** will log when it has been added (otherwise referred to as authorized) as a Server App to a Discord Server or as a User App to a User's account.
+**TwiLite** will log when it has been added (otherwise referred to as authorized) or removed (or "deauthorized") as a Server App to a Discord Server or as a User App to a User's account.
 
 The only information included in this log are:
 - **When added as a Server App:**
@@ -29,6 +29,8 @@ The only information included in this log are:
 - **When added as a User App:**
   - Which User added **TwiLite** as a User App (specifically, the User's display/user name, and ID)
   - and which Scopes **TwiLite** was authorized with (commonly `application.commands` for its Slash Commands, and `bot` for its Bot User)
+- **When removed as a User App:**
+  - Which User removed **TwiLite** as a User App (specifically, the User's display/user name, and ID)
 
 This is purely for informational purposes (such as tracking the App's growth), and this information will NOT be given or sold to anyone else.
 

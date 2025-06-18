@@ -18,6 +18,7 @@ export const SlashCommands = {
     'follow-news': () => import('../Commands/SlashCommands/General/follow-news.js'),
     'support': () => import('../Commands/SlashCommands/General/support.js'),
     'temperature': () => import('../Commands/SlashCommands/General/temperature.js'),
+    'discord-outage-feed': () => import('../Commands/SlashCommands/General/discord-outage-feed.js'),
 
     // ***** FOR MANAGEMENT COMMANDS
     'lock-emoji': () => import('../Commands/SlashCommands/Management/lock-emoji.js'),

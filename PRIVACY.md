@@ -1,7 +1,7 @@
 # TwiLite - Privacy Policy
-Last Updated: 16th June 2025
+Last Updated: 18th June 2025
 
-Effective: 1st July 2025
+Effective: ?? July 2025 (Date to be confirmed once update is ready for release)
 
 ---
 
@@ -33,6 +33,18 @@ The only information included in this log are:
   - Which User removed **TwiLite** as a User App (specifically, the User's display/user name, and ID)
 
 This is purely for informational purposes (such as tracking the App's growth), and this information will NOT be given or sold to anyone else.
+
+### Discord Outage Notifier Module
+**TwiLite** offers an **opt-in** Module Servers can use (when **TwiLite** is added as a Server App) to have Discord's outage notices auto-posted into a Text Channel of choice. This is done via the `/discord-outage-feed` Slash Command.
+
+When opted-in, **TwiLite** will require storing the following data in order for this Module to function:
+- **The Server's ID** of the Server opting-in to this Module
+- **The Channel's ID** of the Channel the Server wants this Module to post in
+- **The Webhook's ID & Token** of the Webhook **TwiLite** will create within the Channel for this Module to post via
+
+Servers can, at any time, opt back out of this Module (and thus, no longer receive notifications for Discord's outages) via the same `/discord-outage-feed` Slash Command. Opting out of this Module **will** remove the aforementioned data from **TwiLite** within the context of this Module.
+
+The stored data will NOT be given or sold to anyone else, for any reason.
 
 ---
 

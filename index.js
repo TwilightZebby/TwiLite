@@ -133,7 +133,7 @@ router.post('/webhook', async (request, env, ctx) => {
 
 // *******************************
 /** For incoming Webhook Events from StatusPage. They should include a JSON payload */
-router.post('/webhook', async (request, env, ctx) => {
+router.post('/statuspage', async (request, env, ctx) => {
     //.
 });
 

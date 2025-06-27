@@ -207,16 +207,12 @@ export const Select = {
             // Cancels creation of Role menu
             case "cancel":
             default:
-                // Purge cache, just in case
-                UtilityCollections.RoleMenuManagement.delete(UserId);
                 // ACK
                 return new JsonResponse({
                     type: InteractionResponseType.UpdateMessage,
                     data: {
-                        flags: MessageFlags.Ephemeral,
-                        components: [],
-                        embeds: [],
-                        content: localize(interaction.locale, 'ROLE_MENU_CREATION_CANCELLED')
+                        flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
+                        components: [{ "id": 1, "type": ComponentType.TextDisplay, "content": localize(interaction.locale, 'ROLE_MENU_CREATION_CANCELLED') }],
                     }
                 });
         }

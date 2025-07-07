@@ -24,6 +24,7 @@
     "discord-interactions": "^4.1.0",
     "emoji-regex": "^10.4.0",
     "itty-router": "^5.0.18",
+    "mongodb": "^6.17.0",
     "undici": "^7.9.0"
   },
   "devDependencies": {

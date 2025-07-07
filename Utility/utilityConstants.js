@@ -1,10 +1,22 @@
 import { Collection } from '@discordjs/collection';
 import { EmbedBuilder, ButtonBuilder, ActionRowBuilder } from '@discordjs/builders';
 import { MessageType } from 'discord-api-types/v10';
+import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MONGO_URI } from '../config';
 
 
 // *******************************
 //  Exports
+
+/** Mongo Client */
+export const MongoClient = new MongoClient(MONGO_URI, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true
+    },
+    timeoutMS: 10_000
+});
 
 /** Utility & Command/Interaction Collections */
 export const UtilityCollections = {

@@ -2,21 +2,26 @@ import { Collection } from '@discordjs/collection';
 import { EmbedBuilder, ButtonBuilder, ActionRowBuilder } from '@discordjs/builders';
 import { MessageType } from 'discord-api-types/v10';
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import { MONGO_URI } from '../config';
+import { MONGO_CONNECTION_URI } from '../config.js';
 
 
 // *******************************
 //  Exports
 
-/** Mongo Client */
-export const MongoClient = new MongoClient(MONGO_URI, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true
-    },
-    timeoutMS: 10_000
-});
+/** Mongo Client Connection
+ * @returns {MongoClient}
+ */
+export const createMongoClient = () => {
+    return new MongoClient(MONGO_CONNECTION_URI, {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+            timeoutMS: 3_000,
+            maxIdleTimeMS: 10_000
+        }
+    });
+}
 
 /** Utility & Command/Interaction Collections */
 export const UtilityCollections = {

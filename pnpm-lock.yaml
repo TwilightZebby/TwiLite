@@ -14,6 +14,9 @@ importers:
       '@discordjs/collection':
         specifier: ^2.1.1
         version: 2.1.1
+      cf-mongodb-polyfills:
+        specifier: ^1.0.1
+        version: 1.0.1
       discord-api-types:
         specifier: 0.38.11
         version: 0.38.11
@@ -405,6 +408,9 @@ packages:
   bson@6.10.4:
     resolution: {integrity: sha512-WIsKqkSC0ABoBJuT1LEX+2HEvNmNKKgnTAyd0fL8qzK4SH2i9NXg+t08YtdZp/V9IZ33cxe3iV4yM0qg8lMQng==, tarball: https://registry.npmjs.org/bson/-/bson-6.10.4.tgz}
     engines: {node: '>=16.20.1'}
+
+  cf-mongodb-polyfills@1.0.1:
+    resolution: {integrity: sha512-9K/bpTWI32zrHGwV1IXRlKN85Q1V1e8DQn+blzbjKBCTUtBpyejll1nt+ZH7zQRuLuBjVnKcqQwhXzuk92BihA==, tarball: https://registry.npmjs.org/cf-mongodb-polyfills/-/cf-mongodb-polyfills-1.0.1.tgz}
 
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==, tarball: https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz}
@@ -874,6 +880,8 @@ snapshots:
   blake3-wasm@2.1.5: {}
 
   bson@6.10.4: {}
+
+  cf-mongodb-polyfills@1.0.1: {}
 
   color-convert@2.0.1:
     dependencies:

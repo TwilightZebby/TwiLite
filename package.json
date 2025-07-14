@@ -20,6 +20,7 @@
   "dependencies": {
     "@discordjs/builders": "^1.11.1",
     "@discordjs/collection": "^2.1.1",
+    "cf-mongodb-polyfills": "^1.0.1",
     "discord-api-types": "0.38.11",
     "discord-interactions": "^4.1.0",
     "emoji-regex": "^10.4.0",

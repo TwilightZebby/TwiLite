@@ -174,7 +174,7 @@ async function followFeed(interaction, interactionUser, usedCommandName, userDis
 
     // Check if Server is already following this feed
     try {
-        const NotifierColl = TwiliteDb.collection("outage-follows");
+        const NotifierColl = TwiliteDb.collection("outage-notifier");
         const NotifierQuery = await NotifierColl.findOne({ guild_id: interaction.guild_id });
     
         // ALREADY FOLLOWING
@@ -192,7 +192,7 @@ async function followFeed(interaction, interactionUser, usedCommandName, userDis
         // NOT FOLLOWING
         else {
             // Attempt to create new entry
-            let entryToCreate = { guild_id: interaction.guild_id, channel_id: interaction.channel.id, webhook_id: null, webhook_token: null, in_thread: false };
+            let entryToCreate = { type: "DISCORD", guild_id: interaction.guild_id, channel_id: interaction.channel.id, webhook_id: null, webhook_token: null, in_thread: false };
 
             // Attempt webhook creation
             let resolvedIcon = await resolveImage("https://us-east-1.tixte.net/uploads/twilite.is-from.space/discord-outage-feed-icon-v2.png");
@@ -283,5 +283,105 @@ async function followFeed(interaction, interactionUser, usedCommandName, userDis
  * @param {String} userDisplayName 
  */
 async function unfollowFeed(interaction, interactionUser, usedCommandName, userDisplayName) {
-    //.
+    // Open DB connection
+    const MongoDbClient = createMongoClient();
+    const TwiliteDb = MongoDbClient.db("main");
+
+    // Check if Server is following this feed
+    try {
+        const NotifierColl = TwiliteDb.collection("outage-notifier");
+        const NotifierQuery = await NotifierColl.findOne({ type: "DISCORD", guild_id: interaction.guild_id });
+    
+        // IS FOLLOWING
+        if ( NotifierQuery != null ) {
+            // Attempt webhook deletion
+            let webhookDeletion = await fetch(`https://discord.com/api/v10/webhooks/${NotifierQuery.webhook_id}/${NotifierQuery.webhook_token}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bot ${DISCORD_TOKEN}`,
+                    'X-Audit-Log-Reason': localize(interaction.guild_locale, 'DISCORD_STATUS_COMMAND_UNFOLLOW_SUCCESS_AUDIT_LOG', userDisplayName)
+                },
+                method: 'DELETE'
+            });
+
+            // Successful webhook deletion
+            if ( webhookDeletion.status === 200 || webhookDeletion.status === 204 ) {
+                // Attempt to remove from DB
+                try {
+                    let removeFromDb = await NotifierColl.deleteOne({ type: "DISCORD", guild_id: interaction.guild_id });
+
+                    if ( removeFromDb.deletedCount !== 1 ) {
+                        await MongoDbClient.close();
+
+                        return new JsonResponse({
+                            type: InteractionResponseType.ChannelMessageWithSource,
+                            data: {
+                                flags: MessageFlags.Ephemeral,
+                                content: localize(interaction.locale, 'DISCORD_STATUS_COMMAND_ERROR_UNFOLLOW_GENERIC', `<#${interaction.channel.id}>`)
+                            }
+                        });
+                    }
+                    else {
+                        await MongoDbClient.close();
+
+                        return new JsonResponse({
+                            type: InteractionResponseType.ChannelMessageWithSource,
+                            data: {
+                                flags: MessageFlags.Ephemeral,
+                                content: localize(interaction.locale, 'DISCORD_STATUS_COMMAND_UNFOLLOW_SUCCESS', `<#${interaction.channel.id}>`)
+                            }
+                        });
+                    }
+                    
+                } catch (err) {
+                    console.error(err);
+                    await MongoDbClient.close();
+
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'DISCORD_STATUS_COMMAND_ERROR_UNFOLLOW_GENERIC')
+                        }
+                    });
+                }
+            }
+            // Not successful
+            else {
+                console.log(`[Discord Outage Notifier] Error while deleting Webhook: ${webhookDeletion.status} ${webhookDeletion.statusText}`);
+                await MongoDbClient.close();
+
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        flags: MessageFlags.Ephemeral,
+                        content: localize(interaction.locale, 'DISCORD_STATUS_COMMAND_ERROR_UNFOLLOW_GENERIC')
+                    }
+                });
+            }
+        }
+        // IS NOT FOLLOWING
+        else {
+            await MongoDbClient.close();
+
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'DISCORD_STATUS_COMMAND_ERROR_NOT_CURRENTLY_FOLLOWING')
+                }
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        await MongoDbClient.close();
+
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                flags: MessageFlags.Ephemeral,
+                content: localize(interaction.locale, 'DISCORD_STATUS_COMMAND_ERROR_UNFOLLOW_GENERIC')
+            }
+        });
+    }
 }

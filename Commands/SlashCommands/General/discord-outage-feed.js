@@ -204,7 +204,7 @@ async function followFeed(interaction, interactionUser, usedCommandName, userDis
                 },
                 method: 'POST',
                 body: JSON.stringify({
-                    name: `Dis-outage Notifier`,
+                    name: `Outage Notifier`,
                     avatar: `${resolvedIcon}`
                 })
             });

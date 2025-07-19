@@ -18,7 +18,7 @@
   "author": "TwilightZebby",
   "license": "SEE LICENSE IN https://github.com/TwilightZebby/license/blob/main/license.md",
   "dependencies": {
-    "@discordjs/builders": "^1.11.1",
+    "@discordjs/builders": "^1.11.2",
     "@discordjs/collection": "^2.1.1",
     "cf-mongodb-polyfills": "^1.0.1",
     "discord-api-types": "0.38.11",
@@ -29,6 +29,6 @@
     "undici": "^7.9.0"
   },
   "devDependencies": {
-    "wrangler": "^4.20.0"
+    "wrangler": "^4.22.0"
   }
 }

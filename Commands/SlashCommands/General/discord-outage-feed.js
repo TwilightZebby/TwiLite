@@ -192,11 +192,18 @@ async function followFeed(interaction, interactionUser, usedCommandName, userDis
         // NOT FOLLOWING
         else {
             // Attempt to create new entry
-            let entryToCreate = { type: "DISCORD", guild_id: interaction.guild_id, channel_id: interaction.channel.id, webhook_id: null, webhook_token: null, in_thread: false };
+            let entryToCreate = { type: "DISCORD", guild_id: interaction.guild_id, channel_id: interaction.channel.id, webhook_id: null, webhook_token: null, thread_id: null, in_thread: false };
+            
+            // If used in a PUBLIC_THREAD Channel
+            if ( interaction.channel.type === ChannelType.PublicThread ) {
+                entryToCreate.in_thread = true;
+                entryToCreate.thread_id = interaction.channel.id;
+                entryToCreate.channel_id = interaction.channel.parent_id;
+            }
 
             // Attempt webhook creation
             let resolvedIcon = await resolveImage("https://us-east-1.tixte.net/uploads/twilite.is-from.space/discord-outage-feed-icon-v2.png");
-            let webhookCreation = await fetch(`https://discord.com/api/v10/channels/${interaction.channel.id}/webhooks`, {
+            let webhookCreation = await fetch(`https://discord.com/api/v10/channels/${entryToCreate.channel_id}/webhooks`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bot ${DISCORD_TOKEN}`,
@@ -214,11 +221,6 @@ async function followFeed(interaction, interactionUser, usedCommandName, userDis
             if ( webhookCreation.status === 200 || webhookCreation.status === 204 ) {
                 entryToCreate.webhook_id = responseBody["id"];
                 entryToCreate.webhook_token = responseBody["token"];
-
-                // If used in a PUBLIC_THREAD Channel
-                if ( interaction.channel.type === ChannelType.PublicThread ) {
-                    entryToCreate.in_thread = true;
-                }
 
                 // Attempt save to DB
                 try {

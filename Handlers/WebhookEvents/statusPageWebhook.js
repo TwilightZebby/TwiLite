@@ -194,7 +194,6 @@ export async function handleStatusPageWebhook(webhookEvent) {
 
 
     // Now grab all the Discord webhook data needed to send these messages, or edit if already sent to said webhook
-    // TODO: Create DB for storing { incident_id, guild_id, message_id } so it can be edited. Use incident.resolved_at to clear from that DB when the incident is over.
     const CheckForOngoingIncident = await ActiveIncidentsCollection.countDocuments({ incident_id: webhookEvent.incident.id });
 
     // This is a new incident!

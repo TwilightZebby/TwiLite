@@ -1,7 +1,7 @@
 # TwiLite - Privacy Policy
 Last Updated: 18th June 2025
 
-Effective: ?? July 2025 (Date to be confirmed once update is ready for release)
+Effective: ?? August 2025 (Date to be confirmed once update is ready for release)
 
 ---
 
@@ -58,11 +58,11 @@ You can see the public API Documentation regarding what the locale data includes
 ---
 
 ## Final Notes
-If you decide to stop using **TwiLite** as a Server App, then **TwiLite** will automatically remove all data connected to a Server when it is removed or kicked from the Server in question.
+Due to limitations with **TwiLite** being hosted on CloudFlare Workers & how Discord's API works for HTTP-only Apps, **TwiLite** will not be able automatically remove any stored Server or User data when removed or de-authorised from said Server or User.
 
-If, as a User, you have left all Servers **TwiLite** is in as a Server App (and thus, no longer have any mutual Servers with **TwiLite**), then **TwiLite** will automatically remove all data connected to the User in question.
+If you want to have such data removed, you can do so via usage of **TwiLite**'s commands. The relevant commands are named in above sections of this Policy.
 
-If you have added **TwiLite** to your Discord Account as a User App, and you no longer want it as a User App, you can freely remove it again at any time by navigating to Discord's User Settings -> Authorized Apps, and revoking **TwiLite** from that page.
+Should you have added **TwiLite** to your Discord Account as a User App, and you no longer want it as a User App, you can freely remove it again at any time by navigating to Discord's User Settings -> Authorized Apps, and revoking **TwiLite** from that page.
 
 The Developer of **TwiLite**, TwilightZebby, is contactable for matters regarding **TwiLite** via GitHub, preferrably via opening an Issue Ticket or Discussion on **TwiLite**'s [GitHub Repo](https://github.com/TwilightZebby/TwiLite).
 

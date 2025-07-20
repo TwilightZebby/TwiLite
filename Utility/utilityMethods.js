@@ -119,6 +119,8 @@ export class JsonResponse extends Response {
 // ****************************************
 // ANYTHING BELOW THIS LINE IS BORROWED FROM DISCORD.JS
 // PURELY BECAUSE I'M NOT SMART ENOUGH TO FIGURE OUT HOW TO DO THIS MYSELF YET :sweat_smile:
+// Borrowed from https://github.com/discordjs/discord.js/blob/main/packages/discord.js/src/util/DataResolver.js
+// If you're one of the core maintainers of DJS and this isn't ok for me to do, feel free to (civilly & calmly) let me know!
 
 
 /**

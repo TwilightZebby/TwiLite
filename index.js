@@ -13,6 +13,7 @@ import { handleAppAuthorized } from './Handlers/WebhookEvents/applicationAuthori
 import { handleAppDeauthorized } from './Handlers/WebhookEvents/applicationDeauthorized.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID } from './config.js';
 import { JsonResponse } from './Utility/utilityMethods.js';
+import { handleStatusPageWebhook } from './Handlers/WebhookEvents/statusPageWebhook.js';
 
 
 
@@ -121,6 +122,20 @@ router.post('/webhook', async (request, env, ctx) => {
     else {
         return new Response(null, { status: 204 });
     }
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+/** For incoming Webhook Events from StatusPage. They should include a JSON payload */
+router.post('/statuspage', async (request, env, ctx) => {
+    return await handleStatusPageWebhook(request);
 });
 
 

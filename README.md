@@ -46,7 +46,7 @@ The Action Slash Commands also display a "return action" button when used. This 
 The `/jail` Action Command has Jailbreak Buttons you can enable, via use of the `include-minigame` option, which allows giving *anyone* the chance to free the jailed target.
 These buttons can also be used by the jailed target and the user who sent them to jail - however, the jailed target cannot use the "Bail Freedom" Button!
 
-## Role Menus
+## Role Menu Module
 > [!NOTE]
 > Role Menus can only be used within the Server App context.
 
@@ -65,12 +65,20 @@ You can even add Requirements to Menus you make, restricting their use to those 
 
 All Role Menu management can be found under the `/rolemenu` Command - including guides on how to edit or delete an existing Role Menu.
 
+## Discord Outage Notifier Module
+> [!NOTE]
+> The Discord Outage Notifier Module is only available in the Server App context.
+
+Want to be kept in the loop when Discord has another outage? Use TwiLite's Outage Notifier!
+
+Simply use the `/discord-outage-feed` to toggle if your Server receives these outage notifications (in the Channel you use this Command in) or not.
+
 ## Miscellaneous Features
 TwiLite may sometimes be updated to add some general-purpose, utility, or other miscellaneous features. Currently added ones are as follows:
 
 ### Role-locking Custom Emojis
 > [!NOTE]
-> Ability to upload Role-locked Custom Emojis can only be done when TwiLite is added to your Server.
+> Ability to upload Role-locked Custom Emojis can only be done in the Server App context.
 
 Twilite offers a `/lock-emoji` Command, that can be used by Server Admins to upload role-locked custom emojis to your Server.
 This makes use of a lesser-known feature within Discord, mostly used by Discord's Twitch Integration.
@@ -128,6 +136,7 @@ There are two ways to convert temperatures using TwiLite:
 | `/add-app` | Slash | Shows you the Add App/Invite link you can use to add TwiLite to either your Server(s) or your Account |
 | `/support` | Slash | Shows you where you can gain support from TwiLite's developer, or post ideas/bug reports for TwiLite |
 | `/follow-news` | Slash | Adds TwiLite's Updates & Announcements Feed to the Channel you used this Command in |
+| `/discord-outage-feed` | Slash | Toggles posting Discord's outage notices in the Channel this is used in |
 
 ## Command Type Notes
 - "Message" refers to Message Context Commands

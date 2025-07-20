@@ -374,4 +374,22 @@ Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are suppo
     LOCKEMOJI_COMMAND_ERROR_INVALID_FILE_TYPE: `Sorry, but that Emoji file wasn't a **PNG**, **JPEG**, or **GIF** file type.\nPlease try again, ensuring you use either a \`.png\`, \`.jpeg\`, or \`.gif\` file for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_FILE_TOO_LARGE: `Sorry, but that Emoji file is too large to be uploaded as a Custom Emoji.\nDiscord requires Custom Emojis to be smaller than 256kb in file size. Please try again, once you have a smaller file size for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_GENERIC: `Whoops, an error occurred while trying to upload that Role-locked Custom Emoji.`,
+
+
+
+    // ******* DISCORD OUTAGE NOTIFIER MODULE
+    DISCORD_STATUS_COMMAND_FOLLOW_SUCCESS: `Successfully followed Discord's Status Page!\nAny Discord outages or status issues will now be posted in the {{0}} Channel.`,
+    DISCORD_STATUS_COMMAND_FOLLOW_SUCCESS_AUDIT_LOG: `{{0}} followed Discord's Status Page using TwiLite`,
+    DISCORD_STATUS_COMMAND_UNFOLLOW_SUCCESS: `Successfully unfollowed Discord's Status Page.\nThis Server will no longer receive notifications (from TwiLite) about Discord's outages & status issues.{{0}}`,
+    DISCORD_STATUS_COMMAND_UNFOLLOW_SUCCESS_AUDIT_LOG: `{{0}} unfollowed Discord's Status Page using TwiLite`,
+    
+    DISCORD_STATUS_COMMAND_ERROR_WEBHOOK_DELETION_FAILED: `An error occurred while trying to delete the Webhook for my Discord Outage Notifier.\nYou will have to manually delete the Webhook in Server Settings -> Integrations -> TwiLite -> Webhooks`,
+    DISCORD_STATUS_COMMAND_ERROR_INVALID_CHANNEL_TYPE: `Sorry, you cannot add my Discord Outage Notifier to this Channel.\nPlease try again, ensuring you are running this Command in either a Text Channel, a Public Thread (within a Text Channel), or a Forum Post.`,
+    DISCORD_STATUS_COMMAND_ERROR_MISSING_PERMISSION_VIEW_CHANNEL: `Whoops - looks like I don't have the "**View Channel**" Permission for this Channel.\nI need both this, and the "**Manage Webhooks**", Permissions in this Channel to be able to add my Discord Outage Notifier here.`,
+    DISCORD_STATUS_COMMAND_ERROR_MISSING_PERMISSION_MANAGE_WEBHOOKS: `Whoops - looks like I don't have the "**Manage Webhooks**" Permission for this Channel.\nI need this Permission in this Channel in order to add my Discord Outage Notifier here.`,
+    DISCORD_STATUS_COMMAND_ERROR_ALREADY_FOLLOWING: `This Server is already following my Discord Outage Notifier!\nIf you want to disable the Discord Outage Notifier in this Server, please use the {{0}} Command.`,
+    DISCORD_STATUS_COMMAND_ERROR_NOT_CURRENTLY_FOLLOWING: `This Server is **not** currently following my Discord Outage Notifier.`,
+    
+    DISCORD_STATUS_COMMAND_ERROR_FOLLOW_GENERIC: `Sorry, but something went wrong while trying to follow my Discord Outage Notifier in this Channel...`,
+    DISCORD_STATUS_COMMAND_ERROR_UNFOLLOW_GENERIC: `Sorry, but something went wrong while trying to unfollow this Channel from my Discord Outage Notifier...`,
 }

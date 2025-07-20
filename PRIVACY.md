@@ -1,5 +1,5 @@
 # TwiLite - Privacy Policy
-Last Updated: 18th June 2025
+Last Updated: 20th July 2025
 
 Effective: ?? August 2025 (Date to be confirmed once update is ready for release)
 

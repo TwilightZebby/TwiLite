@@ -76,7 +76,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     const InputIncludeGif = interaction.data.options.find(option => option.name === "include-gif");
     const InputReason = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.String);
     /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataBooleanOption|undefined}*/
-    const InputBlockReturn = interaction.data.options.find(option => option.name === "block-return") ?? { name: "block-return", type: ApplicationCommandOptionType.Boolean, value: true };
+    const InputBlockReturn = interaction.data.options.find(option => option.name === "block-return") ?? { name: "block-return", type: ApplicationCommandOptionType.Boolean, value: false };
 
     // To hide Return Action Button when specific Action doesn't support it
     if ( NoReturnActions.includes(interaction.data.name.toUpperCase()) ) {

@@ -145,10 +145,13 @@ export async function handleStatusPageWebhook(webhookEvent) {
         "content": `## Discord Outage - ${webhookEvent.incident.name}\nImpact: ${webhookEvent.incident.impact}`
     }];
 
-    webhookEvent.incident.incident_updates.reverse(); // Just to have newest at the top
+    // Just to make this fluffing work because idk if the API is sending as a MAP or as an ARRAY (CloudFlare Worker's logs can't helping)
+    let incidentUpdatesArray = Array.from(webhookEvent.incident.incident_updates.values());
+    incidentUpdatesArray.reverse(); // Just to have newest at the top
+
     // Using a FOR loop so I can limit to 5 entries, as not to be a wall of text!
     for ( let i = 0; i < 5; i++ ) {
-        let incidentUpdate = webhookEvent.incident.incident_updates[i];
+        let incidentUpdate = incidentUpdatesArray[i];
 
         // Add formatted update
         let updateDate = new Date(incidentUpdate.updated_at);

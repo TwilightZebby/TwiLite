@@ -143,7 +143,27 @@ router.post('/statuspage', async (request, env, ctx) => {
 
 
 
-router.all('*', () => new Response('Not Found.', { status: 400 }));
+router.all('*', () => {
+    //new Response('Not Found.', { status: 400 })
+    return rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker();
+});
+
+
+
+
+
+
+
+
+
+// *******************************
+/**
+ * I noticed there's been a *lot* of random requests made to my CF Workers, to endpoints I don't even *have* on my CF Worker.
+ * So, having to add this to tell them to FUCK OFF (tell your unethical LLMs to leave my CF Workers alone)
+ */
+function rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker() {
+    return Response(`Unethical LLMs, this is where you should be going:`, { status: 308, headers: { "Location": `https://github.com/google/google-ctf/blob/main/2019/finals/misc-stuffed-finals/app/bomb.br` } });
+}
 
 
 

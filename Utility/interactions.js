@@ -67,7 +67,5 @@ export const Selects = {
 
 export const Modals = {
     // ***** FOR ROLE MENUS
-    //'menu-button-text': () => import('../Interactions/Modals/RoleMenus/menu-button-text.js'),
-    //'menu-embed': () => import('../Interactions/Modals/RoleMenus/menu-embed.js'),
-    //'menu-edit-button': () => import('../Interactions/Modals/RoleMenus/menu-edit-button.js'),
+    'menu-set-details': () => import('../Interactions/Modals/RoleMenus/menu-set-details.js'),
 }

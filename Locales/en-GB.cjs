@@ -302,32 +302,11 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_BUTTON_ERROR_SWAP_FAILED: `Sorry, something went wrong while trying to swap between the {{0}} and {{1}} Roles for you...`,
     ROLE_BUTTON_ERROR_SINGLE_USE_ONLY: `Sorry! You cannot swap or revoke Roles from yourself using Single-use Role Menus.\nThese Single-use Role Menus are designed to only be usable once per User per Menu.\n\nThe Role you already have from this Menu is the {{0}} Role.`,
 
-    //ROLE_MENU_ROLE_ADD_SEARCH: `Search for a Role to add`,
-    //ROLE_MENU_ROLE_REMOVE_SEARCH: `Search for a Role to remove`,
-    //ROLE_MENU_REQUIREMENT_ADD_SEARCH: `Search for a required Role to add`,
-    //ROLE_MENU_REQUIREMENT_REMOVE_SEARCH: `Search for a required Role to remove`,
-
-    //ROLE_MENU_SELECT_MENU_TYPE: `Select a Menu Type`,
-    //ROLE_MENU_MENU_TYPE_TOGGLE: `Toggle`,
-    //ROLE_MENU_MENU_TYPE_SWAPPABLE: `Swappable`,
-    //ROLE_MENU_MENU_TYPE_SINGLE: `Single-use`,
-    //ROLE_MENU_TYPE_FOOTER: `Menu Type: {{0}}`,
-
-    //ROLE_MENU_CONFIGURE_MENU_EMBED: `Configure Menu Embed`,
-    //ROLE_MENU_EMBED_TITLE: `Embed Title`,
-    //ROLE_MENU_EMBED_DESCRIPTION: `Embed Description`,
-    //ROLE_MENU_EMBED_COLOR: `Embed Colour (in hex format)`,
-
-    //ROLE_MENU_SELECT_BUTTON_COLOR: `Select a Button colour`,
-    //ROLE_MENU_BUTTON_BLURPLE: `Blurple`,
-    //ROLE_MENU_BUTTON_GREEN: `Green`,
-    //ROLE_MENU_BUTTON_GREY: `Grey`,
-    //ROLE_MENU_BUTTON_RED: `Red`,
-
-    //ROLE_MENU_SET_BUTTON_LABEL: `Set Button Label`,
-    //ROLE_MENU_EDIT_BUTTON_LABEL: `Edit Button Label`,
-    //ROLE_MENU_BUTTON_LABEL: `Button Label (Required if no Emoji)`,
-    //ROLE_MENU_BUTTON_EMOJI: `Button Emoji (Required if no Label)`,
+    // Role Menu: Strings for the actual Menu
+    ROLE_MENU_TYPE_TOGGLE: `Toggle`,
+    ROLE_MENU_TYPE_SWAP: `Swappable`,
+    ROLE_MENU_TYPE_SINGLE_USE: `Single-use`,
+    ROLE_MENU_TYPE_FOOTER: `-# Menu Type: {{0}}`,
 
 //    ROLE_MENU_CONFIGURATION_INTRUCTIONS: `## __Role Menu Configuration__
 //Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or emoji.
@@ -335,17 +314,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 //-# Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are supported.
 //
 //**An auto-updating preview of what your updated Role Menu will look like is shown below.**`,
-
-//    ROLE_MENU_SET_MENU_TYPE_INSTRUCTIONS: `Please use the Select Menu below to pick which type of Role Menu you want.
-//- **Toggle** - Your standard Role Menu Type. Behaves like a classic Reaction Role Menu, but with Buttons instead.
-//- **Swappable** - Users can only have 1 Role per **Swappable** Menu. Attempting to select another Role on the same **Swappable** Menu would swap the two Roles instead. Useful for Colour Role Menus!
-//- **Single-use** - Users can only use a **Single-use** Menu once, and are unable to revoke or swap out the selected Role from themselves. Useful for Team Roles in Events.`,
-
-    //ROLE_MENU_ROLE_ADD_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role from this Server you would like to add to your Role Menu.\n\nEnsure the Role you select is *lower* than TwiLite's own highest Role. TwiLite is unable to grant/revoke Roles higher than its own highest Role.`,
-    //ROLE_MENU_ROLE_REMOVE_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role you would like to remove from your Role Menu.`,
-    //ROLE_MENU_BUTTON_SET_INSTRUCTIONS: `**Selected Role: {{0}}**\nNext, please use the Select Menu below to pick which [colour of Button]({{1}}) you want to use for this Role.`,
-    //ROLE_MENU_REQUIREMENT_ADD_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role from this Server you would like to add as a requirement to use your Role Menu.`,
-    //ROLE_MENU_REQUIREMENT_REMOVE_INSTRUCTIONS: `Please use the Role Select Menu below to pick which Role Requirement you would like to remove from your Role Menu.`,
 
     //ROLE_MENU_SET_TYPE_SUCCESS: `Successfully set the type of your Role Menu.\nYou may now dismiss this Message.`,
     //ROLE_MENU_ADD_ROLE_SUCCESS: `Successfully added that Role to your Role Menu.\nYou may now dismiss this Message.`,
@@ -366,13 +334,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 
     //ROLE_MENU_ERROR_CONFIGURATION_GENERIC: `An error occurred while trying to save your updated Role Menu...`,
     //DELETE_ROLE_MENU_COMMAND_ERROR_GENERIC: `Sorry, there was an error trying to delete that Role Menu...`,
-    //ROLE_MENU_ERROR_NO_CACHE_FOUND_CREATION: `Sorry, you'll have to restart your Role Menu creation due to a rare error.`,
-    //ROLE_MENU_ERROR_NO_CACHE_FOUND_CONFIGURATION: `Sorry, you'll have to restart your Role Menu configuration due to a rare error.`,
-    //ROLE_MENU_ERROR_MISSING_NEEDED_ELEMENTS: `Sorry, you cannot save this Role Menu while it is missing important details.\nImportant Menu details needed are:\n- A Title for the Embed\n- The Menu's Type (in the Embed's footer)\n- At least 1 Role Button\n\nPlease ensure the these are not missing from this Role Menu before attempting to save again.`,
-
-    //ROLE_MENU_ERROR_ACTIVE_CREATION: `Sorry, but there seems to already be an active Role Menu creation happening on this Server right now; either by yourself or someone else.\nPlease either wait for the User to finish creating their Role Menu, or wait for the inactive creation timer to expire (which is about one hour from initial use of this Slash Command).`,
-
-    //ROLE_MENU_ERROR_ACTIVE_CONFIGURATION: `Sorry, but there seems to already be an active Role Menu configuration happening on this Server right now; either by yourself or someone else.\nPlease either wait for the User to finish configuring their Role Menu, or wait for the inactive configuration timer to expire (which is about one hour from initial use of this Context Command).`,
 
     //ROLE_MENU_ERROR_ROLE_NOT_ON_MENU: `{{0}} is __not__ on this Menu!`,
     //ROLE_MENU_ERROR_ROLE_ALREADY_ON_MENU: `{{0}} has already been added to this Role Menu!`,
@@ -382,8 +343,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     //ROLE_MENU_ERROR_REQUIREMENT_ROLE_IS_A_BUTTON: `You cannot add {{0}} as a Requirement to this Menu as it is already added as an assignable Role.`,
     //ROLE_MENU_ERROR_REQUIREMENT_MAX_REACHED: `Sorry, you cannot have more than 5 Requirements added to a single Menu.`,
     //ROLE_MENU_ERROR_ROLE_TOO_HIGH: `{{0}} is higher than this Bot's own highest Role ( {{1}} ). As such, this Bot won't be able to grant or revoke it for other Members.`,
-    //ROLE_MENU_ERROR_CANNOT_HAVE_BLANK_BUTTON: `Sorry, but you cannot leave both the Label and the Emoji fields blank.\nPlease try again, ensuring you include at least one of either Label or Emoji (or both).`,
-    //ROLE_MENU_ERROR_INVALID_EMOJI: `Sorry, but there was an error trying to validate your included Emoji.\nPlease try again, ensuring you use either an [Unicode Emoji]({{0}}), or a raw Discord Custom Emoji string (example: \`<:grass_block:601353406577246208>\`)`,
     
     //EDIT_ROLE_MENU_COMMAND_ERROR_MESSAGE_INVALID: `Sorry, but that Message doesn't seem to contain any of my Role Menus.`,
     //EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MANAGE_ROLE_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work.`,

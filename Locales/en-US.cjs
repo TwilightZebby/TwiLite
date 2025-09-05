@@ -303,6 +303,12 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_BUTTON_ERROR_SWAP_FAILED: `Sorry, something went wrong while trying to swap between the {{0}} and {{1}} Roles for you...`,
     ROLE_BUTTON_ERROR_SINGLE_USE_ONLY: `Sorry! You cannot swap or revoke Roles from yourself using Single-use Role Menus.\nThese Single-use Role Menus are designed to only be usable once per User per Menu.\n\nThe Role you already have from this Menu is the {{0}} Role.`,
 
+    // Role Menu: Strings for the actual Menu
+    ROLE_MENU_TYPE_TOGGLE: `Toggle`,
+    ROLE_MENU_TYPE_SWAP: `Swappable`,
+    ROLE_MENU_TYPE_SINGLE_USE: `Single-use`,
+    ROLE_MENU_TYPE_FOOTER: `-# Menu Type: {{0}}`,
+
     //ROLE_MENU_ROLE_ADD_SEARCH: `Search for a Role to add`,
     //ROLE_MENU_ROLE_REMOVE_SEARCH: `Search for a Role to remove`,
     //ROLE_MENU_REQUIREMENT_ADD_SEARCH: `Search for a required Role to add`,
@@ -312,7 +318,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     //ROLE_MENU_MENU_TYPE_TOGGLE: `Toggle`,
     //ROLE_MENU_MENU_TYPE_SWAPPABLE: `Swappable`,
     //ROLE_MENU_MENU_TYPE_SINGLE: `Single-use`,
-    //ROLE_MENU_TYPE_FOOTER: `Menu Type: {{0}}`,
 
     //ROLE_MENU_CONFIGURE_MENU_EMBED: `Configure Menu Embed`,
     //ROLE_MENU_EMBED_TITLE: `Embed Title`,

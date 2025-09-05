@@ -200,7 +200,7 @@ export const SlashCommand = {
                         {
                             "id": 30,
                             "type": ComponentType.TextDisplay,
-                            "content": localize(interaction.guild_locale, 'ROLE_MENU_MENU_TYPE_PLACEHOLDER')
+                            "content": localize('en-GB', 'ROLE_MENU_MENU_TYPE_PLACEHOLDER')
                         }
                     ]
                 },

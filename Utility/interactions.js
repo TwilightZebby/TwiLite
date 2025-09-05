@@ -68,4 +68,5 @@ export const Selects = {
 export const Modals = {
     // ***** FOR ROLE MENUS
     'menu-set-details': () => import('../Interactions/Modals/RoleMenus/menu-set-details.js'),
+    'menu-set-type': () => import('../Interactions/Modals/RoleMenus/menu-set-type.js'),
 }

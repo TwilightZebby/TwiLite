@@ -276,10 +276,14 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_REMOVE_REQUIREMENT_MODAL_DESCRIPTION: `Pick a Role Requirement to remove from this Menu`,
     ROLE_MENU_REMOVE_REQUIREMENT_MODAL_PLACEHOLDER: `Select a Role`,
 
+    ROLE_MENU_EDIT_BUTTON_MODAL_TITLE: `Edit Button`,
+    ROLE_MENU_EDIT_BUTTON_MODAL_DESCRIPTION: `Currently editing the Role Button for the {{0}} Role on your Menu.`,
+
     // Role Menu: Creation & Configuration Select Menu Responses
     ROLE_MENU_CREATION_SUCCESS: `Successfully created and posted your new Role Menu!\n\nIf you need to, you can edit or delete your Role Menu by using my Message Context Commands`,
     ROLE_MENU_CREATION_SUCCESS_IMAGE_ALT_TEXT: `TwiLite's Role Menu Context Commands, seen in the Message Context Menu (when opened on a Message containing TwiLite's Role Menu) and after selecting "Apps" on that Context Menu.`,
     ROLE_MENU_CREATION_CANCELLED: `Creation of this Role Menu has been cancelled.\nYou may now dismiss or delete this Message.`,
+    ROLE_MENU_CREATION_ERROR_GENERIC: `An error occurred while trying to save your new Role Menu...`,
 
     ROLE_MENU_ADD_ROLE_MAX_BUTTONS_LIMIT_REACHED: `Sorry, but you cannot add more than 15 Role Buttons to a single Menu.`,
     ROLE_MENU_ADD_REQUIREMENTS_LIMIT_REACHED: `Sorry, but you cannot add more than 5 Requirements to a single Menu.`,
@@ -287,7 +291,16 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_REMOVE_REQUIREMENT_NONE_ADDED: `Sorry, you cannot remove Requirements from a Menu with no set Requirements!`,
 
     // Role Menu: Responses to pressing Role Buttons
+    ROLE_BUTTON_AUDIT_LOG_ENTRY: `Role Menu in {{0}}`,
+    ROLE_BUTTON_REVOKE_SUCCESS: `Successfully revoked the {{0}} Role from you.`,
+    ROLE_BUTTON_GRANT_SUCCESS: `Successfully granted the {{0}} Role to you.`,
+    ROLE_BUTTON_SWAP_SUCCESS: `Successfully swapped the {{0}} Role for the {{1}} Role for you.`,
+    
     ROLE_BUTTON_ERROR_REQUIREMENTS_NOT_MET: `Sorry, you do not meet the Requirements to use this Role Menu.\nYou can see what this Menu's Requirements are above the Buttons inside the Role Menu itself.`,
+    ROLE_BUTTON_ERROR_REVOKE_FAILED: `Sorry, something went wrong while trying to revoke the {{0}} Role from you...`,
+    ROLE_BUTTON_ERROR_GRANT_FAILED: `Sorry, something went wrong while trying to grant the {{0}} Role to you...`,
+    ROLE_BUTTON_ERROR_SWAP_FAILED: `Sorry, something went wrong while trying to swap between the {{0}} and {{1}} Roles for you...`,
+    ROLE_BUTTON_ERROR_SINGLE_USE_ONLY: `Sorry! You cannot swap or revoke Roles from yourself using Single-use Role Menus.\nThese Single-use Role Menus are designed to only be usable once per User per Menu.\n\nThe Role you already have from this Menu is the {{0}} Role.`,
 
     //ROLE_MENU_ROLE_ADD_SEARCH: `Search for a Role to add`,
     //ROLE_MENU_ROLE_REMOVE_SEARCH: `Search for a Role to remove`,
@@ -351,12 +364,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     //DELETE_ROLE_MENU_COMMAND_SUCCESS: `Successfully deleted that Role Menu.`,
     //DELETE_ROLE_MENU_COMMAND_CANCELLED: `Cancelled deletion of that Role Menu.`,
 
-    //ROLE_BUTTON_AUDIT_LOG_ENTRY: `Role Menu in {{0}}`,
-    //ROLE_BUTTON_REVOKE_SUCCESS: `Successfully revoked the {{0}} Role from you.`,
-    //ROLE_BUTTON_GRANT_SUCCESS: `Successfully granted the {{0}} Role to you.`,
-    //ROLE_BUTTON_SWAP_SUCCESS: `Successfully swapped the {{0}} Role for the {{1}} Role for you.`,
-
-    //ROLE_MENU_ERROR_CREATION_GENERIC: `An error occurred while trying to save your new Role Menu...`,
     //ROLE_MENU_ERROR_CONFIGURATION_GENERIC: `An error occurred while trying to save your updated Role Menu...`,
     //DELETE_ROLE_MENU_COMMAND_ERROR_GENERIC: `Sorry, there was an error trying to delete that Role Menu...`,
     //ROLE_MENU_ERROR_NO_CACHE_FOUND_CREATION: `Sorry, you'll have to restart your Role Menu creation due to a rare error.`,
@@ -381,11 +388,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     //EDIT_ROLE_MENU_COMMAND_ERROR_MESSAGE_INVALID: `Sorry, but that Message doesn't seem to contain any of my Role Menus.`,
     //EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MANAGE_ROLE_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work.`,
     //EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MESSAGE_HISTORY_PERMISSION: `Sorry, but I cannot edit an existing Role Menu in this Channel without having the **Read Message History** Permission!`,
-
-    //ROLE_BUTTON_ERROR_REVOKE_FAILED: `Sorry, something went wrong while trying to revoke the {{0}} Role from you...`,
-    //ROLE_BUTTON_ERROR_GRANT_FAILED: `Sorry, something went wrong while trying to grant the {{0}} Role to you...`,
-    //ROLE_BUTTON_ERROR_SWAP_FAILED: `Sorry, something went wrong while trying to swap between the {{0}} and {{1}} Roles for you...`,
-    //ROLE_BUTTON_ERROR_SINGLE_USE_ONLY: `Sorry! You cannot swap or revoke Roles from yourself using Single-use Role Menus.\nThese Single-use Role Menus are designed to only be usable once per User per Menu.\n\nThe Role you already have from this Menu is the {{0}} Role.`,
 
 
 

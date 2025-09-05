@@ -419,7 +419,7 @@ async function saveAndDisplay(interaction) {
 
 
     // Post Menu
-    await fetch(CreateMessageEndpoint(interaction.channel.id), {
+    let attemptMenuPost = await fetch(CreateMessageEndpoint(interaction.channel.id), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -431,6 +431,16 @@ async function saveAndDisplay(interaction) {
             allowed_mentions: { parse: [] }
         })
     });
+
+    if ( attemptMenuPost.status != 204 && attemptMenuPost.status != 200 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                "flags": MessageFlags.Ephemeral,
+                "content": localize(interaction.locale, 'ROLE_MENU_CREATION_ERROR_GENERIC')
+            }
+        });
+    }
 
 
     // Now ACK Interaction

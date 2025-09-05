@@ -1,4 +1,4 @@
-import { ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits, TextInputStyle } from 'discord-api-types/v10';
+import { ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits, TextInputStyle } from 'discord-api-types/v10';
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder } from '@discordjs/builders';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
@@ -76,16 +76,12 @@ async function grantRevokeRole(interaction) {
     // Check for menu requirements
     const SourceMessage = interaction.message;
     const SourceComponents = SourceMessage.components;
-    let findMenuType = SourceComponents[0].components.find(component => component.id === 6);
+    let findMenuType = SourceComponents[0].components.find(component => component.id === 30);
     const SourceMenuType = findMenuType != undefined ? findMenuType.content.split(": ").pop() : undefined;
-    let menuRequirementComponent = SourceComponents[0].components.find(component => component.id === 5);
+    let menuRequirementComponent = SourceComponents[0].components.find(component => component.id === 7);
 
     /** @type {Array<String>} */
-    let menuRequirements = [];
-
-    if ( menuRequirementComponent != undefined && menuRequirementComponent.content != "" && menuRequirementComponent.components == undefined ) {
-        menuRequirements = Array.from(menuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
-    }
+    let menuRequirements = Array.from(menuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
 
     if ( menuRequirements.length > 0 ) {
         // First, check for "Admin" Perm or Owner status, since those will bypass Menu Requirements
@@ -118,17 +114,17 @@ async function grantRevokeRole(interaction) {
 
     switch (SourceMenuType) {
         // Classic Role Menu. Grants Role if User doesn't have it, revokes Role if User does have it.
-        case "TOGGLE":
+        case "Toggle":
             return await toggleRole(interaction, RoleID);
 
 
         // Swappable Role Menu. Users can only have ONE Role at a time per SWAPPABLE Menu. Example use case: Colour Roles.
-        case "SWAP":
+        case "Swappable":
             return await swapRole(interaction, RoleID);
             
 
         // Single-use Role Menu. Users can only use a SINGLE-USE Menu once, and cannot remove the Role they get nor swap it. Example use case: Team Roles for events.
-        case "SINGLE":
+        case "Single-use":
             return await singleRole(interaction, RoleID);
 
 
@@ -152,35 +148,90 @@ async function grantRevokeRole(interaction) {
  * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
  */
 async function editRoleButton(interaction) {
-    // Grab Role ID and cache
-    const RoleId = interaction.data.custom_id.split("_").pop();
-    const UserId = interaction.member.user.id;
-    let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
-    let currentLabel = undefined;
-    let currentEmoji = undefined;
+    // TODO: UPDATE TO NEW COMPONENTS V2 SYSTEM
 
-    // Grab current Label and/or Emoji
-    for ( let i = 0; i <= menuCache.menuButtons.length - 1; i++ ) {
-        if ( menuCache.menuButtons[i].data.custom_id.includes(RoleId) ) {
-            currentLabel = menuCache.menuButtons[i].data.label;
-            currentEmoji = menuCache.menuButtons[i].data.emoji != undefined && menuCache.menuButtons[i].data.emoji.id != undefined ? `<:${menuCache.menuButtons[i].data.emoji.name}:${menuCache.menuButtons[i].data.emoji.id}>`
-            : menuCache.menuButtons[i].data.emoji != undefined && menuCache.menuButtons[i].data.emoji.id == undefined ? `${menuCache.menuButtons[i].data.emoji.name}`
-            : undefined;
-            break;
+    // Grab Role ID & button details for use in pre-filling the Modal
+    const RoleId = interaction.data.custom_id.split("_").pop();
+    const MessageComponents = interaction.message.components;
+    const MenuCoontainer = MessageComponents.find(comp => comp.type === ComponentType.Container);
+    const MenuActionRows = MenuCoontainer.components.filter(comp => comp.type === ComponentType.ActionRow);
+    let currentButtonLabel = undefined;
+    let currentButtonStyle = ButtonStyle.Secondary; // Grey by default
+
+    for ( let i = 0; i <= MenuActionRows.length - 1; i++ ) {
+        for ( let j = 0; j <= MenuActionRows[i].components.length - 1; j++ ) {
+            if ( MenuActionRows[i].components[j].custom_id.includes(RoleId) ) {
+                currentButtonLabel = MenuActionRows[i].components[j].label;
+                currentButtonStyle = MenuActionRows[i].components[j].style;
+                break;
+            }
         }
+        
+        if ( currentButtonLabel != undefined ) { break; }
     }
+    
 
 
     // Construct & display Modal for editing Button
-    const EditButtonModal = new ModalBuilder().setCustomId(`menu-edit-button_${RoleId}`).setTitle(localize(interaction.locale, 'ROLE_MENU_EDIT_BUTTON_LABEL')).addComponents([
-        new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`label`).setLabel(localize(interaction.locale, 'ROLE_MENU_BUTTON_LABEL')).setMaxLength(80).setStyle(TextInputStyle.Short).setRequired(false).setValue(currentLabel != undefined ? currentLabel : "") ]),
-        new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`emoji`).setLabel(localize(interaction.locale, 'ROLE_MENU_BUTTON_EMOJI')).setMaxLength(200).setPlaceholder(`<:grass_block:601353406577246208>, ✨`).setStyle(TextInputStyle.Short).setRequired(false).setValue(currentEmoji != undefined ? currentEmoji : "") ])
-    ]);
-    let editButtonModalJson = EditButtonModal.toJSON();
+    /**
+     * For allowing the User to edit the selected Button on the Menu
+     */
+    let EditButtonModal = {
+        "custom_id": `menu-edit-button`,
+        "title": localize(interaction.locale, ''),
+        "components": [{
+            // Text Display to let User know which Role they're editing the Button for
+            "type": ComponentType.TextDisplay,
+            "content": localize(interaction.locale, 'ROLE_MENU_EDIT_BUTTON_MODAL_DESCRIPTION', `<@&${RoleId}>`)
+        }, {
+            // Edit Button's Label
+            "type": ComponentType.Label,
+            "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_LABEL_INPUT_LABEL'),
+            "description": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_LABEL_INPUT_DESCRIPTION'),
+            "component": {
+                "type": ComponentType.TextInput,
+                "custom_id": `button-label`,
+                "style": TextInputStyle.Short,
+                "max_length": 80,
+                "required": true,
+                "value": currentButtonLabel
+            }
+        }, {
+            // Edit Button's Colour
+            "type": ComponentType.Label,
+            "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_LABEL'),
+            "description": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_DESCRIPTION'),
+            "component": {
+                "type": ComponentType.StringSelect,
+                "custom_id": `button-color`,
+                "min_values": 1,
+                "max_values": 1,
+                "required": true,
+                "placeholder": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_SELECT_PLACEHOLDER'),
+                "options": [{
+                    "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_BLURPLE'),
+                    "value": `BLURPLE`,
+                    "default": currentButtonStyle === ButtonStyle.Primary ? true : false
+                }, {
+                    "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_GREEN'),
+                    "value": `GREEN`,
+                    "default": currentButtonStyle === ButtonStyle.Success ? true : false
+                }, {
+                    "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_GREY'),
+                    "value": `GREY`,
+                    "default": currentButtonStyle === ButtonStyle.Secondary ? true : false
+                }, {
+                    "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_RED'),
+                    "value": `RED`,
+                    "default": currentButtonStyle === ButtonStyle.Danger ? true : false
+                }]
+            }
+        }]
+    };
 
     return new JsonResponse({
         type: InteractionResponseType.Modal,
-        data: editButtonModalJson
+        data: EditButtonModal
     });
 }
 
@@ -292,7 +343,8 @@ async function toggleRole(interaction, RoleID) {
 async function swapRole(interaction, RoleID) {
     // Grab all the Roles on the Menu, to check if the Member already has any of them
     const MenuComponents = interaction.message.components;
-    const MenuButtons = MenuComponents[0].components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
+    const MenuContainer = MenuComponents.find(comp => comp.type === ComponentType.Container);
+    const MenuButtons = MenuContainer.components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
     let menuRoleIds = [];
     MenuButtons.forEach(row => {
         row.components.forEach(button => {
@@ -464,7 +516,8 @@ async function swapRole(interaction, RoleID) {
 async function singleRole(interaction, RoleID) {
     // Grab all the Roles on the Menu, to check if the Member already has any of them
     const MenuComponents = interaction.message.components;
-    const MenuButtons = MenuComponents[0].components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
+    const MenuContainer = MenuComponents.find(comp => comp.type === ComponentType.Container);
+    const MenuButtons = MenuContainer.components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
     let menuRoleIds = [];
     MenuButtons.forEach(row => {
         row.components.forEach(button => {

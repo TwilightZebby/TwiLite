@@ -79,6 +79,16 @@ export function hexToRgb(hex) {
 }
 
 /**
+ * Converts RGB Array into an API-compatible integer for Discord's API
+ * @param {Array<Number>} rgbArray
+ */
+export function rgbArrayToInteger(rgbArray) {
+  const [red, green, blue] = rgbArray;
+  let colorInteger = (red << 16) + (green << 8) + blue;
+  return colorInteger;
+}
+
+/**
  * Returns a random integer within the range specified (inclusive)
  * @param {Number} minimumValue
  * @param {Number} maximumValue

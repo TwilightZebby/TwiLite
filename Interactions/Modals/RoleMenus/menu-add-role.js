@@ -164,7 +164,8 @@ export const Modal = {
         return new JsonResponse({
             type: InteractionResponseType.UpdateMessage,
             data: {
-                components: MessageComponents
+                components: MessageComponents,
+                "allowed_mentions": { "parse": [] }
             }
         });
     }

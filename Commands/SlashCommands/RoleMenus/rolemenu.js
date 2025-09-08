@@ -228,6 +228,7 @@ export const SlashCommand = {
                 data: {
                     flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
                     components: menuPreviewComponents,
+                    "allowed_mentions": { "parse": [] }
                 }
             });
             

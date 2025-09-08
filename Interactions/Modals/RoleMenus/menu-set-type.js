@@ -1,6 +1,5 @@
-import { ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import { hexToRgb, JsonResponse, rgbArrayToInteger } from '../../../Utility/utilityMethods.js';
-import { HexColourRegex } from '../../../Utility/utilityConstants.js';
+import { ComponentType, InteractionResponseType } from 'discord-api-types/v10';
+import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 
 

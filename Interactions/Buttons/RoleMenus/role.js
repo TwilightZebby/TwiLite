@@ -1,9 +1,7 @@
 import { ButtonStyle, ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits, TextInputStyle } from 'discord-api-types/v10';
-import { ActionRowBuilder, ModalBuilder, TextInputBuilder } from '@discordjs/builders';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { DISCORD_TOKEN } from '../../../config.js';
-import { UtilityCollections } from '../../../Utility/utilityConstants.js';
 
 // RegEx
 const RoleMentionRegEx = new RegExp(/<@&(\d{17,20})>/g);

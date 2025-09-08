@@ -1,6 +1,6 @@
 import { ButtonStyle, ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import { hexToRgb, JsonResponse, rgbArrayToInteger } from '../../../Utility/utilityMethods.js';
-import { HexColourRegex, RoleMentionRegEx } from '../../../Utility/utilityConstants.js';
+import { JsonResponse } from '../../../Utility/utilityMethods.js';
+import { RoleMentionRegEx } from '../../../Utility/utilityConstants.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 
 

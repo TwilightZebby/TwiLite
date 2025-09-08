@@ -286,7 +286,10 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_CREATION_ERROR_GENERIC: `An error occurred while trying to save your new Role Menu...`,
 
     ROLE_MENU_ADD_ROLE_MAX_BUTTONS_LIMIT_REACHED: `Sorry, but you cannot add more than 15 Role Buttons to a single Menu.`,
+    ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_REQUIREMENT: `The {{0}} Role has already been added to your Menu as a Requirement!\nIf you want to add it as an assignable Role, first remove it from your Menu's Requirements.`,
+    ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_ASSIGNABLE: `The {{0}} Role has already been added to your Menu!`,
     ROLE_MENU_ADD_REQUIREMENTS_LIMIT_REACHED: `Sorry, but you cannot add more than 5 Requirements to a single Menu.`,
+
     ROLE_MENU_REMOVE_ROLE_NO_ROLES_ADDED: `Sorry, you cannot remove Roles from a Menu that doesn't have any Roles on it!`,
     ROLE_MENU_REMOVE_REQUIREMENT_NONE_ADDED: `Sorry, you cannot remove Requirements from a Menu with no set Requirements!`,
 

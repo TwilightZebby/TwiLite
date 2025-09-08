@@ -40,7 +40,7 @@ export const Modal = {
 
         MenuContainer.components.forEach(comp => {
             // Update Menu's type
-            if ( comp.id === 30 ) { comp.content = `${localize(interaction.guild_locale, 'ROLE_MENU_TYPE_FOOTER', inputMenuType)}`; }
+            if ( comp.id === 30 ) { comp.content = `${localize('en-GB', 'ROLE_MENU_TYPE_FOOTER', inputMenuType)}`; }
         });
 
         // Put container back into message

@@ -148,8 +148,6 @@ async function grantRevokeRole(interaction) {
  * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
  */
 async function editRoleButton(interaction) {
-    // TODO: UPDATE TO NEW COMPONENTS V2 SYSTEM
-
     // Grab Role ID & button details for use in pre-filling the Modal
     const RoleId = interaction.data.custom_id.split("_").pop();
     const MessageComponents = interaction.message.components;
@@ -177,7 +175,7 @@ async function editRoleButton(interaction) {
      * For allowing the User to edit the selected Button on the Menu
      */
     let EditButtonModal = {
-        "custom_id": `menu-edit-button`,
+        "custom_id": `menu-edit-button_${RoleId}`,
         "title": localize(interaction.locale, ''),
         "components": [{
             // Text Display to let User know which Role they're editing the Button for

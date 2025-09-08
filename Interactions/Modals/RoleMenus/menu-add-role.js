@@ -60,6 +60,7 @@ export const Modal = {
         let MenuRequirements = Array.from(MenuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
 
         // Grab already added assignable Roles
+        /** @type {import('discord-api-types/v10').APIActionRowComponent<import('discord-api-types/v10').APIButtonComponentWithCustomId>[]} */
         let MenuButtons = MenuContainer.filter(componentItem => componentItem.type === ComponentType.ActionRow);
         let menuRoleIds = [];
         MenuButtons.forEach(row => {
@@ -102,22 +103,57 @@ export const Modal = {
         };
 
         // Add to Menu (use already added number of assignable Roles to know which Row to add to)
-        if ( menuRoleIds.length < 5 ) {
+        if ( MenuButtons.length === 0 ) {
+            // This is the very first button on the Menu
+            MenuButtons.push({
+                "type": ComponentType.ActionRow,
+                "id": 8,
+                "components": [newMenuButton]
+            });
+        }
+        else if ( MenuButtons.length === 1 && menuRoleIds.length < 5 ) {
             // First row has space
             MenuButtons[0].components.push(newMenuButton);
         }
-        else if ( menuRoleIds.length >= 5 && menuRoleIds.length < 10 ) {
+        else if ( MenuButtons.length === 1 && menuRoleIds.length === 5 ) {
+            // First row is full, but no second row created yet
+            MenuButtons.push({
+                "type": ComponentType.ActionRow,
+                "components": [newMenuButton]
+            });
+        }
+        else if ( MenuButtons.length === 2 && (menuRoleIds.length > 5 && menuRoleIds.length < 10) ) {
             // Second row has space
             MenuButtons[1].components.push(newMenuButton);
+        }
+        else if ( MenuButtons.length === 2 && menuRoleIds.length === 10 ) {
+            // Second row is row, but no third row created yet
+            MenuButtons.push({
+                "type": ComponentType.ActionRow,
+                "components": [newMenuButton]
+            });
         }
         else {
             // Third/Final row has space
             MenuButtons[2].components.push(newMenuButton);
         }
 
+        // Recreate Role List to add newly added assignable Role
+        let roleList = [];
+        MenuButtons.forEach(row => {
+            row.components.forEach(button => {
+                let tempRoleId = button.custom_id.split("_").pop();
+                let tempLabel = button.label;
+                roleList.push(`- <@&${tempRoleId}> - ${tempLabel}`);
+            });
+        });
+
 
         // Edit into Menu
         MenuContainer.components.splice(4, MenuButtons.length, MenuButtons);
+        MenuContainer.components.forEach(comp => {
+            if ( comp.id === 6 ) { comp.content = roleList.join(`\n`); }
+        });
 
         // Put container back into message
         MessageComponents.forEach(comp => {

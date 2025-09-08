@@ -68,8 +68,21 @@ export const Modal = {
             if ( hasButtonBeenEdited ) { break; }
         }
 
+        // Recreate Role List to update the edited Button's label with the list
+        let roleList = [];
+        MenuButtons.forEach(row => {
+            row.components.forEach(button => {
+                let tempRoleId = button.custom_id.split("_").pop();
+                let tempLabel = button.label;
+                roleList.push(`- <@&${tempRoleId}> - ${tempLabel}`);
+            });
+        });
+
         // Edit into Menu
         MenuContainer.components.splice(4, MenuButtons.length, MenuButtons);
+        MenuContainer.components.forEach(comp => {
+            if ( comp.id === 6 ) { comp.content = roleList.join(`\n`); }
+        });
 
         // Put container back into message
         MessageComponents.forEach(comp => {

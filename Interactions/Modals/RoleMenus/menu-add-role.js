@@ -40,9 +40,9 @@ export const Modal = {
             // Button Colour
             if ( tempTopLevelComp.custom_id === "button-color" ) {
                 let tempColor = tempTopLevelComp.values.shift();
-                inputButtonColor = tempTopLevelComp.value === "BLURPLE" ? ButtonStyle.Primary
-                    : tempTopLevelComp.value === "GREEN" ? ButtonStyle.Success
-                    : tempTopLevelComp.value === "GREY" ? ButtonStyle.Secondary
+                inputButtonColor = tempColor === "BLURPLE" ? ButtonStyle.Primary
+                    : tempColor === "GREEN" ? ButtonStyle.Success
+                    : tempColor === "GREY" ? ButtonStyle.Secondary
                     : ButtonStyle.Danger;
             }
         }

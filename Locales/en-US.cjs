@@ -186,7 +186,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_TITLE_PLACEHOLDER: `## Self-assignable Role Menu`,
     ROLE_MENU_DESCRIPTION_PLACEHOLDER: `This Role Menu hasn't been configured yet!\nUse the select menu below to setup this Role Menu.`,
     ROLE_MENU_ROLE_LIST_PLACEHOLDER: `- No Roles added yet`,
-    ROLE_MENU_REQUIREMENTS_PLACEHOLDER: `-# Anyone can use this Role Menu!`,
+    ROLE_MENU_REQUIREMENTS_PLACEHOLDER: `Anyone can use this Role Menu.`,
     ROLE_MENU_MENU_TYPE_PLACEHOLDER: `-# Menu Type: Toggle`,
 
     ROLE_MENU_EDIT_GUIDE: `To edit an existing Role Menu made with TwiLite, simply right-click/long-press on the Message containing the Role Menu -> Select "Apps" -> Select " [Edit Role Menu]({{0}}) ".`,
@@ -227,7 +227,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_CANCEL_CONFIGURATION_DESCRIPTION: `Cancels configuration of this Role Menu`,
 
     // Role Menu: Creation/Configuration Modals
-
     ROLE_MENU_ADD_ROLE_MODAL_TITLE: `Add a Role to your Menu`,
     ROLE_MENU_ADD_ROLE_MODAL_ROLE_SELECT_LABEL: `Role to add`,
     ROLE_MENU_ADD_ROLE_MODAL_ROLE_SELECT_DESCRIPTION: `Select which Role on this Server you want to add to your Role Menu.`,
@@ -289,8 +288,11 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_ADD_ROLE_MAX_BUTTONS_LIMIT_REACHED: `Sorry, but you cannot add more than 15 Role Buttons to a single Menu.`,
     ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_REQUIREMENT: `The {{0}} Role has already been added to your Menu as a Requirement!\nIf you want to add it as an assignable Role, first remove it from your Menu's Requirements.`,
     ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_ASSIGNABLE: `The {{0}} Role has already been added to your Menu!`,
-    ROLE_MENU_ADD_REQUIREMENTS_LIMIT_REACHED: `Sorry, but you cannot add more than 5 Requirements to a single Menu.`,
     
+    ROLE_MENU_ADD_REQUIREMENTS_LIMIT_REACHED: `Sorry, but you cannot add more than 5 Requirements to a single Menu.`,
+    ROLE_MENU_ADD_REQUIREMENTS_ALREADY_ADDED_AS_REQUIREMENT: `The {{0}} Role has already been added as a Requirement for this Menu!`,
+    ROLE_MENU_ADD_REQUIREMENTS_ALREADY_ADDED_AS_ASSIGNABLE: `The {{0}} Role has already been added to your Menu as an assignable Role!\nIf you want to add it as aa Requirement, first remove it from your Menu's assignable Roles.`,
+
     ROLE_MENU_REMOVE_ROLE_NO_ROLES_ADDED: `Sorry, you cannot remove Roles from a Menu that doesn't have any Roles on it!`,
     ROLE_MENU_REMOVE_REQUIREMENT_NONE_ADDED: `Sorry, you cannot remove Requirements from a Menu with no set Requirements!`,
 
@@ -311,6 +313,10 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_TYPE_SWAP: `Swappable`,
     ROLE_MENU_TYPE_SINGLE_USE: `Single-use`,
     ROLE_MENU_TYPE_FOOTER: `-# Menu Type: {{0}}`,
+
+    ROLE_MENU_RESTRICTION_NONE: `Anyone can use this Role Menu.`,
+    ROLE_MENU_RESTRICTION_SINGLE: `Only those with the {{0}} Role can use this Role Menu.`,
+    ROLE_MENU_RESTRICTION_MULTIPLE: `Only those with one of either {{0}} Roles can use this Role Menu.`,
 
     //ROLE_MENU_ROLE_ADD_SEARCH: `Search for a Role to add`,
     //ROLE_MENU_ROLE_REMOVE_SEARCH: `Search for a Role to remove`,

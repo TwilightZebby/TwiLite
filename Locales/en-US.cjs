@@ -177,9 +177,7 @@ module.exports = {
     // ******* ROLE MENUS
     // Role Menu: Slash Command initial responses
     ROLE_MENU_CREATE_INTRUCTIONS: `## __Role Menu Creation__
-Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or emoji.
--# If including in Buttons, please make sure to have the relevant Emoji IDs ready (such as in a notepad program); as you won't be able to copy from a Discord Message while an Input Form Modal is open.
--# Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are supported.
+Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or color.
 
 **An auto-updating preview of what your new Role Menu will look like is shown below.**`,
 
@@ -198,6 +196,16 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_ERROR_INVALID_CHANNEL: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.`,
     ROLE_MENU_ERROR_MISSING_MANAGE_ROLES_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work, *and* that my highest Role is positioned above all the Roles you want to add to my Role Menus. (I cannot grant or revoke Roles above my highest Role)`,
     ROLE_MENU_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, but I cannot create a Role Menu in this Channel without having the **Send Messages** Permission!`,
+
+    // Role Menu: Context Command responses
+    ROLE_MENU_CONFIGURATION_INTRUCTIONS: `## __Role Menu Configuration__
+Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or color.
+
+**An auto-updating preview of what your updated Role Menu will look like is shown below.**`,
+
+    EDIT_ROLE_MENU_COMMAND_ERROR_MESSAGE_INVALID: `Sorry, but that Message doesn't seem to contain any of my Role Menus.`,
+    EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MANAGE_ROLE_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work.`,
+    EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MESSAGE_HISTORY_PERMISSION: `Sorry, but I cannot edit an existing Role Menu in this Channel without having the **Read Message History** Permission!`,
 
     // Role Menu: Select Menu options
     ROLE_MENU_SELECT_AN_ACTION: `Please select an action`,

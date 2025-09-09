@@ -177,9 +177,7 @@ module.exports = {
     // ******* ROLE MENUS
     // Role Menu: Slash Command initial responses
     ROLE_MENU_CREATE_INTRUCTIONS: `## __Role Menu Creation__
-Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or emoji.
--# If including in Buttons, please make sure to have the relevant Emoji IDs ready (such as in a notepad program); as you won't be able to copy from a Discord Message while an Input Form Modal is open.
--# Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are supported.
+Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or colour.
 
 **An auto-updating preview of what your new Role Menu will look like is shown below.**`,
 
@@ -198,6 +196,16 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_ERROR_INVALID_CHANNEL: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.`,
     ROLE_MENU_ERROR_MISSING_MANAGE_ROLES_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work, *and* that my highest Role is positioned above all the Roles you want to add to my Role Menus. (I cannot grant or revoke Roles above my highest Role)`,
     ROLE_MENU_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, but I cannot create a Role Menu in this Channel without having the **Send Messages** Permission!`,
+
+    // Role Menu: Context Command responses
+    ROLE_MENU_CONFIGURATION_INTRUCTIONS: `## __Role Menu Configuration__
+Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or colour.
+
+**An auto-updating preview of what your updated Role Menu will look like is shown below.**`,
+
+    EDIT_ROLE_MENU_COMMAND_ERROR_MESSAGE_INVALID: `Sorry, but that Message doesn't seem to contain any of my Role Menus.`,
+    EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MANAGE_ROLE_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work.`,
+    EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MESSAGE_HISTORY_PERMISSION: `Sorry, but I cannot edit an existing Role Menu in this Channel without having the **Read Message History** Permission!`,
 
     // Role Menu: Select Menu options
     ROLE_MENU_SELECT_AN_ACTION: `Please select an action`,
@@ -285,6 +293,10 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_CREATION_CANCELLED: `Creation of this Role Menu has been cancelled.\nYou may now dismiss or delete this Message.`,
     ROLE_MENU_CREATION_ERROR_GENERIC: `An error occurred while trying to save your new Role Menu...`,
 
+    ROLE_MENU_CONFIGURATION_CANCELLED: `Configuration of this Role Menu has been cancelled. You may now dismiss or delete this Message.`,
+    ROLE_MENU_CONFIGURATION_SUCCESS: `Successfully saved your updated Role Menu!`,
+    ROLE_MENU_CONFIGURATION_ERROR_GENERIC: `An error occurred while trying to save your updated Role Menu...`,
+
     ROLE_MENU_ADD_ROLE_MAX_BUTTONS_LIMIT_REACHED: `Sorry, but you cannot add more than 15 Role Buttons to a single Menu.`,
     ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_REQUIREMENT: `The {{0}} Role has already been added to your Menu as a Requirement!\nIf you want to add it as an assignable Role, first remove it from your Menu's Requirements.`,
     ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_ASSIGNABLE: `The {{0}} Role has already been added to your Menu!`,
@@ -320,13 +332,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_RESTRICTION_SINGLE: `Only those with the {{0}} Role can use this Role Menu.`,
     ROLE_MENU_RESTRICTION_MULTIPLE: `Only those with one of either {{0}} Roles can use this Role Menu.`,
 
-//    ROLE_MENU_CONFIGURATION_INTRUCTIONS: `## __Role Menu Configuration__
-//Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or emoji.
-//-# If including in Buttons, please make sure to have the relevant Emoji IDs ready (such as in a notepad program); as you won't be able to copy from a Discord Message while an Input Form is open.
-//-# Additionally, both Custom Discord Emojis, and standard Unicode Emojis, are supported.
-//
-//**An auto-updating preview of what your updated Role Menu will look like is shown below.**`,
-
     //ROLE_MENU_SET_TYPE_SUCCESS: `Successfully set the type of your Role Menu.\nYou may now dismiss this Message.`,
     //ROLE_MENU_ADD_ROLE_SUCCESS: `Successfully added that Role to your Role Menu.\nYou may now dismiss this Message.`,
     //ROLE_MENU_REMOVE_ROLE_SUCCESS: `Successfully removed that Role from your Role Menu.\nYou may now dismiss this Message.`,
@@ -334,14 +339,10 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     //ROLE_MENU_REMOVE_REQUIREMENT_SUCCESS: `Successfully removed that Role Requirement from your Role Menu.\nYou may now dismiss this Message.`,
     //ROLE_MENU_EDIT_BUTTON_SUCCESS: `Successfully edited that Button for your Role Menu.\nYou may now dismiss this Message.`,
 
-    //ROLE_MENU_CONFIGURATION_CANCELLED: `Configuration of this Role Menu has been cancelled. You may now dismiss or delete this Message.`,
-    //ROLE_MENU_CONFIGURATION_SUCCESS: `Successfully saved your updated Role Menu!`,
-
     //DELETE_ROLE_MENU_COMMAND_VALIDATION: `Are you sure you want to delete this Role Menu?`,
     //DELETE_ROLE_MENU_COMMAND_SUCCESS: `Successfully deleted that Role Menu.`,
     //DELETE_ROLE_MENU_COMMAND_CANCELLED: `Cancelled deletion of that Role Menu.`,
 
-    //ROLE_MENU_ERROR_CONFIGURATION_GENERIC: `An error occurred while trying to save your updated Role Menu...`,
     //DELETE_ROLE_MENU_COMMAND_ERROR_GENERIC: `Sorry, there was an error trying to delete that Role Menu...`,
 
     //ROLE_MENU_ERROR_ROLE_NOT_ON_MENU: `{{0}} is __not__ on this Menu!`,
@@ -352,10 +353,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     //ROLE_MENU_ERROR_REQUIREMENT_ROLE_IS_A_BUTTON: `You cannot add {{0}} as a Requirement to this Menu as it is already added as an assignable Role.`,
     //ROLE_MENU_ERROR_REQUIREMENT_MAX_REACHED: `Sorry, you cannot have more than 5 Requirements added to a single Menu.`,
     //ROLE_MENU_ERROR_ROLE_TOO_HIGH: `{{0}} is higher than this Bot's own highest Role ( {{1}} ). As such, this Bot won't be able to grant or revoke it for other Members.`,
-    
-    //EDIT_ROLE_MENU_COMMAND_ERROR_MESSAGE_INVALID: `Sorry, but that Message doesn't seem to contain any of my Role Menus.`,
-    //EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MANAGE_ROLE_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work.`,
-    //EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MESSAGE_HISTORY_PERMISSION: `Sorry, but I cannot edit an existing Role Menu in this Channel without having the **Read Message History** Permission!`,
 
 
 

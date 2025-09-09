@@ -44,6 +44,24 @@ export const Modal = {
         /** @type {import('discord-api-types/v10').APIActionRowComponent<import('discord-api-types/v10').APIButtonComponentWithCustomId>[]} */
         let MenuButtons = MenuContainer.filter(componentItem => componentItem.type === ComponentType.ActionRow);
 
+        // Validate selected Role *is* an added assignable Role to be removed
+        let menuRoleIds = [];
+        MenuButtons.forEach(row => {
+            row.components.forEach(button => {
+                menuRoleIds.push(button.custom_id.split("_").pop());
+            });
+        });
+
+        if ( !(menuRoleIds.includes(inputSelectedRole)) ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_SELECTED_ROLE_NOT_ON_MENU', `<@&${inputSelectedRole}>`)
+                }
+            });
+        }
+
         // Splice specified Role out of Menu
         let hasBeenRemoved = false;
         for ( let i = 0; i <= MenuButtons.length - 1; i++ ) {
@@ -62,12 +80,6 @@ export const Modal = {
         // Completely recreate MenuButtons in order to make sure there's no random gaps in the rows after the removal
         /** @type {import('discord-api-types/v10').APIActionRowComponent<import('discord-api-types/v10').APIButtonComponentWithCustomId>[]} */
         let updatedMenuButtons = [];
-        let menuRoleIds = [];
-        MenuButtons.forEach(row => {
-            row.components.forEach(button => {
-                menuRoleIds.push(button.custom_id.split("_").pop());
-            });
-        });
 
         MenuButtons.forEach(row => {
             row.components.forEach(button => {

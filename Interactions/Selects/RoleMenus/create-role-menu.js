@@ -1,8 +1,7 @@
-import { ComponentType, InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
-import { ActionRowBuilder, ModalBuilder, RoleSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextInputBuilder } from '@discordjs/builders';
+import { ComponentType, InteractionResponseType, MessageFlags, SelectMenuDefaultValueType, TextInputStyle } from 'discord-api-types/v10';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
-import { CreateMessageEndpoint, RoleMentionRegEx, UtilityCollections } from '../../../Utility/utilityConstants.js';
+import { CreateMessageEndpoint, RoleMentionRegEx } from '../../../Utility/utilityConstants.js';
 import { DISCORD_TOKEN } from '../../../config.js';
 import { IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS } from '../../../Assets/Hyperlinks.js';
 
@@ -29,194 +28,373 @@ export const Select = {
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
      */
     async executeSelect(interaction, interactionUser) {
-        // Construct needed Selects
-        const AddRoleSelect = new ActionRowBuilder().addComponents([
-            new RoleSelectMenuBuilder().setCustomId(`menu-add-role`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_ROLE_ADD_SEARCH'))
-        ]);
+        // **** Construct needed Modals
+        /**
+         * For grabbing which Role should be added to the Menu
+         */
+        let AddRoleModal = {
+            "custom_id": `menu-add-role`,
+            "title": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_TITLE'),
+            "components": [{
+                // Ask for which Role to add
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_ROLE_SELECT_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_ROLE_SELECT_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.RoleSelect,
+                    "custom_id": `role-to-add`,
+                    "placeholder": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_ROLE_SELECT_PLACEHOLDER'),
+                    "min_values": 1,
+                    "max_values": 1,
+                    "required": true
+                }
+            }, {
+                // Ask for label to display on Button
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_LABEL_INPUT_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_LABEL_INPUT_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.TextInput,
+                    "custom_id": `button-label`,
+                    "style": TextInputStyle.Short,
+                    "max_length": 80,
+                    "required": true
+                }
+            }, {
+                // Ask for which colour to display the Button in
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.StringSelect,
+                    "custom_id": `button-color`,
+                    "min_values": 1,
+                    "max_values": 1,
+                    "required": true,
+                    "placeholder": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_SELECT_PLACEHOLDER'),
+                    "options": [{
+                        "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_BLURPLE'),
+                        "value": `BLURPLE`
+                    }, {
+                        "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_GREEN'),
+                        "value": `GREEN`
+                    }, {
+                        "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_GREY'),
+                        "value": `GREY`
+                    }, {
+                        "label": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MODAL_BUTTON_COLOR_OPTION_RED'),
+                        "value": `RED`
+                    }]
+                }
+            }]
+        };
 
-        const RemoveRoleSelect = new ActionRowBuilder().addComponents([
-            new RoleSelectMenuBuilder().setCustomId(`menu-remove-role`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_ROLE_REMOVE_SEARCH'))
-        ]);
+        /**
+         * For grabbing which Role should be removed from the Menu
+         */
+        let RemoveRoleModal = {
+            "custom_id": `menu-remove-role`,
+            "title": localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_MODAL_TITLE'),
+            "components": [{
+                // Ask for which Role to remove
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_MODAL_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_MODAL_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.RoleSelect,
+                    "custom_id": `role-to-remove`,
+                    "placeholder": localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_MODAL_PLACEHOLDER'),
+                    "min_values": 1,
+                    "max_values": 1,
+                    "default_values": [],
+                    "required": true
+                }
+            }]
+        };
 
-        const SetMenuTypeSelect = new ActionRowBuilder().addComponents([
-            new StringSelectMenuBuilder().setCustomId(`menu-set-type`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_SELECT_MENU_TYPE')).setOptions([
-                new StringSelectMenuOptionBuilder().setValue(`TOGGLE`).setLabel(localize(interaction.locale, 'ROLE_MENU_MENU_TYPE_TOGGLE')),
-                new StringSelectMenuOptionBuilder().setValue(`SWAP`).setLabel(localize(interaction.locale, 'ROLE_MENU_MENU_TYPE_SWAPPABLE')),
-                new StringSelectMenuOptionBuilder().setValue(`SINGLE`).setLabel(localize(interaction.locale, 'ROLE_MENU_MENU_TYPE_SINGLE'))
-            ])
-        ]);
+        /**
+         * For grabbing the Menu Type
+         */
+        let SetMenuTypeModal = {
+            "custom_id": `menu-set-type`,
+            "title": localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_MODAL_TITLE'),
+            "components": [{
+                // Text Display for explaining the different menu types
+                "type": ComponentType.TextDisplay,
+                "content": localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_MODAL_TYPES_EXPLAINATION')
+            }, {
+                // Ask for the menu type to set
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_MODAL_SELECT_LABEL'),
+                "component": {
+                    "type": ComponentType.StringSelect,
+                    "custom_id": `menu-type`,
+                    "min_values": 1,
+                    "max_values": 1,
+                    "required": true,
+                    "placeholder": localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_MODAL_SELECT_PLACEHOLDER'),
+                    "options": [{
+                        "label": localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_MODAL_SELECT_OPTION_TOGGLE'),
+                        "value": `TOGGLE`
+                    }, {
+                        "label": localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_MODAL_SELECT_OPTION_SWAP'),
+                        "value": `SWAP`
+                    }, {
+                        "label": localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_MODAL_SELECT_OPTION_SINGLE_USE'),
+                        "value": `SINGLE`
+                    }]
+                }
+            }]
+        };
 
-        const AddRequirementsSelect = new ActionRowBuilder().setComponents([
-            new RoleSelectMenuBuilder().setCustomId(`menu-add-requirement`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_ADD_SEARCH'))
-        ]);
+        /**
+         * For changing the Menu's details (title, description, sidebar colour)
+         */
+        let SetMenuDetailsModal = {
+            "custom_id": `menu-set-details`,
+            "title": localize(interaction.locale, 'ROLE_MENU_SET_MENU_DETAILS_MODAL_TITLE'),
+            "components": [{
+                // Ask for Menu's title
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_TITLE_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_TITLE_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.TextInput,
+                    "custom_id": `menu-title`,
+                    "style": TextInputStyle.Short,
+                    "max_length": 256,
+                    "required": true,
+                    "value": undefined
+                }
+            }, {
+                // Ask for Menu's description
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_DESCRIPTION_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_DESCRIPTION_LABEL_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.TextInput,
+                    "custom_id": `menu-description`,
+                    "style": TextInputStyle.Paragraph,
+                    "max_length": 2000,
+                    "required": false,
+                    "value": undefined
+                }
+            }, {
+                // Ask for Menu's sidebar colour
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_COLOR_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_COLOR_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.TextInput,
+                    "custom_id": `menu-color`,
+                    "style": TextInputStyle.Short,
+                    "max_length": 7,
+                    "required": false,
+                    "placeholder": "#ab44ff",
+                    "value": undefined
+                }
+            }]
+        };
 
-        const RemoveRequirementsSelect = new ActionRowBuilder().setComponents([
-            new RoleSelectMenuBuilder().setCustomId(`menu-remove-requirement`).setMinValues(1).setMaxValues(1).setPlaceholder(localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_REMOVE_SEARCH'))
-        ]);
+        /**
+         * For adding a new requirement
+         */
+        let AddRequirementModal = {
+            "custom_id": `menu-add-requirement`,
+            "title": localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT_MODAL_TITLE'),
+            "components": [{
+                // Ask for the Role to add as a requirement
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT_MODAL_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT_MODAL_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.RoleSelect,
+                    "custom_id": `role-to-add`,
+                    "min_values": 1,
+                    "max_values": 1,
+                    "required": true,
+                    "placeholder": localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT_MODAL_PLACEHOLDER')
+                }
+            }]
+        };
 
-        // JSONify all the above for when ACKing responses!
-        let addRoleJson = AddRoleSelect.toJSON();
-        let removeRoleJson = RemoveRoleSelect.toJSON();
-        let setMenuTypeJson = SetMenuTypeSelect.toJSON();
-        let addRequirementJson = AddRequirementsSelect.toJSON();
-        let removeRequirementJson = RemoveRequirementsSelect.toJSON();
+        /**
+         * For removing a requirement
+         */
+        let RemoveRequirementModal = {
+            "custom_id": `menu-remove-requirement`,
+            "title": localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_MODAL_TITLE'),
+            "components": [{
+                // Ask for the Role requirement to remove
+                "type": ComponentType.Label,
+                "label": localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_MODAL_LABEL'),
+                "description": localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_MODAL_DESCRIPTION'),
+                "component": {
+                    "type": ComponentType.RoleSelect,
+                    "custom_id": `role-to-remove`,
+                    "min_values": 1,
+                    "max_values": 1,
+                    "required": true,
+                    "placeholder": localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_MODAL_PLACEHOLDER'),
+                    "default_values": []
+                }
+            }]
+        };
 
-
-        // Grab selected value & User ID
+        
+        
+        // Grab selected option & interaction user ID & current components
         const InputOption = interaction.data.values.shift();
-        const UserId = interaction.member.user.id;
+        const CurrentComponents = interaction.message.components;
+        const CurrentContainer = CurrentComponents.find(comp => comp.type === ComponentType.Container);
 
+
+        // Act based on selected option
         switch (InputOption) {
             // Set Menu Type
             case "set-type":
-                // Ask User what Menu Type they want
-                return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        components: [setMenuTypeJson],
-                        content: localize(interaction.locale, 'ROLE_MENU_SET_MENU_TYPE_INSTRUCTIONS')
-                    }
-                });
-
-
-            // Manage Embed
-            case "configure-embed":
-                // Grab current Embed info to use in Modal
-                let currentEmbed = interaction.message.embeds.shift();
-
-                let embedModal = new ModalBuilder().setCustomId(`menu-embed`).setTitle(localize(interaction.locale, 'ROLE_MENU_CONFIGURE_MENU_EMBED')).addComponents([
-                    new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`title`).setLabel(localize(interaction.locale, 'ROLE_MENU_EMBED_TITLE')).setMaxLength(256).setStyle(TextInputStyle.Short).setRequired(true).setValue(!currentEmbed.title ? "" : currentEmbed.title) ]),
-                    new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`description`).setLabel(localize(interaction.locale, 'ROLE_MENU_EMBED_DESCRIPTION')).setMaxLength(2000).setStyle(TextInputStyle.Paragraph).setRequired(false).setValue(!currentEmbed.description ? "" : currentEmbed.description) ]),
-                    new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`hex-color`).setLabel(localize(interaction.locale, 'ROLE_MENU_EMBED_COLOR')).setMaxLength(7).setStyle(TextInputStyle.Short).setPlaceholder("#ab44ff").setRequired(false).setValue(!currentEmbed.color ? "" : `${typeof currentEmbed.color === 'number' ? `#${currentEmbed.color.toString(16).padStart(6, '0')}` : currentEmbed.color}`) ])
-                ]);
-
-                let embedModalJson = embedModal.toJSON();
-
                 return new JsonResponse({
                     type: InteractionResponseType.Modal,
-                    data: embedModalJson
+                    data: SetMenuTypeModal
                 });
 
             
-            // Add a Role to the Menu
+            // Manage Menu Details
+            case "edit-details":
+                // Grab current details in order to pre-fill the Modal (for better UX)
+                let currentMenuTitle = CurrentContainer.components.find(comp => comp.id === 4);
+                let currentMenuDescription = CurrentContainer.components.find(comp => comp.id === 5);
+                let currentMenuSidebarColor = CurrentContainer.accent_color;
+
+                // Set Title field
+                SetMenuDetailsModal.components[0].component.value = currentMenuTitle.content.slice(3) ?? undefined;
+                // Set Description field
+                SetMenuDetailsModal.components[1].component.value = currentMenuDescription.content ?? undefined;
+                // Set Sidebar Colour field
+                SetMenuDetailsModal.components[2].component.value = !currentMenuSidebarColor ? undefined : `${typeof currentMenuSidebarColor === 'number' ? `#${currentMenuSidebarColor.toString(16).padStart(6, '0')}` : currentMenuSidebarColor}`;
+                
+                return new JsonResponse({
+                    type: InteractionResponseType.Modal,
+                    data: SetMenuDetailsModal
+                });
+
+
+            // Add a Role
             case "add-role":
-                // **** Validate Menu doesn't already have max limit of 15 Roles added
-                let currentAddedRoles = UtilityCollections.RoleMenuManagement.get(UserId);
-                if ( currentAddedRoles.menuButtons.length === 15 ) {
+                // Validate max roles per menu limit (of 15) hasn't been reached
+                let currentMenuActionRows = CurrentContainer.components.filter(comp => comp.type === ComponentType.ActionRow);
+                let countAddedRoles = 0;
+                currentMenuActionRows.forEach(row => {
+                    row.components.forEach(button => {
+                        countAddedRoles += 1;
+                    });
+                });
+
+                if ( countAddedRoles === 15 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_BUTTON_LIMIT_EXCEEDED')
-                        }
+                        data: { "flags": MessageFlags.Ephemeral, "content": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_MAX_BUTTONS_LIMIT_REACHED') }
                     });
                 }
 
-                // There is still space for more Roles, so ask which should be added
                 return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        components: [addRoleJson],
-                        content: localize(interaction.locale, 'ROLE_MENU_ROLE_ADD_INSTRUCTIONS')
-                    }
+                    type: InteractionResponseType.Modal,
+                    data: AddRoleModal
                 });
 
 
-            // Remove a Role from the Menu
+            // Remove a Role
             case "remove-role":
-                // **** Validate Menu does have Roles Added
-                let currentRoles = UtilityCollections.RoleMenuManagement.get(UserId);
-                if ( currentRoles.menuButtons.length === 0 ) {
+                // Validate there are Roles on the Menu
+                let currentAddedActionRows = CurrentContainer.components.filter(comp => comp.type === ComponentType.ActionRow);
+                let countExistingRoles = 0;
+                // Also grab Role IDs so we can pre-populate the Role Select
+                /** @type {import('discord-api-types/v10').APISelectMenuDefaultValue[]} */
+                let defaultRoleValues = [];
+
+                currentAddedActionRows.forEach(row => {
+                    row.components.forEach(button => {
+                        countExistingRoles += 1;
+                        let roleIdTemp = button.custom_id.split("_").pop();
+                        defaultRoleValues.push({ id: roleIdTemp, type: SelectMenuDefaultValueType.Role });
+                    });
+                });
+
+                if ( countExistingRoles === 0 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_NO_ROLES_ON_MENU')
-                        }
+                        data: { "flags": MessageFlags.Ephemeral, "content": localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_NO_ROLES_ADDED') }
                     });
                 }
 
-                // ACK to ask User which Role to remove from Menu
+                // Set default values in Role Select
+                RemoveRoleModal.components[0].component.default_values = defaultRoleValues;
+
                 return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        components: [removeRoleJson],
-                        content: localize(interaction.locale, 'ROLE_MENU_ROLE_REMOVE_INSTRUCTIONS')
-                    }
+                    type: InteractionResponseType.Modal,
+                    data: RemoveRoleModal
                 });
 
 
-            // Add a Requirement to use the Menu
+            // Add a Requirement
             case "add-requirement":
-                // Check Menu hasn't reached max of 5 requirements
-                let currentAddedRequirements = UtilityCollections.RoleMenuManagement.get(UserId);
-                if ( currentAddedRequirements.roleRequirements.length === 5 ) {
+                // Validate max requirements per menu limit (of 5) hasn't been reached
+                let currentMenuRequirements = CurrentContainer.components.find(comp => comp.id === 7);
+                let matchedRequirements = Array.from(currentMenuRequirements.content.matchAll(RoleMentionRegEx), (m) => m[0]);
+
+                if ( matchedRequirements.length === 5 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_REQUIREMENT_MAX_REACHED')
-                        }
+                        data: { "flags": MessageFlags.Ephemeral, "content": localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENTS_LIMIT_REACHED') }
                     });
                 }
 
-                // ACK to ask User which Role to add as a Requirement
                 return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        components: [addRequirementJson],
-                        content: localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_ADD_INSTRUCTIONS')
-                    }
+                    type: InteractionResponseType.Modal,
+                    data: AddRequirementModal
                 });
 
-
+            
             // Remove a Requirement
             case "remove-requirement":
-                // Check Menu actually has Requirements on it
-                let currentRequirements = UtilityCollections.RoleMenuManagement.get(UserId);
-                if ( currentRequirements.roleRequirements.length === 0 ) {
+                // Validate there are set requirements to remove
+                let addedMenuRequirements = CurrentContainer.components.find(comp => comp.id === 7);
+                let existingRequirements = Array.from(addedMenuRequirements.content.matchAll(RoleMentionRegEx), (m) => m[0]);
+                // Also grab Role IDs so we can pre-populate the Role Select
+                /** @type {import('discord-api-types/v10').APISelectMenuDefaultValue[]} */
+                let defaultRequirementValues = [];
+
+                if ( existingRequirements.length === 0 ) {
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'ROLE_MENU_ERROR_NO_REQUIREMENTS_FOUND')
-                        }
+                        data: { "flags": MessageFlags.Ephemeral, "content": localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_NONE_ADDED') }
                     });
                 }
 
-                // ACK to ask User which Requirement to remove
+                // Set default values for Role Select
+                existingRequirements.forEach(item => {
+                    defaultRequirementValues.push({ id: item, type: SelectMenuDefaultValueType.Role });
+                });
+                RemoveRequirementModal.components[0].component.default_values = defaultRequirementValues;
+
                 return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        components: [removeRequirementJson],
-                        content: localize(interaction.locale, 'ROLE_MENU_REQUIREMENT_REMOVE_INSTRUCTIONS')
-                    }
+                    type: InteractionResponseType.Modal,
+                    data: RemoveRequirementModal
                 });
 
 
-            // Save & Displays the newly created Role Menu
+            // Save & post the newly created Role Menu
             case "save":
                 return await saveAndDisplay(interaction);
 
 
-            // Cancels creation of Role menu
+            // Cancels creation
             case "cancel":
-            default:
-                // Purge cache, just in case
-                UtilityCollections.RoleMenuManagement.delete(UserId);
-                // ACK
                 return new JsonResponse({
                     type: InteractionResponseType.UpdateMessage,
                     data: {
-                        flags: MessageFlags.Ephemeral,
-                        components: [],
-                        embeds: [],
-                        content: localize(interaction.locale, 'ROLE_MENU_CREATION_CANCELLED')
+                        flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
+                        components: [{ "type": ComponentType.TextDisplay, "content": localize(interaction.locale, 'ROLE_MENU_CREATION_CANCELLED') }]
                     }
                 });
         }
@@ -234,101 +412,13 @@ export const Select = {
  * @param {import('discord-api-types/v10').APIMessageComponentSelectMenuInteraction} interaction
  */
 async function saveAndDisplay(interaction) {
-    // Grab Embed & Buttons, and Role Requirements (if any)
-    const MenuEmbed = interaction.message.embeds.shift();
-    let menuComponents = interaction.message.components;
-    let menuMessageContent = interaction.message.content;
-    let menuRequirements = Array.from(menuMessageContent.matchAll(RoleMentionRegEx), (m) => m[0]);
-
-    // Remove Select Menu Component
-    menuComponents.pop();
-
-    
-    // Validate Role Menu *does* have needed elements (ie: Embed Title, Menu Type, and at least one Role)
-    if ( MenuEmbed.footer == undefined || MenuEmbed.title == undefined || menuComponents.length === 0 ) {
-        return new JsonResponse({
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: {
-                flags: MessageFlags.Ephemeral,
-                content: localize(interaction.locale, 'ROLE_MENU_ERROR_MISSING_NEEDED_ELEMENTS')
-            }
-        });
-    }
-
-
-    // Create Requirements String, if any are present
-    let requirementString = "";
-
-    if ( menuRequirements.length === 1 ) {
-        requirementString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_SINGLE', `${menuRequirements[0]}`);
-    }
-    else if ( menuRequirements.length > 1 ) {
-        requirementString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_MULTIPLE', `${menuRequirements.join(" / ")}`);
-    }
-
-
-    const UserId = interaction.member.user.id;
-    const MenuCache = UtilityCollections.RoleMenuManagement.get(UserId);
-
-    // Convert Embed into using Components v2, for displaying Menu in :)
-    //    NOTE: I'm not converting the Preview shown during editing yet as I figure that would be easier to do via a web dashboard in future
-    
-    // Menu Details
-    let menuDetailsComponents = [
-        // Menu Title
-        {
-            "id": 2,
-            "type": ComponentType.TextDisplay,
-            "content": `## ${MenuCache.menuEmbed.data.title}`
-        }
-    ];
-    // Menu Description
-    if ( MenuCache.menuEmbed.data.description != undefined ) {
-        menuDetailsComponents.push({ "id": 3, "type": ComponentType.TextDisplay, "content": MenuCache.menuEmbed.data.description });
-    }
-    // Menu Role List
-    let menuRoleList = "";
-    menuRoleList += MenuCache.menuEmbed.data.fields.shift().value;
-    if ( MenuCache.menuEmbed.data.fields?.length > 0 ) { menuRoleList += `\n${MenuCache.menuEmbed.data.fields.shift().value}`; }
-    menuDetailsComponents.push({ "id": 4, "type": ComponentType.TextDisplay, "content": menuRoleList });
-    // Menu Requirements
-    if ( menuRequirements.length > 0 ) {
-        menuDetailsComponents.push({ "id": 5, "type": ComponentType.TextDisplay, "content": `-# ${requirementString}` });
-    }
-    // Menu Type
-    menuDetailsComponents.push({ "id": 6, "type": ComponentType.TextDisplay, "content": `-# ${MenuCache.menuEmbed.data.footer?.text}` });
-
-    // Redo Buttons into Rows so that Discord's API won't give me a 400 response :S
-    let temp = new ActionRowBuilder();
-
-    MenuCache.menuButtons.forEach(rButton => {
-        if ( temp.components.length === 5 ) {
-            menuDetailsComponents.push(temp.toJSON());
-            temp.setComponents([ rButton ]);
-        }
-        else {
-            temp.addComponents([ rButton ]);
-        }
-
-        // If last Button, force-push back into Array
-        let checkIndex = MenuCache.menuButtons.findIndex(theButton => theButton.data.custom_id === `role_${rButton.data.custom_id.split("_").pop()}`);
-        if ( MenuCache.menuButtons.length - 1 === checkIndex ) {
-            menuDetailsComponents.push(temp.toJSON());
-        }
-    });
-    
-
-    let convertToComponents = {
-        "id": 1,
-        "type": ComponentType.Container,
-        "accent_color": MenuCache.menuEmbed.data.color != undefined ? MenuCache.menuEmbed.data.color : null,
-        "spoiler": false,
-        "components": menuDetailsComponents
-    };
+    // Grab components to repost Role Menu
+    const MessageComponents = interaction.message.components;
+    const MenuContainer = MessageComponents.find(comp => comp.type === ComponentType.Container);
 
 
     // Post Menu
-    await fetch(CreateMessageEndpoint(interaction.channel.id), {
+    let attemptMenuPost = await fetch(CreateMessageEndpoint(interaction.channel.id), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -336,19 +426,34 @@ async function saveAndDisplay(interaction) {
         },
         body: JSON.stringify({
             flags: MessageFlags.IsComponentsV2,
-            components: [convertToComponents],
+            components: [MenuContainer],
             allowed_mentions: { parse: [] }
         })
     });
+
+    if ( attemptMenuPost.status != 204 && attemptMenuPost.status != 200 ) {
+        return new JsonResponse({
+            type: InteractionResponseType.ChannelMessageWithSource,
+            data: {
+                "flags": MessageFlags.Ephemeral,
+                "content": localize(interaction.locale, 'ROLE_MENU_CREATION_ERROR_GENERIC')
+            }
+        });
+    }
 
 
     // Now ACK Interaction
     return new JsonResponse({
         type: InteractionResponseType.UpdateMessage,
         data: {
-            components: [],
-            embeds: [],
-            content: localize(interaction.locale, 'ROLE_MENU_CREATION_SUCCESS', IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS)
+            /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
+            components: [{
+                "type": ComponentType.TextDisplay,
+                "content": localize(interaction.locale, 'ROLE_MENU_CREATION_SUCCESS')
+            }, {
+                "type": ComponentType.MediaGallery,
+                "items": [{ "media": { "url": IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS }, "description": localize(interaction.locale, 'ROLE_MENU_CREATION_SUCCESS_IMAGE_ALT_TEXT') }]
+            }]
         }
     });
 }

@@ -1,4 +1,4 @@
-import { InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
+import { ComponentType, InteractionResponseType } from 'discord-api-types/v10';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { ManageMessageEndpoint } from '../../../Utility/utilityConstants.js';
@@ -27,21 +27,21 @@ export const Button = {
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
      */
     async executeButton(interaction, interactionUser) {
-        // Grab data
-        let buttonCustomId = interaction.data.custom_id.split("_");
-        const DeletionConfirmation = interaction.data.custom_id.includes("cancel") ? "CANCEL" : "CONFIRM";
-
-        if ( DeletionConfirmation === "CANCEL" ) {
+        // Validate confirmation
+        if ( interaction.data.custom_id.includes("cancel") ) {
             return new JsonResponse({
                 type: InteractionResponseType.UpdateMessage,
                 data: {
-                    content: localize(interaction.locale, 'DELETE_ROLE_MENU_COMMAND_CANCELLED'),
-                    components: []
+                    components: [{
+                        "type": ComponentType.TextDisplay,
+                        "content": localize(interaction.locale, 'DELETE_ROLE_MENU_COMMAND_CANCELLED')
+                    }]
                 }
             });
         }
         else {
-            const MenuMessageId = buttonCustomId.pop();
+            // Confirmation confirmed. Delete menu!
+            const MenuMessageId = interaction.data.custom_id.split("_").pop();
 
             let attemptDeletion = await fetch(ManageMessageEndpoint(interaction.channel.id, MenuMessageId), {
                 method: 'DELETE',
@@ -50,13 +50,15 @@ export const Button = {
                     Authorization: `Bot ${DISCORD_TOKEN}`
                 }
             });
-            
+
             if ( attemptDeletion.status === 204 ) {
                 return new JsonResponse({
                     type: InteractionResponseType.UpdateMessage,
                     data: {
-                        content: localize(interaction.locale, 'DELETE_ROLE_MENU_COMMAND_SUCCESS'),
-                        components: []
+                        components: [{
+                            "type": ComponentType.TextDisplay,
+                            "content": localize(interaction.locale, 'DELETE_ROLE_MENU_COMMAND_SUCCESS')
+                        }]
                     }
                 });
             }
@@ -64,8 +66,10 @@ export const Button = {
                 return new JsonResponse({
                     type: InteractionResponseType.UpdateMessage,
                     data: {
-                        content: localize(interaction.locale, 'DELETE_ROLE_MENU_COMMAND_ERROR_GENERIC'),
-                        components: []
+                        components: [{
+                            "type": ComponentType.TextDisplay,
+                            "content": localize(interaction.locale, 'DELETE_ROLE_MENU_COMMAND_ERROR_GENERIC')
+                        }]
                     }
                 });
             }

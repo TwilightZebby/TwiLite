@@ -1,11 +1,5 @@
-import { InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import * as EmojiRegex from 'emoji-regex';
-import { ActionRowBuilder } from '@discordjs/builders';
+import { ButtonStyle, ComponentType, InteractionResponseType } from 'discord-api-types/v10';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
-import { localize } from '../../../Utility/localizeResponses.js';
-import { DiscordEmojiRegex, OriginalInteractionResponseEndpoint, UtilityCollections } from '../../../Utility/utilityConstants.js';
-import { EMOJIPEDIA_URI } from '../../../Assets/Hyperlinks.js';
-import { DISCORD_APP_USER_ID, DISCORD_TOKEN } from '../../../config.js';
 
 
 export const Modal = {
@@ -18,154 +12,89 @@ export const Modal = {
     /** Modal's Description, mostly for reminding me what it does!
      * @type {String}
      */
-    description: "Handles editing Role Buttons on Role Menus",
+    description: "Handles editing an existing Role Button on a Menu",
 
     /** Runs the Modal
      * @param {import('discord-api-types/v10').APIModalSubmitGuildInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
      */
     async executeModal(interaction, interactionUser) {
-        // Grab inputs
-        const SplitCustomId = interaction.data.custom_id.split("_");
-        const RoleId = SplitCustomId.pop();
-        let inputLabel;
-        let inputEmoji;
-        interaction.data.components.forEach(modalRow => {
-            modalRow.components.forEach(modalComponent => {
-                if ( modalComponent.custom_id === "label" ) { inputLabel = modalComponent.value; }
-                else if ( modalComponent.custom_id === "emoji" ) { inputEmoji = modalComponent.value; }
+        // Grab inputted data
+        const ModalComponents = interaction.data.components;
+        let inputSelectedRole = interaction.data.custom_id.split("_").pop();
+        let inputButtonLabel = "";
+        let inputButtonColor = ButtonStyle.Secondary;
+
+        for ( let i = 0; i <= ModalComponents.length - 1; i++) {
+            let tempTopLevelComp = ModalComponents[i].component;
+            // Button Label
+            if ( tempTopLevelComp.custom_id === "button-label" ) {
+                inputButtonLabel = tempTopLevelComp.value;
+            }
+            // Button Colour
+            if ( tempTopLevelComp.custom_id === "button-color" ) {
+                let tempColor = tempTopLevelComp.values.shift();
+                inputButtonColor = tempColor === "BLURPLE" ? ButtonStyle.Primary
+                    : tempColor === "GREEN" ? ButtonStyle.Success
+                    : tempColor === "GREY" ? ButtonStyle.Secondary
+                    : ButtonStyle.Danger;
+            }
+        }
+
+
+
+        // Grab message components
+        let MessageComponents = interaction.message.components;
+        /** @type {import('discord-api-types/v10').APIContainerComponent} */
+        let MenuContainer = MessageComponents.find(comp => comp.type === ComponentType.Container);
+        
+        // Grab already added assignable Roles
+        /** @type {import('discord-api-types/v10').APIActionRowComponent<import('discord-api-types/v10').APIButtonComponentWithCustomId>[]} */
+        let MenuButtons = MenuContainer.filter(componentItem => componentItem.type === ComponentType.ActionRow);
+
+        // Edit the button using new details
+        let hasButtonBeenEdited = false;
+        for ( let i = 0; i <= MenuButtons.length - 1; i++ ) {
+            for ( let j = 0; j <= MenuButtons[i].components.length - 1; j++ ) {
+                if ( MenuButtons[i].components[j].custom_id.includes(inputSelectedRole) ) {
+                    MenuButtons[i].components[j].label = inputButtonLabel;
+                    MenuButtons[i].components[j].style = inputButtonColor;
+                    hasButtonBeenEdited = true;
+                }
+
+                if ( hasButtonBeenEdited ) { break; }
+            }
+
+            if ( hasButtonBeenEdited ) { break; }
+        }
+
+        // Recreate Role List to update the edited Button's label with the list
+        let roleList = [];
+        MenuButtons.forEach(row => {
+            row.components.forEach(button => {
+                let tempRoleId = button.custom_id.split("_").pop();
+                let tempLabel = button.label;
+                roleList.push(`- <@&${tempRoleId}> - ${tempLabel}`);
             });
         });
 
-
-        // Validate that at least ONE input was given
-        if ( (inputLabel == "" && inputLabel == " " && inputLabel == null && inputLabel == undefined) && (inputEmoji == "" && inputEmoji == " " && inputEmoji == null && inputEmoji == undefined) ) {
-            return new JsonResponse({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                    flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'ROLE_MENU_ERROR_CANNOT_HAVE_BLANK_BUTTON')
-                }
-            });
-        }
-
-
-        // Validate Emoji, if one was given
-        if ( inputEmoji != "" && inputEmoji != " " && inputEmoji != null && inputEmoji != undefined ) {
-            if ( !DiscordEmojiRegex.test(inputEmoji) && !EmojiRegex.default().test(inputEmoji) ) {
-                return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'ROLE_MENU_ERROR_INVALID_EMOJI', `<${EMOJIPEDIA_URI}>`)
-                    }
-                });
-            }
-        }
-
-
-        // Update Button in cache
-        const UserId = interaction.member.user.id;
-        let menuCache = UtilityCollections.RoleMenuManagement.get(UserId);
-
-        for ( let i = 0; i <= menuCache.menuButtons.length - 1; i++ ) {
-            if ( menuCache.menuButtons[i].data.custom_id.includes(RoleId) ) {
-                if ( inputLabel != "" && inputLabel != " " && inputLabel != null && inputLabel != undefined ) { menuCache.menuButtons[i].setLabel(inputLabel); }
-                else { menuCache.menuButtons[i].data.label = undefined; }
-
-                if ( inputEmoji != "" && inputEmoji != " " && inputEmoji != null && inputEmoji != undefined ) {
-                    if ( EmojiRegex.default().test(inputEmoji) ) { menuCache.menuButtons[i].setEmoji({ name: inputEmoji }); }
-                    else {
-                        // It's a Discord Emoji. So App needs both the name and the ID
-                        inputEmoji = inputEmoji.replace('<', '');
-                        inputEmoji = inputEmoji.replace('>', '');
-                        let splitEmoji = inputEmoji.split(":");
-                        let emojiId = splitEmoji.pop();
-                        let emojiName = splitEmoji.pop();
-                        menuCache.menuButtons[i].setEmoji({ id: emojiId, name: emojiName });
-                    }
-                }
-                else { menuCache.menuButtons[i].data.emoji = undefined; }
-
-                break;
-            }
-        }
-
-
-
-        // Re-construct for editing into Menu Message
-        let updatedComponents = [];
-        let temp = new ActionRowBuilder();
-        let textFieldOne = "";
-        let textFieldTwo = "";
-        
-        menuCache.menuEmbed.spliceFields(0, 3);
-        
-        menuCache.menuButtons.forEach(roleButton => {
-            if ( temp.components.length === 5 ) {
-                updatedComponents.push(temp.toJSON());
-                temp.setComponents([ roleButton ]);
-            }
-            else {
-                temp.addComponents([ roleButton ]);
-            }
-                    
-        
-            if ( textFieldOne.length <= 1000 ) {
-                let tempId = roleButton.data.custom_id.split("_").pop();
-                let tempLabel = roleButton.data.emoji != undefined && roleButton.data.emoji.id != undefined ? `<:${roleButton.data.emoji.name}:${roleButton.data.emoji.id}> ${roleButton.data.label != undefined ? roleButton.data.label : ''}`
-                    : roleButton.data.emoji != undefined && roleButton.data.emoji.id == undefined ? `${roleButton.data.emoji.name} ${roleButton.data.label != undefined ? roleButton.data.label : ''}`
-                    : roleButton.data.label;
-        
-                textFieldOne += `• <@&${tempId}> - ${tempLabel}\n`;
-            }
-            else {
-                let tempId = roleButton.data.custom_id.split("_").pop();
-                let tempLabel = roleButton.data.emoji != undefined && roleButton.data.emoji.id != undefined ? `<:${roleButton.data.emoji.name}:${roleButton.data.emoji.id}> ${roleButton.data.label != undefined ? roleButton.data.label : ''}`
-                    : roleButton.data.emoji != undefined && roleButton.data.emoji.id == undefined ? `${roleButton.data.emoji.name} ${roleButton.data.label != undefined ? roleButton.data.label : ''}`
-                    : roleButton.data.label;
-        
-                textFieldTwo += `• <@&${tempId}> - ${tempLabel}\n`;
-            }
-        
-            // If last Button, push back into Array
-            let checkIndex = menuCache.menuButtons.findIndex(rButton => rButton.data.custom_id === `role_${roleButton.data.custom_id.split("_").pop()}`);
-            if ( menuCache.menuButtons.length - 1 === checkIndex ) {
-                updatedComponents.push(temp.toJSON());
-            }
-        });
-        
-        // re-add Select Menu
-        updatedComponents.push(menuCache.selectMenu.toJSON());
-        
-        // Update Embed
-        menuCache.menuEmbed.addFields({ name: `\u200B`, value: textFieldOne });
-        if ( textFieldTwo.length > 3 ) { menuCache.menuEmbed.addFields({ name: `\u200B`, value: textFieldTwo }); }
-        let embedJson = menuCache.menuEmbed.toJSON();
-
-        // Edit into main
-        await fetch(OriginalInteractionResponseEndpoint(DISCORD_APP_USER_ID, menuCache.interactionToken), {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bot ${DISCORD_TOKEN}`
-            },
-            body: JSON.stringify({
-                embeds: [embedJson],
-                components: updatedComponents
-            })
+        // Edit into Menu
+        MenuContainer.components.splice(4, MenuButtons.length, MenuButtons);
+        MenuContainer.components.forEach(comp => {
+            if ( comp.id === 6 ) { comp.content = roleList.join(`\n`); }
         });
 
+        // Put container back into message
+        MessageComponents.forEach(comp => {
+            if ( comp.type === ComponentType.Container ) { comp = MenuContainer; }
+        });
 
-        // Save Cache
-        UtilityCollections.RoleMenuManagement.set(UserId, menuCache);
-
-        // ACK
+        // Update message
         return new JsonResponse({
-            type: InteractionResponseType.ChannelMessageWithSource,
+            type: InteractionResponseType.UpdateMessage,
             data: {
-                flags: MessageFlags.Ephemeral,
-                content: localize(interaction.locale, 'ROLE_MENU_EDIT_BUTTON_SUCCESS')
+                components: MessageComponents,
+                "allowed_mentions": { "parse": [] }
             }
         });
     }

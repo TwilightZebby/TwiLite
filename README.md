@@ -65,14 +65,6 @@ You can even add Requirements to Menus you make, restricting their use to those 
 
 All Role Menu management can be found under the `/rolemenu` Command - including guides on how to edit or delete an existing Role Menu.
 
-## Discord Outage Notifier Module
-> [!NOTE]
-> The Discord Outage Notifier Module is only available in the Server App context.
-
-Want to be kept in the loop when Discord has another outage? Use TwiLite's Outage Notifier!
-
-Simply use the `/discord-outage-feed` to toggle if your Server receives these outage notifications (in the Channel you use this Command in) or not.
-
 ## Miscellaneous Features
 TwiLite may sometimes be updated to add some general-purpose, utility, or other miscellaneous features. Currently added ones are as follows:
 
@@ -136,7 +128,6 @@ There are two ways to convert temperatures using TwiLite:
 | `/add-app` | Slash | Shows you the Add App/Invite link you can use to add TwiLite to either your Server(s) or your Account |
 | `/support` | Slash | Shows you where you can gain support from TwiLite's developer, or post ideas/bug reports for TwiLite |
 | `/follow-news` | Slash | Adds TwiLite's Updates & Announcements Feed to the Channel you used this Command in |
-| `/discord-outage-feed` | Slash | Toggles posting Discord's outage notices in the Channel this is used in |
 
 ## Command Type Notes
 - "Message" refers to Message Context Commands

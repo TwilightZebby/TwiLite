@@ -178,6 +178,7 @@ module.exports = {
     // Role Menu: Slash Command initial responses
     ROLE_MENU_CREATE_INTRUCTIONS: `## __Role Menu Creation__
 Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or colour.
+:information_source: Please remember that I can**not** grant/revoke Roles that are above my own highest Role in this Server.
 
 **An auto-updating preview of what your new Role Menu will look like is shown below.**`,
 
@@ -200,6 +201,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     // Role Menu: Context Command responses
     ROLE_MENU_CONFIGURATION_INTRUCTIONS: `## __Role Menu Configuration__
 Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons. Press an existing Role Button to edit its label and/or colour.
+:information_source: Please remember that I can**not** grant/revoke Roles that are above my own highest Role in this Server.
 
 **An auto-updating preview of what your updated Role Menu will look like is shown below.**`,
 
@@ -307,6 +309,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_ADD_ROLE_MAX_BUTTONS_LIMIT_REACHED: `Sorry, but you cannot add more than 15 Role Buttons to a single Menu.`,
     ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_REQUIREMENT: `The {{0}} Role has already been added to your Menu as a Requirement!\nIf you want to add it as an assignable Role, first remove it from your Menu's Requirements.`,
     ROLE_MENU_ADD_ROLE_ALREADY_ADDED_AS_ASSIGNABLE: `The {{0}} Role has already been added to your Menu!`,
+    ROLE_MENU_ADD_ROLE_CANNOT_ADD_MANAGED_ROLES: `Sorry, the {{0}} Role is managed by an integration or another App - meaning, I cannot grant/revoke it.`,
     
     ROLE_MENU_ADD_REQUIREMENTS_LIMIT_REACHED: `Sorry, but you cannot add more than 5 Requirements to a single Menu.`,
     ROLE_MENU_ADD_REQUIREMENTS_ALREADY_ADDED_AS_REQUIREMENT: `The {{0}} Role has already been added as a Requirement for this Menu!`,
@@ -338,22 +341,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_RESTRICTION_NONE: `Anyone can use this Role Menu.`,
     ROLE_MENU_RESTRICTION_SINGLE: `Only those with the {{0}} Role can use this Role Menu.`,
     ROLE_MENU_RESTRICTION_MULTIPLE: `Only those with one of either {{0}} Roles can use this Role Menu.`,
-
-    //ROLE_MENU_SET_TYPE_SUCCESS: `Successfully set the type of your Role Menu.\nYou may now dismiss this Message.`,
-    //ROLE_MENU_ADD_ROLE_SUCCESS: `Successfully added that Role to your Role Menu.\nYou may now dismiss this Message.`,
-    //ROLE_MENU_REMOVE_ROLE_SUCCESS: `Successfully removed that Role from your Role Menu.\nYou may now dismiss this Message.`,
-    //ROLE_MENU_ADD_REQUIREMENT_SUCCESS: `Successfully added that Role Requirement to your Role Menu.\nYou may now dismiss this Message.`,
-    //ROLE_MENU_REMOVE_REQUIREMENT_SUCCESS: `Successfully removed that Role Requirement from your Role Menu.\nYou may now dismiss this Message.`,
-    //ROLE_MENU_EDIT_BUTTON_SUCCESS: `Successfully edited that Button for your Role Menu.\nYou may now dismiss this Message.`,
-
-    //ROLE_MENU_ERROR_ROLE_NOT_ON_MENU: `{{0}} is __not__ on this Menu!`,
-    //ROLE_MENU_ERROR_ROLE_ALREADY_ON_MENU: `{{0}} has already been added to this Role Menu!`,
-    //ROLE_MENU_ERROR_ROLE_IS_A_REQUIREMENT: `You cannot add {{0}} as an assignable Role as it has already been added as a Menu Requirement.`,
-    //ROLE_MENU_ERROR_REQUIREMENT_ROLE_NOT_ON_MENU: `{{0}} is __not__ on this Menu as a Requirement!`,
-    //ROLE_MENU_ERROR_REQUIREMENT_ROLE_ALREADY_ON_MENU: `{{0}} has already been added as a Requirement to this Role Menu!`,
-    //ROLE_MENU_ERROR_REQUIREMENT_ROLE_IS_A_BUTTON: `You cannot add {{0}} as a Requirement to this Menu as it is already added as an assignable Role.`,
-    //ROLE_MENU_ERROR_REQUIREMENT_MAX_REACHED: `Sorry, you cannot have more than 5 Requirements added to a single Menu.`,
-    //ROLE_MENU_ERROR_ROLE_TOO_HIGH: `{{0}} is higher than this Bot's own highest Role ( {{1}} ). As such, this Bot won't be able to grant or revoke it for other Members.`,
 
 
 

@@ -61,6 +61,3 @@
 - name: feature:role menus
   description: Affects or relates to the Role Menu module
   color: 'FBCA04'
-- name: feature:status notifier
-  description: Affects or relates to the Status Notifier module
-  color: 'FBCA04'

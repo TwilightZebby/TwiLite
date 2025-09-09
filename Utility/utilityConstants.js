@@ -11,7 +11,7 @@ import { MONGO_CONNECTION_URI } from '../config.js';
 /** Mongo Client Connection
  * @returns {MongoClient}
  */
-export const createMongoClient = () => {
+/* export const createMongoClient = () => {
     return new MongoClient(MONGO_CONNECTION_URI, {
         serverApi: {
             version: ServerApiVersion.v1,
@@ -21,7 +21,7 @@ export const createMongoClient = () => {
             maxIdleTimeMS: 10_000
         }
     });
-}
+} */
 
 /** Utility & Command/Interaction Collections */
 export const UtilityCollections = {
@@ -43,13 +43,7 @@ export const UtilityCollections = {
     /** Holds all Cooldowns for Select Menu Interactions, mapped by "selectName_userID"
      * @type {Collection<String, Number>}
      */
-    SelectCooldowns: new Collection(),
-
-    /** Temp-stores Interaction IDs && Tokens for use in editing/deleting messages during Role Menu Management. Also caches Buttons & Embed during Menu management.
-     *  `Collection<userId, {sourceMessageId, interactionId, interactionToken, selectMenu, menuEmbed, menuButtons, roleRequirements, mainInstructions}>`
-     * @type {Collection<String, {sourceMessageId: ?String, interactionId: String, interactionToken: String, selectMenu: ActionRowBuilder, menuEmbed: EmbedBuilder, menuButtons: Array<ButtonBuilder>, roleRequirements: Array<String>, mainInstructions: String}>}
-     */
-    RoleMenuManagement: new Collection()
+    SelectCooldowns: new Collection()
 };
 
 

@@ -129,20 +129,6 @@ router.post('/webhook', async (request, env, ctx) => {
 
 
 
-
-
-
-// *******************************
-/** For incoming Webhook Events from StatusPage. They should include a JSON payload */
-router.post('/statuspage', async (request, env, ctx) => {
-    return await handleStatusPageWebhook(request);
-});
-
-
-
-
-
-
 router.all('*', () => {
     //new Response('Not Found.', { status: 400 })
     return rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker();

@@ -207,6 +207,13 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MANAGE_ROLE_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work.`,
     EDIT_ROLE_MENU_COMMAND_ERROR_MISSING_MESSAGE_HISTORY_PERMISSION: `Sorry, but I cannot edit an existing Role Menu in this Channel without having the **Read Message History** Permission!`,
 
+    DELETE_ROLE_MENU_COMMAND_VALIDATION: `Are you sure you want to delete this Role Menu?`,
+    DELETE_ROLE_MENU_CONFIRMATION_BUTTON_LABEL: `Delete Menu`,
+    DELETE_ROLE_MENU_CANCEL_BUTTON_LABEL: `Cancel deletion`,
+    DELETE_ROLE_MENU_COMMAND_SUCCESS: `Successfully deleted that Role Menu.`,
+    DELETE_ROLE_MENU_COMMAND_CANCELLED: `Cancelled deletion of that Role Menu.`,
+    DELETE_ROLE_MENU_COMMAND_ERROR_GENERIC: `Sorry, there was an error trying to delete that Role Menu.\nIf you have **Manage Messages** Permission in this Channel, you can delete that Role Menu yourself using Discord's "Delete Message" option.`,
+
     // Role Menu: Select Menu options
     ROLE_MENU_SELECT_AN_ACTION: `Please select an action`,
 
@@ -338,12 +345,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     //ROLE_MENU_ADD_REQUIREMENT_SUCCESS: `Successfully added that Role Requirement to your Role Menu.\nYou may now dismiss this Message.`,
     //ROLE_MENU_REMOVE_REQUIREMENT_SUCCESS: `Successfully removed that Role Requirement from your Role Menu.\nYou may now dismiss this Message.`,
     //ROLE_MENU_EDIT_BUTTON_SUCCESS: `Successfully edited that Button for your Role Menu.\nYou may now dismiss this Message.`,
-
-    //DELETE_ROLE_MENU_COMMAND_VALIDATION: `Are you sure you want to delete this Role Menu?`,
-    //DELETE_ROLE_MENU_COMMAND_SUCCESS: `Successfully deleted that Role Menu.`,
-    //DELETE_ROLE_MENU_COMMAND_CANCELLED: `Cancelled deletion of that Role Menu.`,
-
-    //DELETE_ROLE_MENU_COMMAND_ERROR_GENERIC: `Sorry, there was an error trying to delete that Role Menu...`,
 
     //ROLE_MENU_ERROR_ROLE_NOT_ON_MENU: `{{0}} is __not__ on this Menu!`,
     //ROLE_MENU_ERROR_ROLE_ALREADY_ON_MENU: `{{0}} has already been added to this Role Menu!`,

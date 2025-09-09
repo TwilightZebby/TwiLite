@@ -90,6 +90,19 @@ export const Modal = {
             });
         }
 
+        // Validate Role isn't a "Managed" Role (which means no one can grant/revoke it)
+        let resolvedSelectedRole = interaction.data.resolved.roles[inputSelectedRole];
+
+        if ( resolvedSelectedRole.managed ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    "flags": MessageFlags.Ephemeral,
+                    "content": localize(interaction.locale, 'ROLE_MENU_ADD_ROLE_CANNOT_ADD_MANAGED_ROLES', `<@&${inputSelectedRole}>`)
+                }
+            });
+        }
+
 
 
         // Validated Role isn't already on the Menu - so add it as an assignable Role!

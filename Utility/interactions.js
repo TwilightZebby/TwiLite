@@ -32,8 +32,8 @@ export const ContextCommands = {
     'Kiss User': () => import('../Commands/ContextCommands/Actions/Kiss_User.js'),
 
     // ***** FOR ROLE MENUS
-    //'Delete Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Delete_Role_Menu.js'),
-    //'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),
+    'Delete Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Delete_Role_Menu.js'),
+    'Edit Role Menu': () => import('../Commands/ContextCommands/RoleMenus/Edit_Role_Menu.js'),
 
     // ***** FOR GENERAL COMMANDS
     'Convert Temperature': () => import('../Commands/ContextCommands/General/Convert_Temperature.js'),
@@ -49,24 +49,23 @@ export const Buttons = {
     'jail': () => import('../Interactions/Buttons/Actions/jail.js'),
 
     // ***** FOR ROLE MENUS
-    //'role': () => import('../Interactions/Buttons/RoleMenus/role.js'),
-    //'menu-delete': () => import('../Interactions/Buttons/RoleMenus/menu-delete.js'),
+    'role': () => import('../Interactions/Buttons/RoleMenus/role.js'),
+    'menu-delete': () => import('../Interactions/Buttons/RoleMenus/menu-delete.js'),
 }
 
 export const Selects = {
     // ***** FOR ROLE MENUS
     'create-role-menu': () => import('../Interactions/Selects/RoleMenus/create-role-menu.js'),
-    //'configure-role-menu': () => import('../Interactions/Selects/RoleMenus/configure-role-menu.js'),
-    //'menu-set-type': () => import('../Interactions/Selects/RoleMenus/menu-set-type.js'),
-    //'menu-add-role': () => import('../Interactions/Selects/RoleMenus/menu-add-role.js'),
-    //'menu-add-button': () => import('../Interactions/Selects/RoleMenus/menu-add-button.js'),
-    //'menu-remove-role': () => import('../Interactions/Selects/RoleMenus/menu-remove-role.js'),
-    //'menu-add-requirement': () => import('../Interactions/Selects/RoleMenus/menu-add-requirement.js'),
-    //'menu-remove-requirement': () => import('../Interactions/Selects/RoleMenus/menu-remove-requirement.js'),
+    'configure-role-menu': () => import('../Interactions/Selects/RoleMenus/configure-role-menu.js'),
 }
 
 export const Modals = {
     // ***** FOR ROLE MENUS
+    'menu-add-requirement': () => import('../Interactions/Modals/RoleMenus/menu-add-requirement.js'),
+    'menu-add-role': () => import('../Interactions/Modals/RoleMenus/menu-add-role.js'),
+    'menu-edit-button': () => import('../Interactions/Modals/RoleMenus/menu-edit-button.js'),
+    'menu-remove-requirement': () => import('../Interactions/Modals/RoleMenus/menu-remove-requirement.js'),
+    'menu-remove-role': () => import('../Interactions/Modals/RoleMenus/menu-remove-role.js'),
     'menu-set-details': () => import('../Interactions/Modals/RoleMenus/menu-set-details.js'),
     'menu-set-type': () => import('../Interactions/Modals/RoleMenus/menu-set-type.js'),
 }

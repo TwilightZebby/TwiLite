@@ -162,7 +162,7 @@ export const SlashCommand = {
                 {
                     "id": 1,
                     "type": ComponentType.TextDisplay,
-                    "content": localize(interaction.guild_locale, 'ROLE_MENU_CREATE_INTRUCTIONS')
+                    "content": localize(interaction.locale, 'ROLE_MENU_CREATE_INTRUCTIONS')
                 },
                 {
                     "id": 2,

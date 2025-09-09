@@ -294,7 +294,9 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_ADD_REQUIREMENTS_ALREADY_ADDED_AS_ASSIGNABLE: `The {{0}} Role has already been added to your Menu as an assignable Role!\nIf you want to add it as aa Requirement, first remove it from your Menu's assignable Roles.`,
 
     ROLE_MENU_REMOVE_ROLE_NO_ROLES_ADDED: `Sorry, you cannot remove Roles from a Menu that doesn't have any Roles on it!`,
+    ROLE_MENU_REMOVE_ROLE_SELECTED_ROLE_NOT_ON_MENU: `The {{0}} Role cannot be removed from this Menu, as it has not previously been added to this Menu as an assignable Role!`,
     ROLE_MENU_REMOVE_REQUIREMENT_NONE_ADDED: `Sorry, you cannot remove Requirements from a Menu with no set Requirements!`,
+    ROLE_MENU_REMOVE_REQUIREMENT_SELECTED_ROLE_NOT_ON_MENU: `The {{0}} Requirement cannot be removed from this Menu, as it has not previously been added to this Menu as a Requirement!`,
 
     // Role Menu: Responses to pressing Role Buttons
     ROLE_BUTTON_AUDIT_LOG_ENTRY: `Role Menu in {{0}}`,

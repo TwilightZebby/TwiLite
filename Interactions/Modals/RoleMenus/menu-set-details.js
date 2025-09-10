@@ -27,10 +27,13 @@ export const Modal = {
         let inputMenuSidebarColor = undefined;
 
         for ( let i = 0; i <= ModalComponents.length - 1; i++) {
-            let tempTopLevelComp = ModalComponents[i].component;
-            if ( tempTopLevelComp.custom_id === "menu-title" ) { inputMenuTitle = tempTopLevelComp.value; }
-            if ( tempTopLevelComp.custom_id === "menu-description" ) { inputMenuDescription = tempTopLevelComp.value ?? "\u200B"; }
-            if ( tempTopLevelComp.custom_id === "menu-color" ) { inputMenuSidebarColor = tempTopLevelComp.value ?? undefined; }
+            // Safety net to stop Text Displays breaking this check
+            if ( ModalComponents[i].type === ComponentType.Label ) {
+                let tempTopLevelComp = ModalComponents[i].component;
+                if ( tempTopLevelComp.custom_id === "menu-title" ) { inputMenuTitle = tempTopLevelComp.value; }
+                if ( tempTopLevelComp.custom_id === "menu-description" ) { inputMenuDescription = tempTopLevelComp.value ?? "\u200B"; }
+                if ( tempTopLevelComp.custom_id === "menu-color" ) { inputMenuSidebarColor = tempTopLevelComp.value ?? undefined; }
+            }
         }
 
         // Validate inputted colour

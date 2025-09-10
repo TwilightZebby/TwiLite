@@ -25,10 +25,13 @@ export const Modal = {
         let inputMenuType = localize('en-GB', 'ROLE_MENU_TYPE_TOGGLE');
         
         for ( let i = 0; i <= ModalComponents.length - 1; i++) {
-            let tempTopLevelComp = ModalComponents[i].component;
-            if ( tempTopLevelComp.custom_id === "menu-type" ) {
-                let tempType = tempTopLevelComp.values.shift();
-                inputMenuType = tempType === 'TOGGLE' ? 'Toggle' : tempType === 'SWAP' ? 'Swappable' : 'Single-use';
+            // Safety net to stop Text Displays breaking this check
+            if ( ModalComponents[i].type === ComponentType.Label ) {
+                let tempTopLevelComp = ModalComponents[i].component;
+                if ( tempTopLevelComp.custom_id === "menu-type" ) {
+                    let tempType = tempTopLevelComp.values.shift();
+                    inputMenuType = tempType === 'TOGGLE' ? 'Toggle' : tempType === 'SWAP' ? 'Swappable' : 'Single-use';
+                }
             }
         }
 

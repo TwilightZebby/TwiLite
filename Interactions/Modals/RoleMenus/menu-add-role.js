@@ -28,22 +28,25 @@ export const Modal = {
         let inputButtonColor = ButtonStyle.Secondary;
 
         for ( let i = 0; i <= ModalComponents.length - 1; i++) {
-            let tempTopLevelComp = ModalComponents[i].component;
-            // Selected Role
-            if ( tempTopLevelComp.custom_id === "role-to-add" ) {
-                inputSelectedRole = tempTopLevelComp.values.shift();
-            }
-            // Button Label
-            if ( tempTopLevelComp.custom_id === "button-label" ) {
-                inputButtonLabel = tempTopLevelComp.value;
-            }
-            // Button Colour
-            if ( tempTopLevelComp.custom_id === "button-color" ) {
-                let tempColor = tempTopLevelComp.values.shift();
-                inputButtonColor = tempColor === "BLURPLE" ? ButtonStyle.Primary
-                    : tempColor === "GREEN" ? ButtonStyle.Success
-                    : tempColor === "GREY" ? ButtonStyle.Secondary
-                    : ButtonStyle.Danger;
+            // Safety net to stop Text Displays breaking this check
+            if ( ModalComponents[i].type === ComponentType.Label ) {
+                let tempTopLevelComp = ModalComponents[i].component;
+                // Selected Role
+                if ( tempTopLevelComp.custom_id === "role-to-add" ) {
+                    inputSelectedRole = tempTopLevelComp.values.shift();
+                }
+                // Button Label
+                if ( tempTopLevelComp.custom_id === "button-label" ) {
+                    inputButtonLabel = tempTopLevelComp.value;
+                }
+                // Button Colour
+                if ( tempTopLevelComp.custom_id === "button-color" ) {
+                    let tempColor = tempTopLevelComp.values.shift();
+                    inputButtonColor = tempColor === "BLURPLE" ? ButtonStyle.Primary
+                        : tempColor === "GREEN" ? ButtonStyle.Success
+                        : tempColor === "GREY" ? ButtonStyle.Secondary
+                        : ButtonStyle.Danger;
+                }
             }
         }
 

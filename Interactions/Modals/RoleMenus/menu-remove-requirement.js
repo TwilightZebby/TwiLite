@@ -26,10 +26,13 @@ export const Modal = {
         let inputSelectedRole = "";
 
         for ( let i = 0; i <= ModalComponents.length - 1; i++) {
-            let tempTopLevelComp = ModalComponents[i].component;
-            // Selected Role
-            if ( tempTopLevelComp.custom_id === "role-to-remove" ) {
-                inputSelectedRole = tempTopLevelComp.values.shift();
+            // Safety net to stop Text Displays breaking this check
+            if ( ModalComponents[i].type === ComponentType.Label ) {
+                let tempTopLevelComp = ModalComponents[i].component;
+                // Selected Role
+                if ( tempTopLevelComp.custom_id === "role-to-remove" ) {
+                    inputSelectedRole = tempTopLevelComp.values.shift();
+                }
             }
         }
 

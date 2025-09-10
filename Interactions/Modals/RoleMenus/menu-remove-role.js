@@ -26,7 +26,6 @@ export const Modal = {
         let inputSelectedRole = "";
 
         for ( let i = 0; i <= ModalComponents.length - 1; i++) {
-            console.log(JSON.stringify(ModalComponents[i]));
             // Safety net to stop Text Displays breaking this check
             if ( ModalComponents[i].type === ComponentType.Label ) {
                 let tempTopLevelComp = ModalComponents[i].component;

@@ -70,10 +70,10 @@ export const Modal = {
             requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_NONE');
         }
         else if ( MenuRequirements.length === 1 ) {
-            requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_SINGLE', `<@&${MenuRequirements[0]}>`);
+            requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_SINGLE', MenuRequirements[0].startsWith("<@&") ? MenuRequirements[0] : `<@&${MenuRequirements[0]}>`);
         }
         else {
-            let tempRequirements = MenuRequirements.map(item => `<@&${item}>`).join(', ');
+            let tempRequirements = MenuRequirements.map(item => item.startsWith("<@&") ? item : `<@&${item}>`).join(', ');
             requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_MULTIPLE', `${tempRequirements}`);
         }
 

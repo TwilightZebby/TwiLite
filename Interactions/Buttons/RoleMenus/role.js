@@ -149,8 +149,8 @@ async function editRoleButton(interaction) {
     // Grab Role ID & button details for use in pre-filling the Modal
     const RoleId = interaction.data.custom_id.split("_").pop();
     const MessageComponents = interaction.message.components;
-    const MenuCoontainer = MessageComponents.find(comp => comp.type === ComponentType.Container);
-    const MenuActionRows = MenuCoontainer.components.filter(comp => comp.type === ComponentType.ActionRow);
+    const MenuContainer = MessageComponents.find(comp => comp.type === ComponentType.Container);
+    const MenuActionRows = MenuContainer.components.filter(comp => comp.type === ComponentType.ActionRow);
     let currentButtonLabel = undefined;
     let currentButtonStyle = ButtonStyle.Secondary; // Grey by default
 

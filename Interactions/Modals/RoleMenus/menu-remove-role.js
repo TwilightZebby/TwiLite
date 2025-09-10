@@ -45,7 +45,7 @@ export const Modal = {
 
         // Grab already added assignable Roles
         /** @type {import('discord-api-types/v10').APIActionRowComponent<import('discord-api-types/v10').APIButtonComponentWithCustomId>[]} */
-        let MenuButtons = MenuContainer.filter(componentItem => componentItem.type === ComponentType.ActionRow);
+        let MenuButtons = MenuContainer.components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
 
         // Validate selected Role *is* an added assignable Role to be removed
         let menuRoleIds = [];

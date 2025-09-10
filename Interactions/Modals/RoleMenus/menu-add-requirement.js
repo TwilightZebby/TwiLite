@@ -49,7 +49,7 @@ export const Modal = {
         let MenuRequirements = Array.from(MenuRequirementComponent.content.matchAll(RoleMentionRegEx), (m) => m[0]);
 
         // Grab already added assignable Roles
-        let MenuButtons = MenuContainer.filter(componentItem => componentItem.type === ComponentType.ActionRow);
+        let MenuButtons = MenuContainer.components.filter(componentItem => componentItem.type === ComponentType.ActionRow);
         let menuRoleIds = [];
         MenuButtons.forEach(row => {
             row.components.forEach(button => {

@@ -13,7 +13,6 @@ import { handleAppAuthorized } from './Handlers/WebhookEvents/applicationAuthori
 import { handleAppDeauthorized } from './Handlers/WebhookEvents/applicationDeauthorized.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID } from './config.js';
 import { JsonResponse } from './Utility/utilityMethods.js';
-import { handleStatusPageWebhook } from './Handlers/WebhookEvents/statusPageWebhook.js';
 
 
 

@@ -81,9 +81,14 @@ export const Modal = {
 
 
         // Validated Role isn't already on the Menu - so add it as a new Requirement!
+        MenuRequirements.push(inputSelectedRole);
+
         // Format into string
         let requirementsString = ``;
-        if ( MenuRequirements.length === 1 ) {
+        if ( MenuRequirements.length === 0 ) {
+            requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_NONE');
+        }
+        else if ( MenuRequirements.length === 1 ) {
             requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_SINGLE', `<@&${MenuRequirements[0]}>`);
         }
         else {

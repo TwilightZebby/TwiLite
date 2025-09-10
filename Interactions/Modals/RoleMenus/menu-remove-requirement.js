@@ -59,10 +59,17 @@ export const Modal = {
             });
         }
 
+        // Remove selected Requirement
+        let selectedIndex = MenuRequirements.findIndex(item => item === inputSelectedRole);
+        let catchDeletion = MenuRequirements.splice(selectedIndex, 1);
+
 
         // Update requirements string
         let requirementsString = ``;
-        if ( MenuRequirements.length === 1 ) {
+        if ( MenuRequirements.length === 0 ) {
+            requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_NONE');
+        }
+        else if ( MenuRequirements.length === 1 ) {
             requirementsString = localize(interaction.guild_locale, 'ROLE_MENU_RESTRICTION_SINGLE', `<@&${MenuRequirements[0]}>`);
         }
         else {

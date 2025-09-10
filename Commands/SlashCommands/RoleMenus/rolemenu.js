@@ -197,7 +197,7 @@ export const SlashCommand = {
                             "content": `-# ${localize(interaction.guild_locale, 'ROLE_MENU_REQUIREMENTS_PLACEHOLDER')}`
                         },
                         {
-                            "id": 30,
+                            "id": 8,
                             "type": ComponentType.TextDisplay,
                             "content": localize('en-GB', 'ROLE_MENU_MENU_TYPE_PLACEHOLDER')
                         }

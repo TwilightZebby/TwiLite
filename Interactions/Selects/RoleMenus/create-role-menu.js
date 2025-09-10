@@ -176,7 +176,7 @@ export const Select = {
                     "custom_id": `menu-description`,
                     "style": TextInputStyle.Paragraph,
                     "max_length": 2000,
-                    "required": false,
+                    "required": true,
                     "value": undefined
                 }
             }, {

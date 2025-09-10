@@ -58,7 +58,7 @@ export const Modal = {
         });
 
         // Validation against Requirements
-        if ( MenuRequirements.includes(inputSelectedRole) ) {
+        if ( MenuRequirements.includes(`<@&${inputSelectedRole}>`) ) {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {

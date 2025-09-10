@@ -49,7 +49,7 @@ export const Modal = {
 
 
         // Validate selected Role *is* an added Requirement that can be removed
-        if ( !(MenuRequirements.includes(inputSelectedRole)) ) {
+        if ( !(MenuRequirements.includes(`<@&${inputSelectedRole}>`)) ) {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {

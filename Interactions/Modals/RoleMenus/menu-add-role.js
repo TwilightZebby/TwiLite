@@ -123,7 +123,7 @@ export const Modal = {
             // This is the very first button on the Menu
             MenuButtons.push({
                 "type": ComponentType.ActionRow,
-                "id": 8,
+                "id": 9,
                 "components": [newMenuButton]
             });
         }
@@ -168,7 +168,7 @@ export const Modal = {
         // Edit into Menu
         for ( let i = 0; i <= MenuButtons.length - 1; i++ ) {
             // This mess is just so I can pull each updated row out of MenuButtons and into MenuContainer.components, without having an Array where a Component Object should be
-            MenuContainer.components.splice(4 + i, 1, MenuButtons[i]);
+            MenuContainer.components.splice(5 + i, 1, MenuButtons[i]);
         }
         
         MenuContainer.components.forEach(comp => {

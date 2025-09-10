@@ -31,7 +31,7 @@ export const Modal = {
             if ( ModalComponents[i].type === ComponentType.Label ) {
                 let tempTopLevelComp = ModalComponents[i].component;
                 if ( tempTopLevelComp.custom_id === "menu-title" ) { inputMenuTitle = tempTopLevelComp.value; }
-                if ( tempTopLevelComp.custom_id === "menu-description" ) { inputMenuDescription = tempTopLevelComp.value ?? "\u200B"; }
+                if ( tempTopLevelComp.custom_id === "menu-description" ) { inputMenuDescription = tempTopLevelComp.value ?? "** **"; }
                 if ( tempTopLevelComp.custom_id === "menu-color" ) { inputMenuSidebarColor = tempTopLevelComp.value ?? undefined; }
             }
         }

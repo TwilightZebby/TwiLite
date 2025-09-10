@@ -57,7 +57,7 @@ export const ContextCommand = {
         // Grab data
         const SourceMessage = interaction.data.resolved.messages[interaction.data.target_id];
         const SourceComponents = SourceMessage.components;
-        let checkForMenuType = SourceComponents[0].components.find(comp => comp.id === 30);
+        let checkForMenuType = SourceComponents[0].components.find(comp => comp.id === 8);
 
 
         // Validate Command was used on a Role Menu by this App

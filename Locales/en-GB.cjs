@@ -279,7 +279,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_TITLE_LABEL: `Menu's Title`,
     ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_TITLE_DESCRIPTION: `Set the title of your Role Menu`,
     ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_DESCRIPTION_LABEL: `Menu's Description`,
-    ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_DESCRIPTION_LABEL_DESCRIPTION: `Set an optional description of your Role Menu`,
+    ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_DESCRIPTION_LABEL_DESCRIPTION: `Set a description for your Role Menu`,
     ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_COLOR_LABEL: `Menu's Colour`,
     ROLE_MENU_SET_MENU_DETAILS_MODAL_MENU_COLOR_DESCRIPTION: `Set the optional sidebar colour for your Role Menu. MUST be in a hex code format (eg: #ab44ff)`,
 

@@ -74,7 +74,7 @@ async function grantRevokeRole(interaction) {
     // Check for menu requirements
     const SourceMessage = interaction.message;
     const SourceComponents = SourceMessage.components;
-    let findMenuType = SourceComponents[0].components.find(component => component.id === 30);
+    let findMenuType = SourceComponents[0].components.find(component => component.id === 8);
     const SourceMenuType = findMenuType != undefined ? findMenuType.content.split(": ").pop() : undefined;
     let menuRequirementComponent = SourceComponents[0].components.find(component => component.id === 7);
 

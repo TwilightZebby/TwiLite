@@ -1,8 +1,9 @@
 import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, PermissionFlagsBits, ComponentType, SeparatorSpacingSize } from 'discord-api-types/v10';
+import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from '@discordjs/builders';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { DISCORD_APP_USER_ID } from '../../../config.js';
 import { localize } from '../../../Utility/localizeResponses.js';
-import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from '@discordjs/builders';
+import { EMOJI_ICON_OLD_RICH_PRESENCE, EMOJI_ICON_ROCKET, EMOJI_REQUIREMENT_ADD, EMOJI_REQUIREMENT_REMOVE, EMOJI_ROLE_ADD, EMOJI_ROLE_REMOVE } from '../../../Assets/AppEmojis.js';
 
 
 export const ContextCommand = {
@@ -134,7 +135,7 @@ export const ContextCommand = {
                         new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT')).setValue("add-requirement").setDescription(localize(interaction.locale, 'ROLE_MENU_ADD_REQUIREMENT_DESCRIPTION')).setEmoji({ name: EMOJI_REQUIREMENT_ADD.name, id: EMOJI_REQUIREMENT_ADD.id }),
                         new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT')).setValue("remove-requirement").setDescription(localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_DESCRIPTION')).setEmoji({ name: EMOJI_REQUIREMENT_REMOVE.name, id: EMOJI_REQUIREMENT_REMOVE.id }),
                         new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_SAVE_AND_POST')).setValue("save").setDescription(localize(interaction.locale, 'ROLE_MENU_SAVE_AND_POST_DESCRIPTION')).setEmoji({ name: EMOJI_ICON_ROCKET.name, id: EMOJI_ICON_ROCKET.id }),
-                        new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_CANCEL_CONFIGURATION')).setValue("cancel").setDescription(localize(interaction.locale, 'OLE_MENU_CANCEL_CONFIGURATION_DESCRIPTION')).setEmoji({ name: `❌`})
+                        new StringSelectMenuOptionBuilder().setLabel(localize(interaction.locale, 'ROLE_MENU_CANCEL_CONFIGURATION')).setValue("cancel").setDescription(localize(interaction.locale, 'ROLE_MENU_CANCEL_CONFIGURATION_DESCRIPTION')).setEmoji({ name: `❌`})
                     ]).toJSON()
                 ]
             }

@@ -16,6 +16,7 @@ export const SlashCommands = {
     // ***** FOR GENERAL COMMANDS
     'add-app': () => import('../Commands/SlashCommands/General/add-app.js'),
     'follow-news': () => import('../Commands/SlashCommands/General/follow-news.js'),
+    'invite-guest': () => import('../Commands/SlashCommands/General/invite-guest.js'),
     'support': () => import('../Commands/SlashCommands/General/support.js'),
     'temperature': () => import('../Commands/SlashCommands/General/temperature.js'),
 

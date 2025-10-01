@@ -388,4 +388,17 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     LOCKEMOJI_COMMAND_ERROR_INVALID_FILE_TYPE: `Sorry, but that Emoji file wasn't a **PNG**, **JPEG**, or **GIF** file type.\nPlease try again, ensuring you use either a \`.png\`, \`.jpeg\`, or \`.gif\` file for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_FILE_TOO_LARGE: `Sorry, but that Emoji file is too large to be uploaded as a Custom Emoji.\nDiscord requires Custom Emojis to be smaller than 256kb in file size. Please try again, once you have a smaller file size for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_GENERIC: `Whoops, an error occurred while trying to upload that Role-locked Custom Emoji.`,
+
+
+
+    // ******* INVITE VOICE GUEST COMMAND
+    INVITE_GUEST_COMMAND_SUCCESS_AUDIT_LOG_ENTRY: `Guest Voice Invite created by {{0}} using my /invite-guest Command`,
+    INVITE_GUEST_COMMAND_SUCCESS_MESSAGE: `Successfully created your Guest Voice Invite for the {{0}} Voice Channel!\n\nYour Guest Voice Invite is: https://discord.gg/{{1}}`,
+    INVITE_GUEST_COMMAND_ERROR_FAILED_TO_CHECK_GUILDS_ACCESS_TO_FEATURE: `An error prevented me from checking if this Server has access to making Guest Voice Invites.\nPlease wait a little and try again.`,
+    INVITE_GUEST_COMMAND_ERROR_GUILD_TOO_LARGE: `Sorry, this Server is too large to make Guest Voice Invites.\n-# (Discord restricts Guest Voice Invites to Servers with less than 200 total members)`,
+    INVITE_GUEST_COMMAND_ERROR_GUILD_HAS_VANITY_SET: `Sorry, this Server does not have access to making Guest Voice Invites.\n-# (Discord prevents Servers with a Vanity Invite set from making Guest Voice Invites)`,
+    INVITE_GUEST_COMMAND_ERROR_GUILD_HAS_ONBOARDING_PROMPTS_SET: `Sorry, this Server does not have access to making Guest Voice Invites.\n-# (Discord prevents Servers with Onboarding questions/prompts set from making Guest Voice Invites)`,
+    INVITE_GUEST_COMMAND_ERROR_GUILD_HAS_INVITES_DISABLED_BY_DISCORD: `Sorry, this Server cannot make any Invites due to Discord's Trust & Safety team revoking that ability from this Server.`,
+    INVITE_GUEST_COMMAND_ERROR_APP_MISSING_CREATE_INVITE_PERMISSION: `Sorry, I cannot make a Guest Voice Invite for {{0}} since I do *not* have "Create Invite" Permission for that Voice Channel.\nPlease try again once I have been granted that Permission.`,
+    INVITE_GUEST_COMMAND_ERROR_FAILED_TO_CREATE_INVITE: `Sorry, an error occurred while trying to make a Guest Voice Invite for {{0}}`,
 }

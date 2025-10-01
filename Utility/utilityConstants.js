@@ -2,13 +2,13 @@ import { Collection } from '@discordjs/collection';
 import { EmbedBuilder, ButtonBuilder, ActionRowBuilder } from '@discordjs/builders';
 import { MessageType } from 'discord-api-types/v10';
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import { MONGO_CONNECTION_URI } from '../config.js';
+import { MONGO_CONNECTION_URI, superProperties } from '../config.js';
 
 
 // *******************************
 //  Exports
 
-/** Mongo Client Connection
+/* * Mongo Client Connection
  * @returns {MongoClient}
  */
 /* export const createMongoClient = () => {
@@ -22,6 +22,11 @@ import { MONGO_CONNECTION_URI } from '../config.js';
         }
     });
 } */
+
+/**
+ * Base64-encoded Super Properties for accessing experimental API features
+ */
+export const encodedSuperProperties = Buffer.from(superProperties).toString('base64');
 
 /** Utility & Command/Interaction Collections */
 export const UtilityCollections = {

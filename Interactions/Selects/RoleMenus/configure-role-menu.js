@@ -307,15 +307,10 @@ export const Select = {
                 // Validate there are Roles on the Menu
                 let currentAddedActionRows = CurrentContainer.components.filter(comp => comp.type === ComponentType.ActionRow);
                 let countExistingRoles = 0;
-                // Also grab Role IDs so we can pre-populate the Role Select
-                /** @type {import('discord-api-types/v10').APISelectMenuDefaultValue[]} */
-                let defaultRoleValues = [];
 
                 currentAddedActionRows.forEach(row => {
                     row.components.forEach(button => {
                         countExistingRoles += 1;
-                        let roleIdTemp = button.custom_id.split("_").pop();
-                        defaultRoleValues.push({ id: roleIdTemp, type: SelectMenuDefaultValueType.Role });
                     });
                 });
 
@@ -325,9 +320,6 @@ export const Select = {
                         data: { "flags": MessageFlags.Ephemeral, "content": localize(interaction.locale, 'ROLE_MENU_REMOVE_ROLE_NO_ROLES_ADDED') }
                     });
                 }
-
-                // Set default values in Role Select
-                RemoveRoleModal.components[0].component.default_values = defaultRoleValues;
 
                 return new JsonResponse({
                     type: InteractionResponseType.Modal,
@@ -359,9 +351,6 @@ export const Select = {
                 // Validate there are set requirements to remove
                 let addedMenuRequirements = CurrentContainer.components.find(comp => comp.id === 7);
                 let existingRequirements = Array.from(addedMenuRequirements.content.matchAll(RoleMentionRegEx), (m) => m[0]);
-                // Also grab Role IDs so we can pre-populate the Role Select
-                /** @type {import('discord-api-types/v10').APISelectMenuDefaultValue[]} */
-                let defaultRequirementValues = [];
 
                 if ( existingRequirements.length === 0 ) {
                     return new JsonResponse({
@@ -369,12 +358,6 @@ export const Select = {
                         data: { "flags": MessageFlags.Ephemeral, "content": localize(interaction.locale, 'ROLE_MENU_REMOVE_REQUIREMENT_NONE_ADDED') }
                     });
                 }
-
-                // Set default values for Role Select
-                existingRequirements.forEach(item => {
-                    defaultRequirementValues.push({ id: item, type: SelectMenuDefaultValueType.Role });
-                });
-                RemoveRequirementModal.components[0].component.default_values = defaultRequirementValues;
 
                 return new JsonResponse({
                     type: InteractionResponseType.Modal,

@@ -95,22 +95,22 @@ export const Modal = {
                         "components": [button]
                     });
                 }
-                else if ( updatedMenuButtons.length === 1 && menuRoleIds.length < 5 ) {
+                else if ( updatedMenuButtons.length === 1 && updatedMenuButtons.length < 5 ) {
                     // First row has space
                     updatedMenuButtons[0].components.push(button);
                 }
-                else if ( updatedMenuButtons.length === 1 && menuRoleIds.length === 5 ) {
+                else if ( updatedMenuButtons.length === 1 && updatedMenuButtons.length === 5 ) {
                     // First row is full, but no second row created yet
                     updatedMenuButtons.push({
                         "type": ComponentType.ActionRow,
                         "components": [button]
                     });
                 }
-                else if ( updatedMenuButtons.length === 2 && (menuRoleIds.length > 5 && menuRoleIds.length < 10) ) {
+                else if ( updatedMenuButtons.length === 2 && (updatedMenuButtons.length > 5 && updatedMenuButtons.length < 10) ) {
                     // Second row has space
                     updatedMenuButtons[1].components.push(button);
                 }
-                else if ( updatedMenuButtons.length === 2 && menuRoleIds.length === 10 ) {
+                else if ( updatedMenuButtons.length === 2 && updatedMenuButtons.length === 10 ) {
                     // Second row is row, but no third row created yet
                     updatedMenuButtons.push({
                         "type": ComponentType.ActionRow,
@@ -140,9 +140,11 @@ export const Modal = {
         // Edit into Menu
         for ( let i = 0; i <= MenuButtons.length - 1; i++ ) {
             // This mess is just so I can pull each updated row out of MenuButtons and into MenuContainer.components, without having an Array where a Component Object should be
-            MenuContainer.components.splice(5 + i, 1, MenuButtons[i]);
+            //   Also to remove any empty ActionRows
+            if ( !updatedMenuButtons[i] || updatedMenuButtons[i] == undefined ) { MenuContainer.components.splice(5 + i, 1); }
+            else { MenuContainer.components.splice(5 + i, 1, updatedMenuButtons[i]); }
         }
-        
+
         MenuContainer.components.forEach(comp => {
             if ( comp.id === 6 ) { comp.content = roleList.join(`\n`); }
         });
@@ -156,7 +158,7 @@ export const Modal = {
         return new JsonResponse({
             type: InteractionResponseType.UpdateMessage,
             data: {
-                components: MessageComponents,
+                "components": MessageComponents,
                 "allowed_mentions": { "parse": [] }
             }
         });

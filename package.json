@@ -1,6 +1,6 @@
 {
   "name": "twilite",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A multipurpose Discord App made by TwilightZebby for the fun of it.",
   "main": "index.js",
   "type": "module",

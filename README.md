@@ -87,6 +87,21 @@ There are two ways to convert temperatures using TwiLite:
 - `/temperature` - the Slash Command which can be used to manually convert a single temperature
 - "`Convert Temperatures`" - the [Message Context Command](https://github.com/TwilightZebby/TwiLite?tab=readme-ov-file#context-commands--where-to-find-them) which can be used to convert up to 10 temperatures from most Messages sent by Users
 
+### Guest Voice Invites
+> [!NOTE]
+> The `/invite-guest` Command can only be used in the Server App context.
+
+TwiLite offers a `/invite-guest` command, which can easily create Guest Voice Invites for your Server's Voice Channels.
+
+Those who join your Server via one of these Guest Voice Invites are known as "Voice Guests", and can only see the one Voice Channel they are invited to. They are automatically kicked from your Server when they disconnect from the Voice Channel in question.
+
+This makes use of a lesser known Discord feature. However, since it does, it is limited on which Servers can actually make Voice Guest Invites. The limitations are as follows (*all* must be met in order to use this):
+- The Server **must** have less than 200 Members
+- The Server **must NOT** have a Vanity Invite set
+- The Server **must NOT** have Onboarding Questions/Prompts set
+
+These limitations are set by Discord themselves, and is out of the control of TwiLite or its developer.
+
 ---
 
 # Commands List
@@ -128,6 +143,7 @@ There are two ways to convert temperatures using TwiLite:
 | `/add-app` | Slash | Shows you the Add App/Invite link you can use to add TwiLite to either your Server(s) or your Account |
 | `/support` | Slash | Shows you where you can gain support from TwiLite's developer, or post ideas/bug reports for TwiLite |
 | `/follow-news` | Slash | Adds TwiLite's Updates & Announcements Feed to the Channel you used this Command in |
+| `/invite-guest` | Slash | Creates a Guest Voice Invite, to temp-invite Guests to your Voice Channels |
 
 ## Command Type Notes
 - "Message" refers to Message Context Commands

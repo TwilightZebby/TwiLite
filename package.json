@@ -1,6 +1,6 @@
 {
   "name": "twilite",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "A multipurpose Discord App made by TwilightZebby for the fun of it.",
   "main": "index.js",
   "type": "module",
@@ -21,14 +21,14 @@
     "@discordjs/builders": "^1.13.0",
     "@discordjs/collection": "^2.1.1",
     "cf-mongodb-polyfills": "^1.0.1",
-    "discord-api-types": "0.38.31",
+    "discord-api-types": "0.38.33",
     "discord-interactions": "^4.4.0",
     "emoji-regex": "^10.6.0",
     "itty-router": "^5.0.22",
-    "mongodb": "^6.20.0",
+    "mongodb": "^6.21.0",
     "undici": "^7.16.0"
   },
   "devDependencies": {
-    "wrangler": "^4.45.3"
+    "wrangler": "^4.47.0"
   }
 }

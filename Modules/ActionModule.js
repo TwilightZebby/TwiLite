@@ -10,7 +10,7 @@ const MentionEveryoneRegex = new RegExp(/@(everyone|here)/g);
 const MentionRoleRegex = new RegExp(/<@&(\d{17,20})>/g);
 
 /** Actions that should NEVER include the Return Action Button */
-const NoReturnActions = [ "JAIL", "YEET", "COOKIE" ];
+const NoReturnActions = [ "JAIL", "YEET", "COOKIE", "BITE" ];
 
 
 /**

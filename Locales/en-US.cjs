@@ -77,6 +77,7 @@ module.exports = {
     ACTION_COMMAND_OTHER_USER_COOKIE: `**{{0}}** gave a cookie to **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_SLAP: `**{{0}}** slapped **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_JAIL: `**{{0}}** was sent to jail by **{{1}}**`,
+    ACTION_COMMAND_OTHER_USER_BITE: `**{{0}}** gave **{{1}}** an affectionate bite`,
 
     ACTION_COMMAND_SELF_USER_HEADPAT: `**{{0}}** gave themself a headpat`,
     ACTION_COMMAND_SELF_USER_HUG: `**{{0}}** gave themself a cuddle`,
@@ -86,6 +87,7 @@ module.exports = {
     ACTION_COMMAND_SELF_USER_YEET: `**{{0}}** yeeted themselves out of a cannon`,
     ACTION_COMMAND_SELF_USER_COOKIE: `**{{0}}** snuck a cookie out of the cookie jar for themselves`,
     ACTION_COMMAND_SELF_USER_SLAP: `**{{0}}** slapped themselves`,
+    ACTION_COMMAND_SELF_USER_BITE: `**{{0}}** took a bite out of themselves`,
 
     ACTION_COMMAND_ROLE_HEADPAT: `**{{0}}** gave everyone with **{{1}}** headpats`,
     ACTION_COMMAND_ROLE_HUG: `**{{0}}** gave everyone with **{{1}}** a group hug`,
@@ -95,6 +97,7 @@ module.exports = {
     ACTION_COMMAND_ROLE_YEET: `**{{0}}** collectively yeeted **{{1}}**`,
     ACTION_COMMAND_ROLE_COOKIE: `**{{0}}** gave **{{1}}** a cookie`,
     ACTION_COMMAND_ROLE_SLAP: `**{{0}}** collectively slapped **{{1}}**`,
+    ACTION_COMMAND_ROLE_BITE: `**{{0}}** took a collectively bite out of **{{1}}**`,
 
     ACTION_COMMAND_EVERYONE_HEADPAT: `**{{0}}** gave \`@everyone\` a headpat`,
     ACTION_COMMAND_EVERYONE_HUG: `**{{0}}** gave \`@everyone\` a group hug`,
@@ -104,6 +107,7 @@ module.exports = {
     ACTION_COMMAND_EVERYONE_YEET: `**{{0}}** yeeted \`@everyone\` with a catapult`,
     ACTION_COMMAND_EVERYONE_COOKIE: `**{{0}}** gave \`@everyone\` a cookie`,
     ACTION_COMMAND_EVERYONE_SLAP: `**{{0}}** slapped \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_BITE: `**{{0}}** collectively bites \`@everyone\``,
 
     ACTION_COMMAND_OTHER_APPS_HEADPAT: `**{{0}}** gave **{{1}}** a virtual headpat`,
     ACTION_COMMAND_OTHER_APPS_HUG: `**{{0}}** virtually cuddled **{{1}}**`,
@@ -113,6 +117,7 @@ module.exports = {
     ACTION_COMMAND_OTHER_APPS_YEET: `**{{0}}** yeeted **{{1}}** out the internet`,
     ACTION_COMMAND_OTHER_APPS_COOKIE: `**{{0}}** gave **{{1}}** a virtual cookie`,
     ACTION_COMMAND_OTHER_APPS_SLAP: `**{{0}}** slapped **{{1}}**'s physical servers`,
+    ACTION_COMMAND_OTHER_APPS_BITE: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
 
     ACTION_COMMAND_TWILITE_HEADPAT: `**{{0}}** gave me a headpat <3`,
     ACTION_COMMAND_TWILITE_HUG: `**{{0}}** cuddled me <3`,
@@ -122,6 +127,7 @@ module.exports = {
     ACTION_COMMAND_TWILITE_YEET: `I gave **{{0}}** flying lessons for trying to yeet me!`,
     ACTION_COMMAND_TWILITE_COOKIE: `**{{0}}** gave me a virtual cookie!`,
     ACTION_COMMAND_TWILITE_SLAP: `**{{0}}** slapped me?! How dare you!`,
+    ACTION_COMMAND_TWILITE_BITE: `**{{0}}** took a bite out of my code?!`,
 
     ACTION_COMMAND_MEE6_HEADPAT: `***{{0}}** gave **{{1}}** a headpat...*`,
     ACTION_COMMAND_MEE6_HUG: `***{{0}}** hugged **{{1}}**...*`,
@@ -131,6 +137,7 @@ module.exports = {
     ACTION_COMMAND_MEE6_YEET: `**{{0}}** absolutely YEETED **{{1}}**`,
     ACTION_COMMAND_MEE6_COOKIE: `**{{0}}** gave **{{1}}** a cookie from the Dark Side`,
     ACTION_COMMAND_MEE6_SLAP: `**{{0}}** gave **{{1}}** a royal slapping`,
+    ACTION_COMMAND_MEE6_BITE: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
 
     ACTION_RETURN_BUTTON_LABEL_HEADPAT: `Return Headpat`,
     ACTION_RETURN_BUTTON_LABEL_HUG: `Return Hug`,

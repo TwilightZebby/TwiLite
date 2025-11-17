@@ -108,5 +108,17 @@ export const ActionGifs = {
         "https://twilite.is-from.space/r/action-slap-0006b.gif",
         "https://twilite.is-from.space/r/action-slap-0007b.gif",
         "https://twilite.is-from.space/r/action-slap-0008b.gif"
+    ],
+
+    "bite": [
+        "https://twilite.is-from.space/r/action-bite-0001.gif",
+        "https://twilite.is-from.space/r/action-bite-0002.gif",
+        "https://twilite.is-from.space/r/action-bite-0003.gif",
+        "https://twilite.is-from.space/r/action-bite-0004.gif",
+        "https://twilite.is-from.space/r/action-bite-0005.gif",
+        "https://twilite.is-from.space/r/action-bite-0006.gif",
+        "https://twilite.is-from.space/r/action-bite-0007.gif",
+        "https://twilite.is-from.space/r/action-bite-0008.gif",
+        "https://twilite.is-from.space/r/action-bite-0009.gif"
     ]
 };

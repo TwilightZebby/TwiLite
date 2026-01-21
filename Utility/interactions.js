@@ -23,6 +23,9 @@ export const SlashCommands = {
 
     // ***** FOR MANAGEMENT COMMANDS
     'lock-emoji': () => import('../Commands/SlashCommands/Management/lock-emoji.js'),
+
+    // ***** FOR DEVELOPER COMMANDS
+    'inferno': () => import('../Commands/SlashCommands/Developer/inferno.js'),
 }
 
 export const ContextCommands = {

@@ -201,7 +201,8 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 - Right-click/long-press on the Message containing the Role Menu -> Select "Apps" -> Select " [Delete Role Menu]({{0}}) "
 - OR simply delete the Message containing the Role Menu`,
 
-    ROLE_MENU_ERROR_INVALID_CHANNEL: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.`,
+    ROLE_MENU_ERROR_INVALID_CHANNEL_FREE: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.\n\nWant to create Role Menus in Public Threads & Forum Posts? Upgrade to **TwiLite Inferno** to create Role Menus in more Channel types!`,
+    ROLE_MENU_ERROR_INVALID_CHANNEL_INFERNO: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels, Public Threads in Text Channels, and Forum Posts.`,
     ROLE_MENU_ERROR_MISSING_MANAGE_ROLES_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work, *and* that my highest Role is positioned above all the Roles you want to add to my Role Menus. (I cannot grant or revoke Roles above my highest Role)`,
     ROLE_MENU_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, but I cannot create a Role Menu in this Channel without having the **Send Messages** Permission!`,
 

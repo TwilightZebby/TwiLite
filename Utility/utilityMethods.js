@@ -3,7 +3,7 @@ import { Buffer } from 'node:buffer';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 //import { fetch } from 'undici';
-import { DISCORD_TOKEN } from '../config.js';
+import { DISCORD_TOKEN, SKU_INFERNO_ID } from '../config.js';
 
 
 // *******************************
@@ -60,6 +60,33 @@ export function titleCaseGuildFeature(featureFlag) {
 export function getInteractionContext(interaction) {
     if ( interaction.context === InteractionContextType.Guild ) { return 'GUILD_CONTEXT'; }
     else { return 'USER_CONTEXT'; }
+}
+
+/**
+ * Helper method for quickly checking an Interaction's `entitlements` field for the Inferno SKU
+ * @param {import('discord-api-types/v10').APIInteraction} interaction 
+ * 
+ * @returns {Boolean} Boolean stating if this Interaction has (TRUE) the SKU or not (FALSE)
+ */
+export function checkForInfernoSku(interaction) {
+  if ( interaction.entitlements.length > 0 ) {
+      let infernoSku = interaction.entitlements.find(entitlement => entitlement.sku_id === SKU_INFERNO_ID);
+      if ( infernoSku != undefined ) {
+        // Edge-case, YOU NEVER KNOW
+        if ( infernoSku.guild_id !== interaction.guild_id ) {
+          return false;
+        }
+        else {
+          return true;
+        }
+      }
+      else {
+        return false;
+      }
+  }
+  else {
+    return false;
+  }
 }
 
 /**

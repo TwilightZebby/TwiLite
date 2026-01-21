@@ -1,9 +1,10 @@
-import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, ComponentType, SeparatorSpacingSize } from 'discord-api-types/v10';
+import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, ComponentType, SeparatorSpacingSize, ButtonStyle } from 'discord-api-types/v10';
 import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from '@discordjs/builders';
-import { JsonResponse } from '../../../Utility/utilityMethods.js';
+import { checkForInfernoSku, JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { IMAGE_TWILITE_ROLEMENU_CONTEXT_COMMANDS } from '../../../Assets/Hyperlinks.js';
 import { EMOJI_ICON_OLD_RICH_PRESENCE, EMOJI_ICON_ROCKET, EMOJI_REQUIREMENT_ADD, EMOJI_REQUIREMENT_REMOVE, EMOJI_ROLE_ADD, EMOJI_ROLE_REMOVE } from '../../../Assets/AppEmojis.js';
+import { SKU_INFERNO_ID } from '../../../config.js';
 
 
 export const SlashCommand = {
@@ -115,13 +116,38 @@ export const SlashCommand = {
      * @param {String} usedCommandName 
      */
     async executeCommand(interaction, interactionUser, usedCommandName) {
-        // Ensure this was used within supported Channel Types
-        if ( interaction.channel.type !== ChannelType.GuildText ) {
+        // Check for INFERNO SKU
+        const GuildHasInferno = checkForInfernoSku(interaction);
+
+        // Inferno-based Channel Type check
+        if ( (![ChannelType.GuildText, ChannelType.PublicThread].includes(interaction.channel.type)) && GuildHasInferno === true ) {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'ROLE_MENU_ERROR_INVALID_CHANNEL')
+                    content: localize(interaction.locale, 'ROLE_MENU_ERROR_INVALID_CHANNEL_INFERNO')
+                }
+            });
+        }
+
+        // Free-based Channel Type check
+        if ( interaction.channel.type !== ChannelType.GuildText && GuildHasInferno === false ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
+                    /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
+                    components: [{
+                        type: ComponentType.TextDisplay,
+                        content: localize(interaction.locale, 'ROLE_MENU_ERROR_INVALID_CHANNEL_FREE')
+                    }, {
+                        type: ComponentType.ActionRow,
+                        components: [{
+                            type: ComponentType.Button,
+                            style: ButtonStyle.Premium,
+                            sku_id: SKU_INFERNO_ID
+                        }]
+                    }]
                 }
             });
         }

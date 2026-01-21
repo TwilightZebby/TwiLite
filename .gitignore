@@ -8,4 +8,4 @@ wrangler.toml
 
 deployCommands.js
 
-# /JsonFiles
+/Commands/SlashCommands/Developer

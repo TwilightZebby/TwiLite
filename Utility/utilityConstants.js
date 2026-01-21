@@ -1,8 +1,7 @@
 import { Collection } from '@discordjs/collection';
-import { EmbedBuilder, ButtonBuilder, ActionRowBuilder } from '@discordjs/builders';
 import { MessageType } from 'discord-api-types/v10';
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import { MONGO_CONNECTION_URI, superProperties } from '../config.js';
+import { DISCORD_TOKEN, MONGO_CONNECTION_URI, superProperties } from '../config.js';
 
 
 // *******************************
@@ -96,6 +95,14 @@ export const SystemMessageTypes = [
     54, // GUILD_JOIN_REQUEST_WITHDRAWN_NOTIFICATION - Not yet added to D-API-Types (part of Server Membership Applications)
     55, // HD_STREAMING_UPGRADED - Part of the HD Splash Potion Experiment (or has it fully released now?)
 ];
+
+
+
+/** Default request headers for Discord API requests */
+export const DefaultDiscordRequestHeaders = {
+    'content-type': 'application/json',
+    Authorization: `Bot ${DISCORD_TOKEN}`,
+}
 
 
 

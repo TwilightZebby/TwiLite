@@ -24,6 +24,9 @@ export const SlashCommands = {
     // ***** FOR MANAGEMENT COMMANDS
     'lock-emoji': () => import('../Commands/SlashCommands/Management/lock-emoji.js'),
 
+    // ***** FOR PREMIUM COMMANDS
+    'branding': () => import('../Commands/SlashCommands/Premium/branding.js'),
+
     // ***** FOR DEVELOPER COMMANDS
     'inferno': () => import('../Commands/SlashCommands/Developer/inferno.js'),
 }
@@ -55,6 +58,9 @@ export const Buttons = {
     // ***** FOR ROLE MENUS
     'role': () => import('../Interactions/Buttons/RoleMenus/role.js'),
     'menu-delete': () => import('../Interactions/Buttons/RoleMenus/menu-delete.js'),
+
+    // ***** FOR PREMIUM
+    'branding': () => import('../Interactions/Buttons/Premium/branding.js'),
 }
 
 export const Selects = {
@@ -72,4 +78,7 @@ export const Modals = {
     'menu-remove-role': () => import('../Interactions/Modals/RoleMenus/menu-remove-role.js'),
     'menu-set-details': () => import('../Interactions/Modals/RoleMenus/menu-set-details.js'),
     'menu-set-type': () => import('../Interactions/Modals/RoleMenus/menu-set-type.js'),
+
+    // ***** FOR PREMIUM
+    'branding': () => import('../Interactions/Modals/Premium/branding.js'),
 }

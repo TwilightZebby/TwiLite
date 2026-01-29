@@ -2,7 +2,6 @@ import { InteractionContextType, PermissionFlagsBits } from 'discord-api-types/v
 import { Buffer } from 'node:buffer';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-//import { fetch } from 'undici';
 import { DISCORD_TOKEN, SKU_INFERNO_ID } from '../config.js';
 
 

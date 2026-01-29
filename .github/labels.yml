@@ -61,3 +61,9 @@
 - name: feature:role menus
   description: Affects or relates to the Role Menu module
   color: 'FBCA04'
+- name: feature:custom branding
+  description: Affects or relates to the Custom Branding module
+  color: 'FBCA04'
+- name: feature:developer
+  description: Affects or relates to any Developer-specific Commands
+  color: 'FBCA04'

@@ -409,4 +409,43 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     INVITE_GUEST_COMMAND_ERROR_GUILD_HAS_INVITES_DISABLED_BY_DISCORD: `Sorry, this Server cannot make any Invites due to Discord's Trust & Safety team revoking that ability from this Server.`,
     INVITE_GUEST_COMMAND_ERROR_APP_MISSING_CREATE_INVITE_PERMISSION: `Sorry, I cannot make a Guest Voice Invite for {{0}} since I do *not* have "Create Invite" Permission for that Voice Channel.\nPlease try again once I have been granted that Permission.`,
     INVITE_GUEST_COMMAND_ERROR_FAILED_TO_CREATE_INVITE: `Sorry, an error occurred while trying to make a Guest Voice Invite for {{0}}`,
+
+
+
+    // ******* BRANDING COMMAND
+    BRANDING_COMMAND_PANEL_HEADING: `# TwiLite's Server Branding`,
+    BRANDING_COMMAND_PANEL_DESCRIPTION: `Manage TwiLite's branding & appearance for this Server.\nEditing TwiLite's branding/appearance will *not* affect how TwiLite appears in other Servers, *only* for this Server.\n\n-# Please remember that TwiLite's custom branding/appearance will be reset if this Server's **TwiLite Inferno** subscription expires or is cancelled.`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_LABEL: `### TwiLite's Avatar`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_NO_AVATAR_SET: `:x: No custom Bot profile avatar set.`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_HAS_AVATAR_SET: `:white_check_mark: A custom Bot profile avatar is currently set.`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_LABEL: `### TwiLite's Banner`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_NO_BANNER_SET: `:x: No custom Bot profile banner set.`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_HAS_BANNER_SET: `:white_check_mark: A custom Bot profile banner is currently set.`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_LABEL: `### TwiLite's Bio (About Me)`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_NO_BIO_SET: `:x: No custom Bot profile bio set.`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_HAS_BIO_SET: `:white_check_mark: A custom Bot profile bio is currently set.`,
+    BRANDING_COMMAND_PANEL_BUTTON_EDIT_LABEL: `Bulk Edit`,
+    BRANDING_COMMAND_PANEL_BUTTON_RESET_ALL_LABEL: `Reset Branding`,
+
+    BRANDING_COMMAND_PROFILE_EDIT_SUCCESS: `Successfully set TwiLite's new custom profile branding for this Server!`,
+    BRANDING_COMMAND_PROFILE_RESET_ALL_SUCCESS: `Successfully reset TwiLite's profile branding back to its default.`,
+
+    BRANDING_COMMAND_MODAL_TITLE: `Edit Custom Branding`,
+    BRANDING_COMMAND_MODAL_AVATAR_LABEL: `Avatar`,
+    BRANDING_COMMAND_MODAL_AVATAR_DESCRIPTION: `Must be a PNG/JPG/GIF under 10MB`,
+    BRANDING_COMMAND_MODAL_BANNER_LABEL: `Banner`,
+    BRANDING_COMMAND_MODAL_BANNER_DESCRIPTION: `Must be a PNG/JPG/GIF under 10MB and at least 680 x 240 pixels`,
+    BRANDING_COMMAND_MODAL_BIO_LABEL: `Bio`,
+    BRANDING_COMMAND_MODAL_BIO_DESCRIPTION: `Supports use of default & custom emoji, and formatting markdown (excluding Masked Links & Headers)`,
+
+    BRANDING_COMMAND_MODAL_ERROR_FILE_INVALID_TYPE: `Error: {{0}} an invalid file type.\nPlease try again, making sure you upload a PNG, JPG, or GIF file.`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_SIZE_TOO_LARGE: `Error: {{0}} too large of a file.\nPlease try again, ensuring the image you upload is *less than* 10MB.`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_AVATAR_PREFIX: `The Avatar is`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_BANNER_PREFIX: `The Banner is`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_AVATAR_AND_BANNER_PREFIX: `Both the Avatar and Banner are`,
+    BRANDING_COMMAND_MODAL_ERROR_BANNER_DIMENSIONS_TOO_SMALL: `Error: The Banner's dimensions are too small.\nPlease try again, ensuring the Banner image you upload is at least 620 x 240 pixels.`,
+
+    BRANDING_COMMAND_ERROR_PROFILE_EDIT_FAILED: `Failed to set TwiLite's new custom profile branding for this Server.\nPlease see below for more details:\n\n\`\`\`{{0}}\`\`\``,
+    BRANDING_COMMAND_ERROR_PROFILE_RESET_ALL_FAILED: `Failed to reset TwiLite's profile branding back to default.`,
+    BRANDING_COMMAND_ERROR_GUILD_MISSING_INFERNO_SUBSCRIPTION: `Sorry, this Server does not have access to TwiLite's Custom Branding module.\n\nWant to customise TwiLite's profile picture, banner, and bio for this Server?\nUpgrade to **TwiLite Inferno** and gain access to the Custom Branding module and more!`,
 }

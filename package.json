@@ -26,9 +26,9 @@
     "emoji-regex": "^10.6.0",
     "itty-router": "^5.0.22",
     "mongodb": "^6.21.0",
-    "undici": "^7.19.2"
+    "undici": "^7.20.0"
   },
   "devDependencies": {
-    "wrangler": "^4.61.1"
+    "wrangler": "^4.62.0"
   }
 }

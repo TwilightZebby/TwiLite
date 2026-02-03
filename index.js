@@ -11,6 +11,8 @@ import { handleAutocomplete } from './Handlers/Interactions/autocompleteHandler.
 import { handleModal } from './Handlers/Interactions/modalHandler.js';
 import { handleAppAuthorized } from './Handlers/WebhookEvents/applicationAuthorized.js';
 import { handleAppDeauthorized } from './Handlers/WebhookEvents/applicationDeauthorized.js';
+import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpdate.js';
+import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID } from './config.js';
 import { JsonResponse } from './Utility/utilityMethods.js';
 
@@ -116,6 +118,14 @@ router.post('/webhook', async (request, env, ctx) => {
     // APPLICATION_DEAUTHORIZED Event
     else if ( WebhookEvent.event.type === ApplicationWebhookEventType.ApplicationDeauthorized ) {
         return await handleAppDeauthorized(WebhookEvent);
+    }
+    // ENTITLEMENT_UPDATE Event
+    else if ( WebhookEvent.event.type === ApplicationWebhookEventType.EntitlementUpdate ) {
+        return await handleEntitlementUpdate(WebhookEvent);
+    }
+    // ENTITLEMENT_DELETE Event
+    else if ( WebhookEvent.event.type === ApplicationWebhookEventType.EntitlementDelete ) {
+        return await handleEntitlementDelete(WebhookEvent);
     }
     // Just in case
     else {

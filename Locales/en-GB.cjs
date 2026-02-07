@@ -448,4 +448,43 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     BRANDING_COMMAND_ERROR_PROFILE_EDIT_FAILED: `Failed to set TwiLite's new custom profile branding for this Server.\nPlease see below for more details:\n\n\`\`\`{{0}}\`\`\``,
     BRANDING_COMMAND_ERROR_PROFILE_RESET_ALL_FAILED: `Failed to reset TwiLite's profile branding back to default.`,
     BRANDING_COMMAND_ERROR_GUILD_MISSING_INFERNO_SUBSCRIPTION: `Sorry, this Server does not have access to TwiLite's Custom Branding module.\n\nWant to customise TwiLite's profile picture, banner, and bio for this Server?\nUpgrade to **TwiLite Inferno** and gain access to the Custom Branding module and more!`,
+
+
+
+    // ******* FISH COMMAND
+    FISH_COMMAND_HEADING: `# Fishing Lake`,
+    FISH_COMMAND_USER_WENT_FISHING: `{{0}} went fishing, and reeled in {{1}}`,
+    
+    FISH_COMMAND_FISHED_CATEGORY: `-# Item category: {{0}}`,
+    FISH_COMMAND_CATEGORY_NOTHING: `Nothing`,
+    FISH_COMMAND_CATEGORY_FISH: `Fish`,
+    FISH_COMMAND_CATEGORY_JUNK: `Junk`,
+    FISH_COMMAND_CATEGORY_TREASURE: `Treasure`,
+    FISH_COMMAND_CATEGORY_SELF: `Oneself`,
+
+    FISH_COMMAND_ITEM_FISH_COD: `a codfish!`,
+    FISH_COMMAND_ITEM_FISH_EEL: `an eel!`,
+    FISH_COMMAND_ITEM_FISH_HADDOCK: `a haddock!`,
+    FISH_COMMAND_ITEM_FISH_SQUID: `some squid!`,
+    FISH_COMMAND_ITEM_FISH_PUFFERFISH: `a pufferfish!`,
+    FISH_COMMAND_ITEM_FISH_CLOWNFISH: `a clownfish!`,
+    FISH_COMMAND_ITEM_FISH_TROPICAL: `a tropical fish!`,
+    FISH_COMMAND_ITEM_FISH_SALMON: `some salmon`,
+    FISH_COMMAND_ITEM_FISH_AXOLOTL: `an axolotl!`,
+
+    FISH_COMMAND_ITEM_JUNK_TRASH: `some trash...`,
+    FISH_COMMAND_ITEM_JUNK_BONE: `some bones.`,
+    FISH_COMMAND_ITEM_JUNK_STONE: `some loose gravel.`,
+    FISH_COMMAND_ITEM_JUNK_STICK: `a stick.`,
+    FISH_COMMAND_ITEM_JUNK_NET: `someone else's fishing net!`,
+    FISH_COMMAND_ITEM_JUNK_NITRO: `an expired code for Discord Nitro.`,
+
+    FISH_COMMAND_ITEM_TREASURE_GOLD: `some gold!`,
+    FISH_COMMAND_ITEM_TREASURE_COIN: `some loose coins!`,
+    FISH_COMMAND_ITEM_TREASURE_CHEST: `a whole pirate treasure chest!`,
+    FISH_COMMAND_ITEM_TREASURE_JEWELLERY: `some jewellery.`,
+    FISH_COMMAND_ITEM_TREASURE_DIAMOND: `a diamond!`,
+
+    FISH_COMMAND_ITEM_NOTHING: `nothing.`,
+    FISH_COMMAND_ITEM_SELF: `themselves!?`,
 }

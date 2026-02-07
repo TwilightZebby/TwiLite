@@ -22,6 +22,23 @@ export function checkPomelo(user) {
 }
 
 /**
+ * Returns the highest-level display name for the user triggering the Interaction.
+ * This will grab one of the following (in order of preference): Server Nickname, User Global Display Name, User Username
+ * @param {import('discord-api-types/v10').APIInteraction} interaction 
+ * 
+ * @returns {String}
+ */
+export function fetchInteractionUserDisplayName(interaction) {
+  let highestName = interaction.member != undefined && interaction.member?.nick != null ? interaction.member.nick
+    : interaction.member != undefined && interaction.member.nick == null && interaction.member.user.global_name != null ? interaction.member.user.global_name
+    : interaction.member != undefined && interaction.member.nick == null && interaction.member.user.global_name == null ? interaction.member.user.username
+    : interaction.member == undefined && interaction.user?.global_name != null ? interaction.user.global_name
+    : interaction.user.username;
+
+  return highestName;
+}
+
+/**
  * Checks if the App can use External Server Emojis in its Interaction responses
  * @param {import('discord-api-types/v10').APIInteraction} interaction 
  * 

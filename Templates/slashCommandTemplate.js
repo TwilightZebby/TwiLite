@@ -75,8 +75,9 @@ export const SlashCommand = {
      * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
      * @param {String} usedCommandName 
+     * @param {*} cfEnv 
      */
-    async executeCommand(interaction, interactionUser, usedCommandName) {
+    async executeCommand(interaction, interactionUser, usedCommandName, cfEnv) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {

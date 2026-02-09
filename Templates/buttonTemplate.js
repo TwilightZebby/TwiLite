@@ -22,8 +22,9 @@ export const Button = {
     /** Runs the Button
      * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     * @param {*} cfEnv 
      */
-    async executeButton(interaction, interactionUser) {
+    async executeButton(interaction, interactionUser, cfEnv) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {

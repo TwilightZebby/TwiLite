@@ -17,8 +17,9 @@ export const Modal = {
     /** Runs the Modal
      * @param {import('discord-api-types/v10').APIModalSubmitInteraction|import('discord-api-types/v10').APIModalSubmitGuildInteraction|import('discord-api-types/v10').APIModalSubmitDMInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     * @param {*} cfEnv 
      */
-    async executeModal(interaction, interactionUser) {
+    async executeModal(interaction, interactionUser, cfEnv) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {

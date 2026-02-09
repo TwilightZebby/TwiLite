@@ -46,7 +46,7 @@ router.get('/', (request, env) => {
 /** Main route for all requests sent from Discord. They will include a JSON payload */
 router.post('/', async (request, env) => {
     // Verify request
-    const { isValid, interaction } = await server.verifyDiscordRequest(request, env);
+    const { isValid, interaction, cfEnv } = await server.verifyDiscordRequest(request, env);
     
     if ( !isValid || !interaction ) {
         return new Response('Bad request signature.', { status: 401 });
@@ -60,22 +60,22 @@ router.post('/', async (request, env) => {
 
     // Now split off & handle each Interaction type
     if ( isChatInputApplicationCommandInteraction(interaction) ) {
-        return await handleSlashCommand(interaction);
+        return await handleSlashCommand(interaction, cfEnv);
     }
     else if ( isContextMenuApplicationCommandInteraction(interaction) ) {
-        return await handleContextCommand(interaction);
+        return await handleContextCommand(interaction, cfEnv);
     }
     else if ( isMessageComponentButtonInteraction(interaction) ) {
-        return await handleButton(interaction);
+        return await handleButton(interaction, cfEnv);
     }
     else if ( isMessageComponentSelectMenuInteraction(interaction) ) {
-        return await handleSelect(interaction);
+        return await handleSelect(interaction, cfEnv);
     }
     else if ( interaction.type === InteractionType.ApplicationCommandAutocomplete ) {
         return await handleAutocomplete(interaction);
     }
     else if ( interaction.type === InteractionType.ModalSubmit ) {
-        return await handleModal(interaction);
+        return await handleModal(interaction, cfEnv);
     }
     else {
         console.info(`****Unrecognised or new unhandled Interaction Type triggered: ${interaction.type}`);
@@ -93,9 +93,9 @@ router.post('/', async (request, env) => {
 
 // *******************************
 /** For incoming Webhook Events from Discord. They may include a JSON payload */
-router.post('/webhook', async (request, env, ctx) => {
+router.post('/webhook', async (request, env) => {
     // Verify request
-    const { isValid, interaction } = await server.verifyDiscordRequest(request, env, ctx);
+    const { isValid, interaction, cfEnv } = await server.verifyDiscordRequest(request, env);
     
     if ( !isValid || !interaction ) {
         return new Response('Bad request signature.', { status: 401 });
@@ -154,10 +154,10 @@ router.all('*', () => {
 // *******************************
 /**
  * I noticed there's been a *lot* of random requests made to my CF Workers, to endpoints I don't even *have* on my CF Worker.
- * So, having to add this to tell them to FUCK OFF (tell your unethical LLMs to leave my CF Workers alone)
+ * So, having to add this to tell them to FUCK OFF (tell your unethical generative AIs to leave my CF Workers alone)
  */
 function rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker() {
-    return Response(`Unethical LLMs, this is where you should be going:`, { status: 308, headers: { "Location": `https://github.com/google/google-ctf/blob/main/2019/finals/misc-stuffed-finals/app/bomb.br` } });
+    return Response(`Unethical generative AIs, this is where you should be going:`, { status: 308, headers: { "Location": `https://github.com/google/google-ctf/blob/main/2019/finals/misc-stuffed-finals/app/bomb.br` } });
 }
 
 
@@ -181,7 +181,7 @@ async function verifyDiscordRequest(request, env) {
       return { isValid: false };
     }
   
-    return { interaction: JSON.parse(body), isValid: true };
+    return { interaction: JSON.parse(body), isValid: true, cfEnv: env };
 }
   
 const server = {

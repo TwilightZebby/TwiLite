@@ -11,10 +11,11 @@ import { JsonResponse } from '../../Utility/utilityMethods.js';
 /**
  * Handles & Runs Context Commands
  * @param {import('discord-api-types/v10').APIContextMenuInteraction} interaction 
+ * @param {*} cfEnv 
  * 
  * @returns {JsonResponse}
  */
-export async function handleContextCommand(interaction) {
+export async function handleContextCommand(interaction, cfEnv) {
     const Command = await ContextCommands[interaction.data.name]();
 
     // If no Command found, return
@@ -114,7 +115,7 @@ export async function handleContextCommand(interaction) {
 
 
     // Attempt to execute Command
-    try { return await Command.ContextCommand.executeCommand(interaction, interactionUser); }
+    try { return await Command.ContextCommand.executeCommand(interaction, interactionUser, cfEnv); }
     catch (err) {
         console.error(err);
         return new JsonResponse({

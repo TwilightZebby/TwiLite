@@ -1,26 +1,10 @@
 import { Collection } from '@discordjs/collection';
 import { MessageType } from 'discord-api-types/v10';
-import { MongoClient, ServerApiVersion } from 'mongodb';
-import { DISCORD_TOKEN, MONGO_CONNECTION_URI, superProperties } from '../config.js';
+import { DISCORD_TOKEN, superProperties } from '../config.js';
 
 
 // *******************************
 //  Exports
-
-/* * Mongo Client Connection
- * @returns {MongoClient}
- */
-/* export const createMongoClient = () => {
-    return new MongoClient(MONGO_CONNECTION_URI, {
-        serverApi: {
-            version: ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-            timeoutMS: 3_000,
-            maxIdleTimeMS: 10_000
-        }
-    });
-} */
 
 /**
  * Base64-encoded Super Properties for accessing experimental API features

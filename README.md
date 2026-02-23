@@ -214,6 +214,6 @@ __User Context Commands__ are Commands used on a specific User in Servers, and c
 > Hopefully, one day we will be able to reclaim the term "Bot" without its negative connotation. For now, I guess we have to stick with either "App" or "Robot". :c
 
 ## Do you have a support Server for TwiLite?
-> No, I do not. However, I do have a [personal Server](https://discord.gg/nM7fJ8ZqnK) which I *guess* you could use?
+> No, I do not. However, I do have a [personal Server](https://discord.gg/EU97z7bhhx) which I *guess* you could use?
 > 
 > **Though I'd prefer it if you kept any bug reports, support requests, and feature requests for TwiLite to this GitHub page.**

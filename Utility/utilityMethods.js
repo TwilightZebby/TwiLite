@@ -2,7 +2,8 @@ import { InteractionContextType, PermissionFlagsBits } from 'discord-api-types/v
 import { Buffer } from 'node:buffer';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import { DISCORD_TOKEN, SKU_INFERNO_ID } from '../config.js';
+import { DISCORD_APP_USER_ID, DISCORD_TOKEN, SKU_INFERNO_ID } from '../config.js';
+import { DefaultDiscordRequestHeaders } from './utilityConstants.js';
 
 
 // *******************************
@@ -150,6 +151,147 @@ export function randomNumberInRange(minimumValue, maximumValue) {
  */
 export function getInteractionLocale(interaction) {
   return interaction.guild_locale != undefined ? interaction.guild_locale : interaction.locale;
+}
+
+/**
+ * Checks for specific Server Permissions in a specific Server Channel.
+ * This method only exists because Discord does NOT make it easy to check this as a HTTP-only App.
+ * 
+ * @param {String} permission Stringified Big Int of a single Permission to check for
+ * @param {String} serverId Server ID of the Server the Channel is in
+ * @param {String} channelId Channel ID of the Channel to check in
+ * 
+ * @returns {Promise<Boolean>|Promise<'NoAccess'>} Boolean representing if TwiLite has this Permission in the Channel or not. If TwiLite does not have VIEW_CHANNEL Permission, 'NoAccess' will be returned instead.
+ */
+export async function checkForPermissionInChannel(permission, serverId, channelId) {
+  let convertedPerm = BigInt(permission);
+
+
+  /*
+   * If there are any errors with the order of checks here, please feel free to let me know (or open a PR on TwiLite's GitHub)!
+   * 
+   * This whole method was written out of spite and annoyance because, really, I shouldn't need to have to write an overly complex method just to check these permissions!
+   */
+
+
+  // Grab Channel, and TwiLite's Roles, to be able to check permissions
+  let guildChannelRaw = await fetch(`https://discord.com/api/v10/channels/${channelId}`, {
+    method: 'GET',
+    headers: DefaultDiscordRequestHeaders
+  });
+  /** @type {import('discord-api-types/v10').APIChannel} */
+  let guildChannel = await guildChannelRaw.json();
+
+  // if missing VIEW_CHANNEL permission, TwiLite will not have access to the channel in question. As such, reject early!
+  if ( guildChannelRaw.status === 403 ) { return 'NoAccess'; }
+
+
+  let twiliteMemberRaw = await fetch(`https://discord.com/api/v10/guilds/${serverId}/members/${DISCORD_APP_USER_ID}`, {
+    method: 'GET',
+    headers: DefaultDiscordRequestHeaders
+  });
+  /** @type {import('discord-api-types/v10').APIGuildMember} */
+  let twiliteMember = await twiliteMemberRaw.json();
+
+  // Also fetch all Roles so we don't have to loop through unneeded API calls :)
+  //   (Even though this whole method would be a LOT smaller if Discord just provided calculated permission bitfields for Apps in all cases :c)
+  let guildRolesRaw = await fetch(`https://discord.com/api/v10/guilds/${serverId}/roles`, {
+    method: 'GET',
+    headers: DefaultDiscordRequestHeaders
+  });
+  /** @type {import('discord-api-types/v10').APIRole[]} */
+  let guildRoles = await guildRolesRaw.json();
+
+  let hasEveryoneGlobalPermission = false;
+  let hasRoleGlobalPermission = false;
+  let hasEveryoneChannelOverrideGrant = false;
+  let hasEveryoneChannelOverrideRevoke = false;
+  let hasRoleChannelOverrideGrant = false;
+  let hasRoleChannelOverrideRevoke = false;
+  let hasUserChannelOverrideGrant = false;
+  let hasUserChannelOverrideRevoke = false;
+
+
+  // Check against atEveryone's global server permissions
+  let atEveryoneRole = guildRoles.find(role => role.id === serverId);
+  if ( (BigInt(atEveryoneRole.permissions) & convertedPerm) == convertedPerm ) {
+    hasEveryoneGlobalPermission = true;
+  }
+
+  // Also check atEveryone's channel overrides
+  if ( guildChannel.permission_overwrites != undefined ) {
+    let everyoneOverride = guildChannel.permission_overwrites.find(override => override.id === serverId);
+    if ( everyoneOverride != undefined ) {
+      if ( (BigInt(everyoneOverride.allow) & convertedPerm) == convertedPerm ) {
+        hasEveryoneChannelOverrideGrant = true;
+      }
+
+      if ( (BigInt(everyoneOverride.deny) & convertedPerm) == convertedPerm ) {
+        hasEveryoneChannelOverrideRevoke = true;
+      }
+    }
+  }
+
+
+  // If TwiLite does NOT have any Roles, skip doing the role based checks since we only need to check based on atEveryone & user
+  if ( twiliteMember.roles.length > 0 ) {
+    // Check global role permissions AND role-based channel overrides
+    //   Having to use a FOR loop because the `break;` keyword doesn't work in `.forEach()` loops :c
+    for ( let i = 0; i <= twiliteMember.roles.length - 1; i++ ) {
+      let tempRoleId = twiliteMember.roles[i];
+      let tempRoleObject = guildRoles.find(role => role.id === tempRoleId);
+
+      if ( (BigInt(tempRoleObject.permissions) & convertedPerm) == convertedPerm ) {
+        hasRoleGlobalPermission = true;
+      }
+
+      if ( guildChannel.permission_overwrites != undefined ) {
+        let tempOverride = guildChannel.permission_overwrites.find(override => override.id === tempRoleId);
+        if ( tempOverride != undefined ) {
+          if ( (BigInt(tempOverride.allow) & convertedPerm) == convertedPerm ) {
+            hasRoleChannelOverrideGrant = true;
+          }
+
+          if ( (BigInt(tempOverride.deny) & convertedPerm) == convertedPerm ) {
+            hasRoleChannelOverrideRevoke = true;
+          }
+        }
+      }
+
+      if ( (hasRoleChannelOverrideGrant || hasRoleChannelOverrideRevoke) && hasRoleGlobalPermission ) { break; }
+    }
+  }
+
+
+  if ( guildChannel.permission_overwrites != undefined ) {
+    // Check user-based channel overrides
+    let twiliteOverride = guildChannel.permission_overwrites.find(override => override.id === DISCORD_APP_USER_ID);
+    if ( twiliteOverride != undefined ) {
+      if ( (BigInt(twiliteOverride.allow) & convertedPerm) == convertedPerm ) {
+        hasUserChannelOverrideGrant = true;
+      }
+
+      if ( (BigInt(twiliteOverride.deny) & convertedPerm) == convertedPerm ) {
+        hasUserChannelOverrideRevoke = true;
+      }
+    }
+  }
+
+
+
+  // Return result, after calculations
+  let result = false;
+
+  if ( hasEveryoneGlobalPermission ) { result = true; }
+  if ( hasRoleGlobalPermission ) { result = true; }
+  if ( hasEveryoneChannelOverrideGrant ) { result = true; }
+  if ( hasEveryoneChannelOverrideRevoke ) { result = false; }
+  if ( hasRoleChannelOverrideGrant ) { result = true; }
+  if ( hasRoleChannelOverrideRevoke ) { result = false; }
+  if ( hasUserChannelOverrideGrant ) { result = true; }
+  if ( hasUserChannelOverrideRevoke ) { result = false; }
+
+  return result;
 }
 
 // Json Response Class

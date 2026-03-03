@@ -487,4 +487,62 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 
     FISH_COMMAND_ITEM_NOTHING: `nothing.`,
     FISH_COMMAND_ITEM_SELF: `themselves!?`,
+
+
+
+    // ******* TWITCH NOTIFICATION MODULE
+    TWITCH_NOTIF_PREMIUM_EARLY_ACCESS: `The Twitch Notification Module is still in early access for **TwiLite Inferno** powered Servers only.\n\nWant to unlock early access to this module, and more features such as Custom Branding? Upgrade to **TwiLite Inferno**!`,
+
+    TWITCH_NOTIF_PANEL_HEADING: `# Twitch Notifications`,
+    TWITCH_NOTIF_PANEL_DESCRIPTION: `Add or manage receiving "Going Live" Notifications in this Server for linked Twitch Channels.\n\n-# Please remember that this module is still in early access for **TwiLite Inferno** powered Servers. As such, it is still in active development and will be disabled should this Server's **TwiLite Inferno** subscription expires or is cancelled.`,
+    TWITCH_NOTIF_PANEL_EMPTY_PLACEHOLDER: `This Server currently has no Twitch Notifications setup. Use the button below to begin adding Twitch Notifications for this Server!`,
+    TWITCH_NOTIF_PANEL_ITEM_POSTS_IN_CHANNEL: `Posts in {{0}}`,
+    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_SINGLAR: `Pings 1 Role`,
+    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_MULTIPLE: `Pings {{0}} Roles`,
+    TWITCH_NOTIF_PANEL_ITEM_HAS_CUSTOM_MESSAGE: `Has custom message`,
+    
+    TWITCH_NOTIF_PANEL_NOTE_MAXIMUM_LIMIT_REACHED: `Maximum number of Twitch Notifications reached.`,
+
+    TWITCH_NOTIF_PANEL_BUTTON_ADD_NEW: `Add Twitch channel`,
+    TWITCH_NOTIF_PANEL_BUTTON_RESET: `Reset all`,
+    TWITCH_NOTIF_PANEL_BUTTON_EDIT: `Edit`,
+
+    TWITCH_NOTIF_ADD_MODAL_TITLE: `Add Twitch Notification`,
+    TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_NAME: `Twitch Channel`,
+    TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_DESCRIPTION: `The Twitch Channel's username this "go live" notification should be for`,
+    TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
+    TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `The Server Channel you want to post this notification in`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_NAME: `Role(s) to ping [Optional]`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Roles you want to ping in this notification. Will be prefixed to the notification's message.`,
+    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message [Optional]`,
+    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Leave blank to use TwiLite's default message.`,
+
+    TWITCH_NOTIF_ADD_ERROR_INVALID_TWITCH_USERNAME: `Sorry, {{0}} could not be found as a real account on Twitch.\nPlease try again, ensuring you are typing the Twitch username exactly as it appears in Twitch.`,
+    TWITCH_NOTIF_ADD_ERROR_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "View Channel" Permission for {{1}}`,
+    TWITCH_NOTIF_ADD_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "Send Messages" Permission for {{1}}`,
+
+    TWITCH_NOTIF_ADD_ERROR_GENERIC: `There was an error trying to save your new Twitch Notification for **{{0}}**. Please try again later, or report this issue to my developers if this error keeps occurring.`,
+
+    TWITCH_NOTIF_EDIT_MODAL_TITLE: `Edit Twitch Notification`,
+    TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\n\nIf you wish to stop receiving notifications for this Twitch channel, select the "Delete Notification" checkbox at the bottom of this modal.\nIf you do *NOT* wish to delete, then leave that checkbox *blank/empty*.`,
+    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
+    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `Change where this Twitch Notification is posted to, or leave unedited to keep it in current Channel.`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_NAME: `Roles(s) to ping`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Change which Roles are pinged in this notification, or leave unedited to keep the current Roles.`,
+    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message`,
+    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Change the custom message for this notification, or leave unedited to keep the current message.`,
+    TWITCH_NOTIF_EDIT_DELETION_LABEL_NAME: `Delete this Notification`,
+    TWITCH_NOTIF_EDIT_DELETION_LABEL_DESCRIPTION: `Select to fully delete receiving notifications for the {{0}} Twitch channel.`,
+
+    TWITCH_NOTIF_DELETE_ERROR_GENERIC: `Sorry, there was an error preventing deletion of Twitch Notifications for {{0}} in this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_EDIT_ERROR_GENERIC: `Sorry, there was an error preventing saving of your edited Twitch Notification settings for {{0}}.\nPlease try again, or contact my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_EDIT_ERROR_FIELDS_UNCHANGED: `The Twitch Notification settings for {{0}} were unchanged due to no edits being made to the settings.`,
+    TWITCH_NOTIF_EDIT_ERROR_DISCORD_CHANNEL_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, I cannot set {{0}} as your new notification channel due to missing the "View Channel" Permission.`,
+    TWITCH_NOTIF_EDIT_ERROR_DISCORD_CHANNEL_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, I cannot set {{0}} as your new notification channel due to missing the "Send Messages" Permission.`,
+
+    TWITCH_NOTIF_RESET_MODAL_TITLE: `Reset Twitch Notifications`,
+    TWITCH_NOTIF_RESET_MODAL_CONFIRM_LABEL_NAME: `Confirm reset`,
+    TWITCH_NOTIF_RESET_MODAL_CONFIRM_LABEL_DESCRIPTION: `Please confirm you want to fully remove *all* saved Twitch Notifications for this Server.`,
+    
+    TWITCH_NOTIF_RESET_ERROR_GENERIC: `Sorry, there was an error preventing removal of Twitch Notifications for this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
 }

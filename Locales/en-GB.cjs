@@ -522,6 +522,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_ADD_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "Send Messages" Permission for {{1}}`,
 
     TWITCH_NOTIF_ADD_ERROR_GENERIC: `There was an error trying to save your new Twitch Notification for **{{0}}**. Please try again later, or report this issue to my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED: `This Server has already added Twitch Notifications for {{0}}!`,
 
     TWITCH_NOTIF_EDIT_MODAL_TITLE: `Edit Twitch Notification`,
     TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\n\nIf you wish to stop receiving notifications for this Twitch channel, select the "Delete Notification" checkbox at the bottom of this modal.\nIf you do *NOT* wish to delete, then leave that checkbox *blank/empty*.`,

@@ -4,14 +4,21 @@ import { localize } from '../../Utility/localizeResponses';
 
 
 /**
- * @typedef {Object} TwitchNotificationConfig
+ * @typedef {Object} TwitchGoLiveConfig
  * @property {String} TwitchChannelId ID of the Twitch Channel this notification is for
  * @property {String} TwitchChannelName Username of the Twitch Channel this notification is for
  * @property {String} DiscordChannelId ID of the Discord Channel to post this notification in
- * @property {Boolean} NotifyOnGoLive Should a notification be sent when the Twitch Channel goes live?
+ * @property {Boolean} IsNotificationEnabled Should a notification be sent when the Twitch Channel goes live?
  * @property {import('discord-api-types/v10').Locale} DiscordGuildLocale The locale for the Discord Guild. Used so we don't have to call Discord's API every time a new Notification is sent.
- * @property {String} GoLiveMessage A custom notification message for going live, or an empty string if Default Message is wanted instead
- * @property {Array<String>} GoLivePingRoleIds An array of Role IDs for Roles to ping in the go live notification, or an empty array for no Roles
+ * @property {String} CustomMessage A custom notification message for going live, or an empty string if Default Message is wanted instead
+ * @property {Array<String>} PingRoleIds An array of Role IDs for Roles to ping in the go live notification, or an empty array for no Roles
+ * @public
+ */
+
+/**
+ * @typedef {Object} TwitchNotificationConfig
+ * @property {String} DiscordGuildId ID of the Discord Server this set of Twitch Notifications is for
+ * @property {Array<TwitchGoLiveConfig>} TwitchGoLiveConfig Configuration settings for handling "Going live" notifications from Twitch
  * @public
  */
 
@@ -26,7 +33,8 @@ import { localize } from '../../Utility/localizeResponses';
 export async function listTwitchNotifications(interaction, cfEnv, outputType) {
     // Grab current saved Twitch Notifs, if any
     /** @type {?Array<TwitchNotificationConfig>} */
-    let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchnotif_${interaction.guild_id}`));
+    let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
+    let guildTwitchNotifs = fetchedTwitchNotifs?.find(item => item.DiscordGuildId === interaction.guild_id);
 
     // Basic components for management panel
     /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
@@ -48,7 +56,7 @@ export async function listTwitchNotifications(interaction, cfEnv, outputType) {
     }];
 
 
-    if ( fetchedTwitchNotifs == null || fetchedTwitchNotifs.length === 0 ) {
+    if ( fetchedTwitchNotifs == null || fetchedTwitchNotifs.length === 0 || guildTwitchNotifs == undefined || guildTwitchNotifs.TwitchGoLiveConfig.length === 0 ) {
         // No stored configs found, output empty management panel
         responseComponents[0].components.push({
             "type": ComponentType.TextDisplay,
@@ -69,7 +77,7 @@ export async function listTwitchNotifications(interaction, cfEnv, outputType) {
     }
     else {
         // There are set configs found, output management panel for them
-        fetchedTwitchNotifs.forEach(item => {
+        guildTwitchNotifs.TwitchGoLiveConfig.forEach(item => {
             responseComponents[0].components.push({
                 "type": ComponentType.Section,
                 "accessory": {
@@ -80,13 +88,13 @@ export async function listTwitchNotifications(interaction, cfEnv, outputType) {
                 },
                 "components": [{
                     "type": ComponentType.TextDisplay,
-                    "content": `**[${item.TwitchChannelName}](<https://twitch.tv/${item.TwitchChannelName}>)**\n> -# ${localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_POSTS_IN_CHANNEL', `<#${item.DiscordChannelId}>`)} | ${item.GoLivePingRoleIds?.length === 1 ? localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_SINGLAR') : localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_MULTIPLE', `${item.GoLivePingRoleIds?.length ?? 0}`)} ${item.GoLiveMessage != "" ? `| ${localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_HAS_CUSTOM_MESSAGE')}` : ""}`
+                    "content": `**[${item.TwitchChannelName}](<https://twitch.tv/${item.TwitchChannelName}>)**\n> -# ${localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_POSTS_IN_CHANNEL', `<#${item.DiscordChannelId}>`)} | ${item.PingRoleIds?.length === 1 ? localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_SINGLAR') : localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_MULTIPLE', `${item.PingRoleIds?.length ?? 0}`)} ${item.CustomMessage != "" ? `| ${localize(interaction.locale, 'TWITCH_NOTIF_PANEL_ITEM_HAS_CUSTOM_MESSAGE')}` : ""}`
                 }]
             })
         });
 
         // Add final buttons
-        if ( fetchedTwitchNotifs.length < 2 ) {
+        if ( guildTwitchNotifs.TwitchGoLiveConfig.length < 2 ) {
             // Maximum limit not reached
             responseComponents[0].components.push({
                 "type": ComponentType.Separator,
@@ -172,12 +180,13 @@ export async function listTwitchNotifications(interaction, cfEnv, outputType) {
 export async function editTwitchNotification(interaction, cfEnv, twitchId) {
     // Grab selected Twitch Notification
     /** @type {Array<TwitchNotificationConfig>} */
-    let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchnotif_${interaction.guild_id}`));
-    let selectedTwitchNotification = fetchedTwitchNotifs.find(item => item.TwitchChannelId === twitchId);
+    let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
+    let guildTwitchNotifs = fetchedTwitchNotifs.find(item => item.DiscordGuildId === interaction.guild_id);
+    let selectedTwitchNotification = guildTwitchNotifs.TwitchGoLiveConfig.find(item => item.TwitchChannelId === twitchId);
 
     // Setting default values
     let defaultRoleValues = [];
-    selectedTwitchNotification.GoLivePingRoleIds.forEach(role => {
+    selectedTwitchNotification.PingRoleIds.forEach(role => {
         defaultRoleValues.push({ "id": role, "type": SelectMenuDefaultValueType.Role });
     });
 
@@ -226,7 +235,7 @@ export async function editTwitchNotification(interaction, cfEnv, twitchId) {
                 "custom_id": `custom-message`,
                 "max_length": 250,
                 "required": false,
-                "value": selectedTwitchNotification.GoLiveMessage != "" && selectedTwitchNotification.GoLiveMessage != null ? selectedTwitchNotification.GoLiveMessage : undefined
+                "value": selectedTwitchNotification.CustomMessage != "" && selectedTwitchNotification.CustomMessage != null ? selectedTwitchNotification.CustomMessage : undefined
             }
         }, {
             // Checkbox for setting deletion state

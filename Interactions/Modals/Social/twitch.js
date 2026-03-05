@@ -79,9 +79,26 @@ export const Modal = {
                 });
             }
 
+            // Validate given Twitch Channel hasn't already been added for this Discord Server
+            /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
+            let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
+            let guildTwitchNotifs = fetchedTwitchNotifs?.find(item => item.DiscordGuildId === interaction.guild_id);
+            if ( fetchedTwitchNotifs != null && fetchedTwitchNotifs.length !== 0 && guildTwitchNotifs != undefined && guildTwitchNotifs.TwitchGoLiveConfig.length !== 0 ) {
+                let doesTwitchChannelAlreadyExist = guildTwitchNotifs.TwitchGoLiveConfig.find(item => item.TwitchChannelId === twitchUser.id);
+                if ( doesTwitchChannelAlreadyExist != undefined ) {
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED', `**${inputTwitchName}**`)
+                        }
+                    });
+                }
+            }
+
 
             // Validate given Discord Channel is both viewable and chattable for TwiLite
-            let hasViewPermission = await checkForPermissionInChannel(PermissionFlagsBits.ViewChannel, inputDiscordChannelId, interaction.guild_id);
+            let hasViewPermission = await checkForPermissionInChannel(PermissionFlagsBits.ViewChannel, interaction.guild_id, inputDiscordChannelId);
 
             if ( hasViewPermission === false || hasViewPermission === 'NoAccess' ) {
                 return new JsonResponse({
@@ -93,7 +110,7 @@ export const Modal = {
                 });
             }
 
-            let hasSendPermission = await checkForPermissionInChannel(PermissionFlagsBits.SendMessages, inputDiscordChannelId, interaction.guild_id);
+            let hasSendPermission = await checkForPermissionInChannel(PermissionFlagsBits.SendMessages, interaction.guild_id, inputDiscordChannelId);
 
             if ( hasSendPermission === false ) {
                 return new JsonResponse({
@@ -107,23 +124,27 @@ export const Modal = {
 
 
             // Validation complete, now store to KV
-            /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig}*/
+            /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchGoLiveConfig}*/
             let storeData = {
                 TwitchChannelId: twitchUser.id,
                 TwitchChannelName: twitchUser.name,
                 DiscordChannelId: inputDiscordChannelId,
-                NotifyOnGoLive: true, // For now, only settable by TwiLite itself when a Server looses TwiLite Inferno or re-gains Inferno
+                IsNotificationEnabled: true, // For now, only settable by TwiLite itself when a Server looses TwiLite Inferno or re-gains Inferno
                 DiscordGuildLocale: interaction.guild_locale,
-                GoLiveMessage: inputCustomMessage != "" ? inputCustomMessage : "",
-                GoLivePingRoleIds: inputRoleIds.length > 0 ? inputRoleIds : []
+                CustomMessage: inputCustomMessage != "" ? inputCustomMessage : "",
+                PingRoleIds: inputRoleIds.length > 0 ? inputRoleIds : []
             };
 
             try {
-                let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchnotif_${interaction.guild_id}`));
                 if ( fetchedTwitchNotifs == null ) { fetchedTwitchNotifs = []; }
-                fetchedTwitchNotifs.push(storeData);
+                if ( fetchedTwitchNotifs.length === 0 || guildTwitchNotifs == undefined ) {
+                    fetchedTwitchNotifs.push({ DiscordGuildId: interaction.guild_id, TwitchGoLiveConfig: [storeData] });
+                }
+                else {
+                    guildTwitchNotifs.TwitchGoLiveConfig.push(storeData);
+                }
 
-                await cfEnv.crimsonkv.put(`twitchnotif_${interaction.guild_id}`, JSON.stringify(fetchedTwitchNotifs));
+                await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
 
                 return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
             }
@@ -179,19 +200,22 @@ export const Modal = {
 
 
             /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
-            let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchnotif_${interaction.guild_id}`));
-            let selectedTwitchNotificationIndex = fetchedTwitchNotifs.findIndex(item => item.TwitchChannelId === twitchId);
-            let selectedTwitchNotificationObject = fetchedTwitchNotifs.find(item => item.TwitchChannelId === twitchId);
+            let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
+            let guildTwitchNotificationIndex = fetchedTwitchNotifs.findIndex(item => item.DiscordGuildId === interaction.guild_id);
+            let guildTwitchNotificationObject = fetchedTwitchNotifs.find(item => item.DiscordGuildId === interaction.guild_id);
+            let selectedTwitchNotificationIndex = guildTwitchNotificationObject.TwitchGoLiveConfig.findIndex(item => item.TwitchChannelId === twitchId);
+            let selectedTwitchNotificationObject = guildTwitchNotificationObject.TwitchGoLiveConfig.find(item => item.TwitchChannelId === twitchId);
 
 
             // FIRST CHECK DELETION STATE
             //   If true (selected), ignore all other values and DELETE the stored notification settings
             if ( inputDeletionState === true ) {
-                let catchDeletedObject = fetchedTwitchNotifs.splice(selectedTwitchNotificationIndex, 1);
+                let catchDeletedObject = guildTwitchNotificationObject.TwitchGoLiveConfig.splice(selectedTwitchNotificationIndex, 1);
+                fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1, guildTwitchNotificationObject);
 
                 // Deletion success, save & ACK
                 try {
-                    await cfEnv.crimsonkv.put(`twitchnotif_${interaction.guild_id}`, JSON.stringify(fetchedTwitchNotifs));
+                    await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
 
                     return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
                 }
@@ -214,12 +238,12 @@ export const Modal = {
             // Check there were actually changes made to the settings
             //   (Using duplicated arrays so we don't accidentally break something somehow by accident)
             let clonedInputRoleIds = inputRoleIds;
-            let clonedStorageRoleId = selectedTwitchNotificationObject.GoLivePingRoleIds;
+            let clonedStorageRoleId = selectedTwitchNotificationObject.PingRoleIds;
 
             if (
                 (inputDiscordChannelId === selectedTwitchNotificationObject.DiscordChannelId)
                 && (clonedInputRoleIds.sort().toString() === clonedStorageRoleId.sort().toString())
-                && (inputCustomMessage === selectedTwitchNotificationObject.GoLiveMessage)
+                && (inputCustomMessage === selectedTwitchNotificationObject.CustomMessage)
             ) {
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
@@ -237,7 +261,7 @@ export const Modal = {
             if ( (inputDiscordChannelId !== selectedTwitchNotificationObject.DiscordChannelId) ) {
                 // Validate new channel is usable
                 // Validate given Discord Channel is both viewable and chattable for TwiLite
-                let hasViewPermission = await checkForPermissionInChannel(PermissionFlagsBits.ViewChannel, inputDiscordChannelId, interaction.guild_id);
+                let hasViewPermission = await checkForPermissionInChannel(PermissionFlagsBits.ViewChannel, interaction.guild_id, inputDiscordChannelId);
 
                 if ( hasViewPermission === false || hasViewPermission === 'NoAccess' ) {
                     return new JsonResponse({
@@ -249,7 +273,7 @@ export const Modal = {
                     });
                 }
 
-                let hasSendPermission = await checkForPermissionInChannel(PermissionFlagsBits.SendMessages, inputDiscordChannelId, interaction.guild_id);
+                let hasSendPermission = await checkForPermissionInChannel(PermissionFlagsBits.SendMessages, interaction.guild_id, inputDiscordChannelId);
 
                 if ( hasSendPermission === false ) {
                     return new JsonResponse({
@@ -267,22 +291,23 @@ export const Modal = {
 
             // Pinged Roles
             if ( (clonedInputRoleIds.sort().toString() !== clonedStorageRoleId.sort().toString()) ) {
-                selectedTwitchNotificationObject.GoLivePingRoleIds = inputRoleIds;
+                selectedTwitchNotificationObject.PingRoleIds = inputRoleIds;
 
             }
 
             // Custom Message
-            if ( (inputCustomMessage !== selectedTwitchNotificationObject.GoLiveMessage) ) {
-                selectedTwitchNotificationObject.GoLiveMessage = inputCustomMessage;
+            if ( (inputCustomMessage !== selectedTwitchNotificationObject.CustomMessage) ) {
+                selectedTwitchNotificationObject.CustomMessage = inputCustomMessage;
 
             }
 
 
             // Attempt saving new values to DB
-            fetchedTwitchNotifs.splice(selectedTwitchNotificationIndex, 1, selectedTwitchNotificationObject);
+            guildTwitchNotificationObject.TwitchGoLiveConfig.splice(selectedTwitchNotificationIndex, 1, selectedTwitchNotificationObject);
+            fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1, guildTwitchNotificationObject);
 
             try {
-                await cfEnv.crimsonkv.put(`twitchnotif_${interaction.guild_id}`, JSON.stringify(fetchedTwitchNotifs));
+                await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
 
                 return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
             }
@@ -318,9 +343,14 @@ export const Modal = {
 
 
             if ( inputConfirmation === true ) {
-                // Reset confirmed, so remove all Twitch Notifications from DB
+                // Reset confirmed, so remove all Twitch Notifications for that Guild from DB
+                /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
+                let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
+                let guildTwitchNotificationIndex = fetchedTwitchNotifs.findIndex(item => item.DiscordGuildId === interaction.guild_id);
+                let catchThisDeletedObject = fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1);
+
                 try {
-                    await cfEnv.crimsonkv.delete(`twitchnotif_${interaction.guild_id}`);
+                    await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
 
                     return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
                 }

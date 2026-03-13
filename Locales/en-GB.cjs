@@ -515,7 +515,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_NAME: `Role(s) to ping [Optional]`,
     TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Roles you want to ping in this notification. Will be prefixed to the notification's message.`,
     TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message [Optional]`,
-    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Leave blank to use TwiLite's default message.`,
+    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Use {streamerName} to include the streamer's name.`,
 
     TWITCH_NOTIF_ADD_ERROR_INVALID_TWITCH_USERNAME: `Sorry, {{0}} could not be found as a real account on Twitch.\nPlease try again, ensuring you are typing the Twitch username exactly as it appears in Twitch.`,
     TWITCH_NOTIF_ADD_ERROR_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "View Channel" Permission for {{1}}`,
@@ -525,13 +525,13 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED: `This Server has already added Twitch Notifications for {{0}}!`,
 
     TWITCH_NOTIF_EDIT_MODAL_TITLE: `Edit Twitch Notification`,
-    TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\n\nIf you wish to stop receiving notifications for this Twitch channel, select the "Delete Notification" checkbox at the bottom of this modal.\nIf you do *NOT* wish to delete, then leave that checkbox *blank/empty*.`,
+    TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\nIf you don't want to change any setting, then leave them unchanged.\n\nIf you wish to stop receiving notifications for this Twitch channel, select the "Delete Notification" checkbox at the bottom of this modal.\nIf you do *NOT* wish to delete, then leave that checkbox *blank/empty*.`,
     TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
-    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `Change where this Twitch Notification is posted to, or leave unedited to keep it in current Channel.`,
+    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `Set where this Twitch Notification is posted to.`,
     TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_NAME: `Roles(s) to ping`,
-    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Change which Roles are pinged in this notification, or leave unedited to keep the current Roles.`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Set which Roles are pinged in this notification. Will be prefixed to the notification's message`,
     TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message`,
-    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Change the custom message for this notification, or leave unedited to keep the current message.`,
+    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Set the custom message for this notification. Use {streamerName} to include the streamer's name.`,
     TWITCH_NOTIF_EDIT_DELETION_LABEL_NAME: `Delete this Notification`,
     TWITCH_NOTIF_EDIT_DELETION_LABEL_DESCRIPTION: `Select to fully delete receiving notifications for the {{0}} Twitch channel.`,
 
@@ -546,4 +546,9 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_RESET_MODAL_CONFIRM_LABEL_DESCRIPTION: `Please confirm you want to fully remove *all* saved Twitch Notifications for this Server.`,
     
     TWITCH_NOTIF_RESET_ERROR_GENERIC: `Sorry, there was an error preventing removal of Twitch Notifications for this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
+
+    TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE: `{{0}} went live!`,
+    TWITCH_NOTIFICATION_GOING_LIVE_CATEGORY: `Category:`,
+    TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE: `Went live: {{0}}`,
+    TWITCH_NOTIFICATION_GOING_LIVE_WATCH_BUTTON_LABEL: `Watch on Twitch`,
 }

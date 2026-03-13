@@ -22,14 +22,15 @@
     "@discordjs/collection": "^2.1.1",
     "@twurple/api": "^8.0.3",
     "@twurple/auth": "^8.0.3",
+    "@twurple/eventsub-base": "^8.0.3",
     "@twurple/eventsub-http": "^8.0.3",
-    "discord-api-types": "0.38.40",
+    "discord-api-types": "0.38.41",
     "discord-interactions": "^4.4.0",
     "emoji-regex": "^10.6.0",
     "itty-router": "^5.0.23",
-    "undici": "^7.22.0"
+    "undici": "^7.24.0"
   },
   "devDependencies": {
-    "wrangler": "^4.70.0"
+    "wrangler": "^4.72.0"
   }
 }

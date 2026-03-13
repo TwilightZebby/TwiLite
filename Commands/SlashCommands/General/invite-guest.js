@@ -205,9 +205,9 @@ export const SlashCommand = {
             })
         });
         let createdInviteJson = await postInviteRequest.json();
-        console.log(`${postInviteRequest.status} - ${postInviteRequest.statusText}`);
+        /* console.log(`${postInviteRequest.status} - ${postInviteRequest.statusText}`);
         let tempJson = JSON.stringify(createdInviteJson);
-        console.log(tempJson);
+        console.log(tempJson); */
 
 
         // Catch "unexpected 204 empty response" (caused by Invites being force-disabled for that Guild by Discord's T&S team)

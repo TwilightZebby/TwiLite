@@ -1,8 +1,9 @@
 import { ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
-import { checkForPermissionInChannel, JsonResponse } from '../../../Utility/utilityMethods.js';
+import { checkForPermissionInChannel, getTwitchAccessToken, JsonResponse } from '../../../Utility/utilityMethods.js';
 import { TwitchApiClient } from '../../../Utility/utilityConstants.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { listTwitchNotifications } from '../../../Modules/Notifications/TwitchNotifications.js';
+import { CF_WORKER_URL, RANDOMLY_GENERATED_FIXED_STRING, TWITCH_CLIENT_ID } from '../../../config.js';
 
 
 export const Modal = {
@@ -83,6 +84,7 @@ export const Modal = {
             /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
             let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
             let guildTwitchNotifs = fetchedTwitchNotifs?.find(item => item.DiscordGuildId === interaction.guild_id);
+            
             if ( fetchedTwitchNotifs != null && fetchedTwitchNotifs.length !== 0 && guildTwitchNotifs != undefined && guildTwitchNotifs.TwitchGoLiveConfig.length !== 0 ) {
                 let doesTwitchChannelAlreadyExist = guildTwitchNotifs.TwitchGoLiveConfig.find(item => item.TwitchChannelId === twitchUser.id);
                 if ( doesTwitchChannelAlreadyExist != undefined ) {
@@ -123,19 +125,75 @@ export const Modal = {
             }
 
 
-            // Validation complete, now store to KV
-            /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchGoLiveConfig}*/
-            let storeData = {
-                TwitchChannelId: twitchUser.id,
-                TwitchChannelName: twitchUser.name,
-                DiscordChannelId: inputDiscordChannelId,
-                IsNotificationEnabled: true, // For now, only settable by TwiLite itself when a Server looses TwiLite Inferno or re-gains Inferno
-                DiscordGuildLocale: interaction.guild_locale,
-                CustomMessage: inputCustomMessage != "" ? inputCustomMessage : "",
-                PingRoleIds: inputRoleIds.length > 0 ? inputRoleIds : []
-            };
-
+            // Validation complete, now create Twitch Webhook & store to KV
             try {
+                // Create Twitch EventSub Webhook subscription
+                let twitchToken = await getTwitchAccessToken(cfEnv);
+
+                let twitchApiRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": `Bearer ${twitchToken}`,
+                        "Client-ID": `${TWITCH_CLIENT_ID}`,
+                        "Content-Type": `application/json`
+                    },
+                    body: JSON.stringify({
+                        "type": `stream.online`,
+                        "version": `1`,
+                        "condition": {
+                            "broadcaster_user_id": `${twitchUser.id}`
+                        },
+                        "transport": {
+                            "method": `webhook`,
+                            "callback": `https://${CF_WORKER_URL}/twitch-webhooks`,
+                            "secret": `${RANDOMLY_GENERATED_FIXED_STRING}`
+                        }
+                    })
+                });
+
+                if ( twitchApiRequest.status != 202 && twitchApiRequest.status != 409 ) {
+                    console.error(`Twitch \`stream.online\` Webhook subscription failed. Response code: ${twitchApiRequest.status} ${twitchApiRequest.statusText}`);
+
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'TWITCH_NOTIF_ADD_ERROR_GENERIC', `${inputTwitchName}`)
+                        }
+                    });
+                }
+
+                // Store to DB
+                /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchGoLiveConfig}*/
+                let storeData = {
+                    TwitchChannelId: twitchUser.id,
+                    TwitchChannelName: twitchUser.name,
+                    DiscordChannelId: inputDiscordChannelId,
+                    IsNotificationEnabled: true, // For now, only settable by TwiLite itself when a Server looses TwiLite Inferno or re-gains Inferno
+                    DiscordGuildLocale: interaction.guild_locale,
+                    CustomMessage: inputCustomMessage != "" ? inputCustomMessage : "",
+                    PingRoleIds: inputRoleIds.length > 0 ? inputRoleIds : [],
+                    TwitchWebhookSubscriptionId: ""
+                };
+
+                if ( twitchApiRequest.status === 202 ) {
+                    let twitchApiData = await twitchApiRequest.json();
+                    storeData.TwitchWebhookSubscriptionId = twitchApiData.data[0].id;
+                }
+                else if ( twitchApiRequest.status === 409 ) {
+                    // Since we won't get a returned Subscription ID from Twitch, we need to copy it from another instance for the same Twitch Channel.
+                    for ( let i = 0; i <= fetchedTwitchNotifs.length; i++ ) {
+                        if ( fetchedTwitchNotifs[i].DiscordGuildId === interaction.guild_id ) { continue; }
+
+                        for ( let j = 0; j <= fetchedTwitchNotifs[i].TwitchGoLiveConfig.length; j++ ) {
+                            if ( fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchChannelId === twitchUser.id ) {
+                                storeData.TwitchWebhookSubscriptionId = fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchWebhookSubscriptionId;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if ( fetchedTwitchNotifs == null ) { fetchedTwitchNotifs = []; }
                 if ( fetchedTwitchNotifs.length === 0 || guildTwitchNotifs == undefined ) {
                     fetchedTwitchNotifs.push({ DiscordGuildId: interaction.guild_id, TwitchGoLiveConfig: [storeData] });
@@ -212,6 +270,35 @@ export const Modal = {
             if ( inputDeletionState === true ) {
                 let catchDeletedObject = guildTwitchNotificationObject.TwitchGoLiveConfig.splice(selectedTwitchNotificationIndex, 1);
                 fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1, guildTwitchNotificationObject);
+
+                // If there are no other Discord Guilds also subscribed to that same Twitch Channel's "Go Live" events, remove the Twitch subscription
+                let keepTwitchWebhookEvent = false;
+
+                for (let i = 0; i <= fetchedTwitchNotifs.length - 1; i++) {
+                    for (let j = 0; j <= fetchedTwitchNotifs[i].TwitchGoLiveConfig.length - 1; j++) {
+                        if ( fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchChannelId === selectedTwitchNotificationObject.TwitchChannelId ) {
+                            keepTwitchWebhookEvent = true;
+                            break;
+                        }
+                    }
+                }
+
+                if ( keepTwitchWebhookEvent === false ) {
+                    // Remove Twitch webhook subscription
+                    let twitchToken = await getTwitchAccessToken(cfEnv);
+
+                    let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                        method: 'DELETE',
+                        headers: {
+                            "Authorization": `Bearer ${twitchToken}`,
+                            "Client-ID": `${TWITCH_CLIENT_ID}`,
+                            "Content-Type": `application/json`
+                        },
+                        body: JSON.stringify({
+                            "id": `${selectedTwitchNotificationObject.TwitchWebhookSubscriptionId}`
+                        })
+                    });
+                }
 
                 // Deletion success, save & ACK
                 try {
@@ -348,6 +435,40 @@ export const Modal = {
                 let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
                 let guildTwitchNotificationIndex = fetchedTwitchNotifs.findIndex(item => item.DiscordGuildId === interaction.guild_id);
                 let catchThisDeletedObject = fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1);
+
+                // Remove all Twitch webhook subscriptions
+                let twitchToken = await getTwitchAccessToken(cfEnv);
+
+                catchThisDeletedObject.forEach(configItem => {
+                    configItem.TwitchGoLiveConfig.forEach(async goLiveItem => {
+                        // If there are no other Discord Guilds also subscribed to that same Twitch Channel's "Go Live" events, remove the Twitch subscription
+                        let keepTwitchWebhook = false;
+
+                        for (let i = 0; i <= fetchedTwitchNotifs.length - 1; i++) {
+                            for (let j = 0; j <= fetchedTwitchNotifs[i].TwitchGoLiveConfig.length - 1; j++) {
+                                if ( fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchChannelId === goLiveItem.TwitchChannelId ) {
+                                    keepTwitchWebhook = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if ( keepTwitchWebhook === false ) {
+                            let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                                method: 'DELETE',
+                                headers: {
+                                    "Authorization": `Bearer ${twitchToken}`,
+                                    "Client-ID": `${TWITCH_CLIENT_ID}`,
+                                    "Content-Type": `application/json`
+                                },
+                                body: JSON.stringify({
+                                    "id": `${goLiveItem.TwitchWebhookSubscriptionId}`
+                                })
+                            });
+                        }
+
+                    });
+                });
 
                 try {
                     await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));

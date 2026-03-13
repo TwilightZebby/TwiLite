@@ -2,10 +2,16 @@ import { Collection } from '@discordjs/collection';
 import { MessageType } from 'discord-api-types/v10';
 import { AppTokenAuthProvider } from '@twurple/auth';
 import { ApiClient } from '@twurple/api';
-import { DISCORD_TOKEN, superProperties, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
+import { CF_WORKER_URL, DISCORD_TOKEN, RANDOMLY_GENERATED_FIXED_STRING, superProperties, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
+import { EventSubHttpListener, ReverseProxyAdapter } from '@twurple/eventsub-http';
 
 
 const TwitchAuthProvider = new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+
+const TwitchAdapter = new ReverseProxyAdapter({
+    hostName: `${CF_WORKER_URL}`,
+    pathPrefix: `/twitch-webhooks`
+});
 
 
 // *******************************
@@ -15,6 +21,11 @@ const TwitchAuthProvider = new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLI
  * API client for interacting with Twitch's API
  */
 export const TwitchApiClient = new ApiClient({ authProvider: TwitchAuthProvider });
+
+/**
+ * Event Listener for receiving Twitch Events via HTTP Webhooks
+ */
+export const TwitchHttpListener = new EventSubHttpListener({ apiClient: TwitchApiClient, secret: RANDOMLY_GENERATED_FIXED_STRING, adapter: TwitchAdapter });
 
 /**
  * Base64-encoded Super Properties for accessing experimental API features

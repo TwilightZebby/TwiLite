@@ -130,6 +130,8 @@ export const SlashCommand = {
         /** @type {import('discord-api-types/v10').APIGuildMember} */
         let privateCurrentMember = await requestPrivateCurrentMember.json();
 
+        // TODO: Figure out why this is broken now
+
         const HasPerGuildAvatarSet = privateCurrentMember.avatar != undefined ? true : false;
         const AvatarUri = HasPerGuildAvatarSet ? `https://cdn.discordapp.com/guilds/${interaction.guild_id}/users/${DISCORD_APP_USER_ID}/avatars/${privateCurrentMember.avatar}.png` : `https://cdn.discordapp.com/avatars/${DISCORD_APP_USER_ID}/${privateCurrentMember.user.avatar}.png`;
         const HasPerGuildBannerSet = privateCurrentMember.banner != undefined ? true : false;

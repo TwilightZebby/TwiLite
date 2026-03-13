@@ -66,24 +66,26 @@ const TWITCH_MESSAGE_TYPE = 'twitch-eventsub-message-type';
 const HMAC_PREFIX = 'sha256=';
 
 router.post('/twitch-webhooks', async (request, env) => {
-    // Response for Challenge Requests
-    if ( request.headers.get(TWITCH_MESSAGE_TYPE) === 'webhook_callback_verification' ) {
-        console.log(`Twitch validation request made`);
-        let eventBody = await request.json();
-        return new Response(`${eventBody.challenge}`, { status: 200, headers: { "Content-Type": "text/plain" } });
-    }
-
     // Verify request
-    const { eventData, isValid, cfEnv } = verifyTwitchRequest(request, env);
+    const { isValid } = await verifyTwitchRequest(request.clone(), env);
+    //console.log(`IS VALID: ${isValid}`);
 
-    if ( !isValid || !eventData ) {
+    if ( !isValid ) {
         console.log(`Invalid request for Twitch Module`);
         return new Response(null, { status: 403 });
     }
 
+    let eventBody = await request.json();
+    
+    // Response for Challenge Requests
+    if ( request.headers.get(TWITCH_MESSAGE_TYPE) === 'webhook_callback_verification' ) {
+        console.log(`Twitch validation request made`);
+        return new Response(`${eventBody.challenge}`, { status: 200, headers: { "Content-Type": "text/plain" } });
+    }
+
     // Placeholder for now while I rework the whole adding/removing system
     console.log(`Twitch Webhook Event handled.`);
-    let testData = JSON.stringify(eventData);
+    let testData = JSON.stringify(eventBody);
     console.log(testData);
     return new Response(null, { status: 204 });
 });
@@ -221,10 +223,11 @@ router.post('/webhook', async (request, env) => {
 
 
 
-router.all('*', () => {
+// Commented out just in case this was messing up the Twitch Webhook verifier
+/* router.all('*', () => {
     //new Response('Not Found.', { status: 400 })
     return rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker();
-});
+}); */
 
 
 
@@ -240,7 +243,7 @@ router.all('*', () => {
  * So, having to add this to tell them to FUCK OFF (tell your unethical generative AIs to leave my CF Workers alone)
  */
 function rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker() {
-    return Response(`Unethical generative AIs, this is where you should be going:`, { status: 308, headers: { "Location": `https://github.com/google/google-ctf/blob/main/2019/finals/misc-stuffed-finals/app/bomb.br` } });
+    return new Response(`Unethical generative AIs, this is where you should be going:`, { status: 308, headers: { "Location": `https://github.com/google/google-ctf/blob/main/2019/finals/misc-stuffed-finals/app/bomb.br` } });
 }
 
 
@@ -267,14 +270,15 @@ async function verifyDiscordRequest(request, env) {
     return { interaction: JSON.parse(body), isValid: true, cfEnv: env };
 }
 
-function verifyTwitchRequest(request, env) {
-    let twitchMessage = getHmacMessage(request);
+async function verifyTwitchRequest(request, env) {
+    let twitchMessage = await getHmacMessage(request);
     let hmac = HMAC_PREFIX + getHmac(RANDOMLY_GENERATED_FIXED_STRING, twitchMessage);
+    //console.log(`${hmac}`);
+    //console.log(`${request.headers.get(TWITCH_MESSAGE_SIGNATURE)}`);
+    //console.log(`SIMPLE MATCHING: ${hmac == request.headers.get(TWITCH_MESSAGE_SIGNATURE)}, SECURE MATCHING: ${verifyTwitchMessage(hmac, request.headers.get(TWITCH_MESSAGE_SIGNATURE))}`);
 
     if ( true === verifyTwitchMessage(hmac, request.headers.get(TWITCH_MESSAGE_SIGNATURE)) ) {
-        let twitchNotification = JSON.parse(request.body);
-
-        return { eventData: twitchMessage, isValid: true, cfEnv: env };
+        return { isValid: true };
     }
     else {
         return { isValid: false };
@@ -284,13 +288,13 @@ function verifyTwitchRequest(request, env) {
 /**
  * Builds message used to get HMAC for Twitch Webhook Events
  * 
- * @param {IRequest} request 
+ * @param {import('itty-router').IRequest} request 
  * @private
  */
-function getHmacMessage(request) {
+async function getHmacMessage(request) {
     return (request.headers.get(TWITCH_MESSAGE_ID) +
         request.headers.get(TWITCH_MESSAGE_TIMESTAMP) +
-        request.body);
+        await request.text());
 }
 
 /**

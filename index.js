@@ -15,9 +15,8 @@ import { handleAppDeauthorized } from './Handlers/WebhookEvents/applicationDeaut
 import { handleEntitlementCreate } from './Handlers/WebhookEvents/entitlementCreate.js';
 import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpdate.js';
 import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
-import { CLOUDFLARE_ID, CLOUDFLARE_KV_ID, DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
+import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
 import { JsonResponse } from './Utility/utilityMethods.js';
-import { TwitchHttpListener } from './Utility/utilityConstants.js';
 import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
 
 
@@ -37,18 +36,6 @@ const router = AutoRouter();
 router.get('/', (request, env) => {
     return new Response(`👏 ${DISCORD_APP_USER_ID}`);
 });
-
-
-
-
-
-
-
-
-
-// *******************************
-// Setup Twitch Event Listener
-TwitchHttpListener.start();
 
 
 

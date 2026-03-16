@@ -1,4 +1,4 @@
-import { ApplicationWebhookEventType, ApplicationWebhookType, ButtonStyle, ComponentType, InteractionResponseType, InteractionType, MessageFlags } from 'discord-api-types/v10';
+import { ApplicationWebhookEventType, ApplicationWebhookType, InteractionResponseType, InteractionType } from 'discord-api-types/v10';
 import { isChatInputApplicationCommandInteraction, isContextMenuApplicationCommandInteraction, isMessageComponentButtonInteraction, isMessageComponentSelectMenuInteraction } from 'discord-api-types/utils';
 import { AutoRouter } from 'itty-router';
 import { verifyKey } from 'discord-interactions';
@@ -17,6 +17,7 @@ import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpd
 import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
 import { JsonResponse } from './Utility/utilityMethods.js';
+import { TwitchApiClient } from './Utility/utilityConstants.js';
 import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
 
 
@@ -70,36 +71,42 @@ router.post('/twitch-webhooks', async (request, env) => {
         return new Response(`${eventBody.challenge}`, { status: 200, headers: { "Content-Type": "text/plain" } });
     }
 
-    // Placeholder for now while I rework the whole adding/removing system
     console.log(`Twitch Webhook Event handled.`);
-    let testData = JSON.stringify(eventBody);
-    console.log(testData);
-    return new Response(null, { status: 204 });
-});
 
+    // Fetch stored notification config here, so that we are not fetching it for each and every single Twitch EventSub notification (future-proofing)
+    /** @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
+    let fetchedTwitchNotifs = JSON.parse(await env.crimsonkv.get(`twitchNotifications`));
 
-//   Note: This was my first attempt at doing processing of Twitch Webhook Events, before I realised I was doing it wrong! Will be replaced next!
-/* * @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[] */
-/* let requestAllTwitchNotifications = await fetch(`https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ID}/storage/kv/namespaces/${CLOUDFLARE_KV_ID}/values/twitchNotifications`);
+    // ******* STREAM UP/ONLINE NOTIFICATION
+    if ( eventBody["subscription"]["type"] === "stream.online" ) {
+        // Grab Twitch data needed
+        /** @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchStreamUpEventSubData} */
+        let streamUpData = eventBody["event"];
+        let fetchedStreamData = await TwitchApiClient.streams.getStreamByUserId(streamUpData.broadcaster_user_id);
 
-
-requestAllTwitchNotifications.forEach(notifConfig => {
-    notifConfig.TwitchGoLiveConfig.forEach(goLiveConfig => {
-        
-        // ******* TWITCH - ON STREAM ONLINE (channel goes live)
-        // Make sure it's actually enabled first
-        if ( goLiveConfig.IsNotificationEnabled ) {
-            TwitchHttpListener.onStreamOnline(goLiveConfig.TwitchChannelId, async eventData => {
-                console.log(`${eventData.broadcasterDisplayName} just went live!`);
-
-                //await processStreamOnlineEvents(eventData, goLiveConfig);
-                return;
-            });
+        if ( fetchedStreamData == null ) {
+            // Since this is being run on a CF Worker, we don't get a lot of time in order to do stuff.
+            //   As such, I cannot do a "loop with few minutes pause between each cycle in order to wait for Twitch's API to cache it" thing here
+            return;
         }
 
+        let fetchedGameData = await TwitchApiClient.games.getGameById(fetchedStreamData.gameId);
 
-    });
-}); */
+        // Now process the Twitch notification for Discord Guilds that are expecting this streamer's notifications
+        fetchedTwitchNotifs.forEach(notifConfig => {
+            notifConfig.TwitchGoLiveConfig.forEach(async goLiveConfig => {
+
+                // Make sure it's actually enabled first, AND that the config is expecting this streamer
+                if ( goLiveConfig.TwitchChannelId === streamUpData.broadcaster_user_id && goLiveConfig.IsNotificationEnabled ) {
+                    await processStreamOnlineEvents(streamUpData, fetchedStreamData, fetchedGameData, goLiveConfig, env);
+                }
+            });
+        });
+
+    }
+
+    return new Response(null, { status: 204 });
+});
 
 
 

@@ -28,7 +28,7 @@
     "discord-interactions": "^4.4.0",
     "emoji-regex": "^10.6.0",
     "itty-router": "^5.0.23",
-    "undici": "^7.24.0"
+    "undici": "^7.24.4"
   },
   "devDependencies": {
     "wrangler": "^4.73.0"

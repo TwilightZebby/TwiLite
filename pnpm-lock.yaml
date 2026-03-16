@@ -39,8 +39,8 @@ importers:
         specifier: ^5.0.23
         version: 5.0.23
       undici:
-        specifier: ^7.24.0
-        version: 7.24.0
+        specifier: ^7.24.4
+        version: 7.24.4
     devDependencies:
       wrangler:
         specifier: ^4.73.0
@@ -627,8 +627,8 @@ packages:
     resolution: {integrity: sha512-y+8YjDFzWdQlSE9N5nzKMT3g4a5UBX1HKowfdXh0uvAnTaqqwqB92Jt4UXBAeKekDs5IaDKyJFR4X1gYVCgXcw==, tarball: https://registry.npmjs.org/undici/-/undici-7.18.2.tgz}
     engines: {node: '>=20.18.1'}
 
-  undici@7.24.0:
-    resolution: {integrity: sha512-jxytwMHhsbdpBXxLAcuu0fzlQeXCNnWdDyRHpvWsUl8vd98UwYdl9YTyn8/HcpcJPC3pwUveefsa3zTxyD/ERg==, tarball: https://registry.npmjs.org/undici/-/undici-7.24.0.tgz}
+  undici@7.24.4:
+    resolution: {integrity: sha512-BM/JzwwaRXxrLdElV2Uo6cTLEjhSb3WXboncJamZ15NgUURmvlXvxa6xkwIOILIjPNo9i8ku136ZvWV0Uly8+w==, tarball: https://registry.npmjs.org/undici/-/undici-7.24.4.tgz}
     engines: {node: '>=20.18.1'}
 
   unenv@2.0.0-rc.24:
@@ -1191,7 +1191,7 @@ snapshots:
 
   undici@7.18.2: {}
 
-  undici@7.24.0: {}
+  undici@7.24.4: {}
 
   unenv@2.0.0-rc.24:
     dependencies:

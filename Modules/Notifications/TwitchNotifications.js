@@ -24,6 +24,17 @@ import { EMOJI_TWITCH_LOGO } from '../../Assets/AppEmojis.js';
  * @public
  */
 
+/**
+ * @typedef {Object} TwitchStreamUpEventSubData
+ * @property {String} id ID of the Twitch Stream
+ * @property {String} broadcaster_user_id User ID of the stream's Broadcaster
+ * @property {String} broadcaster_user_login User handle of the stream's Broadcaster (in full lowercase)
+ * @property {String} broadcaster_user_name User display name of the stream's broadcaster (can have uppercase letters)
+ * @property {'live'|'playlist'|'watch_party'|'premiere'|'rerun'} type The type of stream
+ * @property {String} started_at The timestamp the stream went online at.
+ * @public
+ */
+
 
 /**
  * Outputs a list of all current Twitch Notifications setup for the Server. Also includes management buttons.
@@ -269,21 +280,16 @@ export async function editTwitchNotification(interaction, cfEnv, twitchId) {
 /**
  * Processes "going live" Twitch API Events
  * 
- * @param {import('@twurple/eventsub-base').EventSubStreamOnlineEvent} eventData 
+ * @param {TwitchStreamUpEventSubData} streamUpEventData 
+ * @param {import('@twurple/api').HelixStream} twitchStreamData 
+ * @param {import('@twurple/api').HelixGame|null} streamCategory 
  * @param {TwitchGoLiveConfig} goLiveConfig 
+ * @param {*} cfEnv 
  */
-export async function processStreamOnlineEvents(eventData, goLiveConfig) {
-    // Grab Twitch data we need for the sent notification
-    let twitchStream = await eventData.getStream();
-    if ( twitchStream == null ) {
-        // Since this is being run on a CF Worker, we don't get a lot of time in order to do stuff.
-        //   As such, I cannot do a "loop with few minutes pause between each cycle in order to wait for Twitch's API to cache it" thing here
-        return;
-    }
-                    
-    let streamCategory = await twitchStream.getGame();
-                    
-    // Now construct Discord Components to send notification in
+export async function processStreamOnlineEvents(streamUpEventData, twitchStreamData, streamCategory, goLiveConfig, cfEnv) {
+    let streamStartDate = new Date(streamUpEventData.started_at);
+
+    // Construct Discord Components to send notification in
     let pingRolesString = "";
     if ( goLiveConfig.PingRoleIds.length > 0 ) {
         goLiveConfig.PingRoleIds.forEach(roleId => { pingRolesString += `<@&${roleId}> ` });
@@ -301,14 +307,14 @@ export async function processStreamOnlineEvents(eventData, goLiveConfig) {
             },
             "components": [{
                 "type": ComponentType.TextDisplay,
-                "content": `${pingRolesString}${goLiveConfig.CustomMessage !== "" ? `**${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE', eventData.broadcasterDisplayName)}**` : `${goLiveConfig.CustomMessage.replace("{streamerName}", eventData.broadcasterDisplayName)}`}\n## ${twitchStream.title}`
+                "content": `${pingRolesString}${goLiveConfig.CustomMessage !== "" ? `**${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE', streamUpEventData.broadcaster_user_name)}**` : `${goLiveConfig.CustomMessage.replace("{streamerName}", streamUpEventData.broadcaster_user_name)}`}\n## ${twitchStreamData.title}`
             }]
         };
     }
     else {
         topComponent = {
             "type": ComponentType.TextDisplay,
-            "content": `${pingRolesString}${goLiveConfig.CustomMessage !== "" ? `**${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE', eventData.broadcasterDisplayName)}**` : `${goLiveConfig.CustomMessage.replace("{streamerName}", eventData.broadcasterDisplayName)}`}\n## ${twitchStream.title}`
+            "content": `${pingRolesString}${goLiveConfig.CustomMessage !== "" ? `**${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE', streamUpEventData.broadcaster_user_name)}**` : `${goLiveConfig.CustomMessage.replace("{streamerName}", streamUpEventData.broadcaster_user_name)}`}\n## ${twitchStreamData.title}`
         };
     }
     
@@ -322,25 +328,25 @@ export async function processStreamOnlineEvents(eventData, goLiveConfig) {
             topComponent,
             {
                 "type": ComponentType.TextDisplay,
-                "content": `### ${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_CATEGORY')}\n${twitchStream.gameName != null ? twitchStream.gameName : `*No category set*`}`
+                "content": `### ${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_CATEGORY')}\n${twitchStreamData.gameName != "" ? twitchStreamData.gameName : `*No category set*`}`
             },
             {
                 "type": ComponentType.MediaGallery,
                 "items": [{
-                    "media": { "url": twitchStream.getThumbnailUrl(1920, 1080) },
-                    "spoiler": twitchStream.isMature
+                    "media": { "url": twitchStreamData.getThumbnailUrl(1920, 1080) },
+                    "spoiler": twitchStreamData.isMature
                 }]
             },
             {
                 "type": ComponentType.TextDisplay,
-                "content": `-# ${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE', `<t:${eventData.startDate.getMilliseconds() / 1000}:R>`)}`
+                "content": `-# ${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE', `<t:${streamStartDate.getMilliseconds() / 1000}:R>`)}`
             },
             {
                 "type": ComponentType.ActionRow,
                 "components": [{
                     "type": ComponentType.Button,
                     "style": ButtonStyle.Link,
-                    "url": `https://twitch.tv/${eventData.broadcasterName}`,
+                    "url": `https://twitch.tv/${streamUpEventData.broadcaster_user_login}`,
                     "label": `${localize(goLiveConfig.DiscordGuildLocale, 'TWITCH_NOTIFICATION_GOING_LIVE_WATCH_BUTTON_LABEL')}`,
                     "emoji": { "id": EMOJI_TWITCH_LOGO.id, "name": EMOJI_TWITCH_LOGO.name }
                 }]

@@ -223,21 +223,14 @@ router.post('/webhook', async (request, env) => {
 
 
 
-// Commented out just in case this was messing up the Twitch Webhook verifier
-/* router.all('*', () => {
-    //new Response('Not Found.', { status: 400 })
-    return rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker();
-}); */
-
-
-
-
-
-
 
 
 
 // *******************************
+router.get('/robots.txt', () => {
+    return rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker();
+});
+
 /**
  * I noticed there's been a *lot* of random requests made to my CF Workers, to endpoints I don't even *have* on my CF Worker.
  * So, having to add this to tell them to FUCK OFF (tell your unethical generative AIs to leave my CF Workers alone)

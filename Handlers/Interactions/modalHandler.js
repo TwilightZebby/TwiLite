@@ -9,10 +9,11 @@ import { JsonResponse } from '../../Utility/utilityMethods.js';
 /**
  * Handles & Runs Buttons
  * @param {import('discord-api-types/v10').APIModalSubmitInteraction} interaction 
+ * @param {*} cfEnv 
  * 
  * @returns {JsonResponse}
  */
-export async function handleModal(interaction) {
+export async function handleModal(interaction, cfEnv) {
     // Grab modal's name from Custom ID
     const ModalName = interaction.data.custom_id.split("_").shift();
     const Modal = await Modals[ModalName]();
@@ -38,7 +39,7 @@ export async function handleModal(interaction) {
 
 
     // Attempt to execute Interaction
-    try { return await Modal.Modal.executeModal(interaction, interactionUser); }
+    try { return await Modal.Modal.executeModal(interaction, interactionUser, cfEnv); }
     catch (err) {
         console.error(err);
         return new JsonResponse({

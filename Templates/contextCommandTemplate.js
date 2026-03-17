@@ -47,8 +47,9 @@ export const ContextCommand = {
     /** Runs the Command
      * @param {import('discord-api-types/v10').APIMessageApplicationCommandGuildInteraction|import('discord-api-types/v10').APIMessageApplicationCommandDMInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     * @param {*} cfEnv 
      */
-    async executeCommand(interaction, interactionUser) {
+    async executeCommand(interaction, interactionUser, cfEnv) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {

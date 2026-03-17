@@ -77,6 +77,7 @@ module.exports = {
     ACTION_COMMAND_OTHER_USER_COOKIE: `**{{0}}** gave a cookie to **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_SLAP: `**{{0}}** slapped **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_JAIL: `**{{0}}** was sent to jail by **{{1}}**`,
+    ACTION_COMMAND_OTHER_USER_BITE: `**{{0}}** gave **{{1}}** an affectionate bite`,
 
     ACTION_COMMAND_SELF_USER_HEADPAT: `**{{0}}** gave themself a headpat`,
     ACTION_COMMAND_SELF_USER_HUG: `**{{0}}** gave themself a cuddle`,
@@ -86,6 +87,7 @@ module.exports = {
     ACTION_COMMAND_SELF_USER_YEET: `**{{0}}** yeeted themselves out of a cannon`,
     ACTION_COMMAND_SELF_USER_COOKIE: `**{{0}}** snuck a cookie out of the cookie jar for themselves`,
     ACTION_COMMAND_SELF_USER_SLAP: `**{{0}}** slapped themselves`,
+    ACTION_COMMAND_SELF_USER_BITE: `**{{0}}** took a bite out of themselves`,
 
     ACTION_COMMAND_ROLE_HEADPAT: `**{{0}}** gave everyone with **{{1}}** headpats`,
     ACTION_COMMAND_ROLE_HUG: `**{{0}}** gave everyone with **{{1}}** a group hug`,
@@ -95,6 +97,7 @@ module.exports = {
     ACTION_COMMAND_ROLE_YEET: `**{{0}}** collectively yeeted **{{1}}**`,
     ACTION_COMMAND_ROLE_COOKIE: `**{{0}}** gave **{{1}}** a cookie`,
     ACTION_COMMAND_ROLE_SLAP: `**{{0}}** collectively slapped **{{1}}**`,
+    ACTION_COMMAND_ROLE_BITE: `**{{0}}** took a collectively bite out of **{{1}}**`,
 
     ACTION_COMMAND_EVERYONE_HEADPAT: `**{{0}}** gave \`@everyone\` a headpat`,
     ACTION_COMMAND_EVERYONE_HUG: `**{{0}}** gave \`@everyone\` a group hug`,
@@ -104,6 +107,7 @@ module.exports = {
     ACTION_COMMAND_EVERYONE_YEET: `**{{0}}** yeeted \`@everyone\` with a catapult`,
     ACTION_COMMAND_EVERYONE_COOKIE: `**{{0}}** gave \`@everyone\` a cookie`,
     ACTION_COMMAND_EVERYONE_SLAP: `**{{0}}** slapped \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_BITE: `**{{0}}** collectively bites \`@everyone\``,
 
     ACTION_COMMAND_OTHER_APPS_HEADPAT: `**{{0}}** gave **{{1}}** a virtual headpat`,
     ACTION_COMMAND_OTHER_APPS_HUG: `**{{0}}** virtually cuddled **{{1}}**`,
@@ -113,6 +117,7 @@ module.exports = {
     ACTION_COMMAND_OTHER_APPS_YEET: `**{{0}}** yeeted **{{1}}** out the internet`,
     ACTION_COMMAND_OTHER_APPS_COOKIE: `**{{0}}** gave **{{1}}** a virtual cookie`,
     ACTION_COMMAND_OTHER_APPS_SLAP: `**{{0}}** slapped **{{1}}**'s physical servers`,
+    ACTION_COMMAND_OTHER_APPS_BITE: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
 
     ACTION_COMMAND_TWILITE_HEADPAT: `**{{0}}** gave me a headpat <3`,
     ACTION_COMMAND_TWILITE_HUG: `**{{0}}** cuddled me <3`,
@@ -122,6 +127,7 @@ module.exports = {
     ACTION_COMMAND_TWILITE_YEET: `I gave **{{0}}** flying lessons for trying to yeet me!`,
     ACTION_COMMAND_TWILITE_COOKIE: `**{{0}}** gave me a virtual cookie!`,
     ACTION_COMMAND_TWILITE_SLAP: `**{{0}}** slapped me?! How dare you!`,
+    ACTION_COMMAND_TWILITE_BITE: `**{{0}}** took a bite out of my code?!`,
 
     ACTION_COMMAND_MEE6_HEADPAT: `***{{0}}** gave **{{1}}** a headpat...*`,
     ACTION_COMMAND_MEE6_HUG: `***{{0}}** hugged **{{1}}**...*`,
@@ -131,6 +137,7 @@ module.exports = {
     ACTION_COMMAND_MEE6_YEET: `**{{0}}** absolutely YEETED **{{1}}**`,
     ACTION_COMMAND_MEE6_COOKIE: `**{{0}}** gave **{{1}}** a cookie from the Dark Side`,
     ACTION_COMMAND_MEE6_SLAP: `**{{0}}** gave **{{1}}** a royal slapping`,
+    ACTION_COMMAND_MEE6_BITE: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
 
     ACTION_RETURN_BUTTON_LABEL_HEADPAT: `Return Headpat`,
     ACTION_RETURN_BUTTON_LABEL_HUG: `Return Hug`,
@@ -194,7 +201,8 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 - Right-click/long-press on the Message containing the Role Menu -> Select "Apps" -> Select " [Delete Role Menu]({{0}}) "
 - OR simply delete the Message containing the Role Menu`,
 
-    ROLE_MENU_ERROR_INVALID_CHANNEL: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.`,
+    ROLE_MENU_ERROR_INVALID_CHANNEL_FREE: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.\n\nWant to create Role Menus in Public Threads & Forum Posts? Upgrade to **TwiLite Inferno** to create Role Menus in more Channel types!`,
+    ROLE_MENU_ERROR_INVALID_CHANNEL_INFERNO: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels, Public Threads in Text Channels, and Forum Posts.`,
     ROLE_MENU_ERROR_MISSING_MANAGE_ROLES_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work, *and* that my highest Role is positioned above all the Roles you want to add to my Role Menus. (I cannot grant or revoke Roles above my highest Role)`,
     ROLE_MENU_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, but I cannot create a Role Menu in this Channel without having the **Send Messages** Permission!`,
 
@@ -401,4 +409,151 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     INVITE_GUEST_COMMAND_ERROR_GUILD_HAS_INVITES_DISABLED_BY_DISCORD: `Sorry, this Server cannot make any Invites due to Discord's Trust & Safety team revoking that ability from this Server.`,
     INVITE_GUEST_COMMAND_ERROR_APP_MISSING_CREATE_INVITE_PERMISSION: `Sorry, I cannot make a Guest Voice Invite for {{0}} since I do *not* have "Create Invite" Permission for that Voice Channel.\nPlease try again once I have been granted that Permission.`,
     INVITE_GUEST_COMMAND_ERROR_FAILED_TO_CREATE_INVITE: `Sorry, an error occurred while trying to make a Guest Voice Invite for {{0}}`,
+
+
+
+    // ******* BRANDING COMMAND
+    BRANDING_COMMAND_PANEL_HEADING: `# TwiLite's Server Branding`,
+    BRANDING_COMMAND_PANEL_DESCRIPTION: `Manage TwiLite's branding & appearance for this Server.\nEditing TwiLite's branding/appearance will *not* affect how TwiLite appears in other Servers, *only* for this Server.\n\n-# Please remember that TwiLite's custom branding/appearance will be reset if this Server's **TwiLite Inferno** subscription expires or is cancelled.`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_LABEL: `### TwiLite's Avatar`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_NO_AVATAR_SET: `:x: No custom Bot profile avatar set.`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_HAS_AVATAR_SET: `:white_check_mark: A custom Bot profile avatar is currently set.`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_LABEL: `### TwiLite's Banner`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_NO_BANNER_SET: `:x: No custom Bot profile banner set.`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_HAS_BANNER_SET: `:white_check_mark: A custom Bot profile banner is currently set.`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_LABEL: `### TwiLite's Bio (About Me)`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_NO_BIO_SET: `:x: No custom Bot profile bio set.`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_HAS_BIO_SET: `:white_check_mark: A custom Bot profile bio is currently set.`,
+    BRANDING_COMMAND_PANEL_BUTTON_EDIT_LABEL: `Bulk Edit`,
+    BRANDING_COMMAND_PANEL_BUTTON_RESET_ALL_LABEL: `Reset Branding`,
+
+    BRANDING_COMMAND_PROFILE_EDIT_SUCCESS: `Successfully set TwiLite's new custom profile branding for this Server!`,
+    BRANDING_COMMAND_PROFILE_RESET_ALL_SUCCESS: `Successfully reset TwiLite's profile branding back to its default.`,
+
+    BRANDING_COMMAND_MODAL_TITLE: `Edit Custom Branding`,
+    BRANDING_COMMAND_MODAL_AVATAR_LABEL: `Avatar`,
+    BRANDING_COMMAND_MODAL_AVATAR_DESCRIPTION: `Must be a PNG/JPG/GIF under 10MB`,
+    BRANDING_COMMAND_MODAL_BANNER_LABEL: `Banner`,
+    BRANDING_COMMAND_MODAL_BANNER_DESCRIPTION: `Must be a PNG/JPG/GIF under 10MB and at least 680 x 240 pixels`,
+    BRANDING_COMMAND_MODAL_BIO_LABEL: `Bio`,
+    BRANDING_COMMAND_MODAL_BIO_DESCRIPTION: `Supports use of default & custom emoji, and formatting markdown (excluding Masked Links & Headers)`,
+
+    BRANDING_COMMAND_MODAL_ERROR_FILE_INVALID_TYPE: `Error: {{0}} an invalid file type.\nPlease try again, making sure you upload a PNG, JPG, or GIF file.`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_SIZE_TOO_LARGE: `Error: {{0}} too large of a file.\nPlease try again, ensuring the image you upload is *less than* 10MB.`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_AVATAR_PREFIX: `The Avatar is`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_BANNER_PREFIX: `The Banner is`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_AVATAR_AND_BANNER_PREFIX: `Both the Avatar and Banner are`,
+    BRANDING_COMMAND_MODAL_ERROR_BANNER_DIMENSIONS_TOO_SMALL: `Error: The Banner's dimensions are too small.\nPlease try again, ensuring the Banner image you upload is at least 620 x 240 pixels.`,
+
+    BRANDING_COMMAND_ERROR_PROFILE_EDIT_FAILED: `Failed to set TwiLite's new custom profile branding for this Server.\nPlease see below for more details:\n\n\`\`\`{{0}}\`\`\``,
+    BRANDING_COMMAND_ERROR_PROFILE_RESET_ALL_FAILED: `Failed to reset TwiLite's profile branding back to default.`,
+    BRANDING_COMMAND_ERROR_GUILD_MISSING_INFERNO_SUBSCRIPTION: `Sorry, this Server does not have access to TwiLite's Custom Branding module.\n\nWant to customise TwiLite's profile picture, banner, and bio for this Server?\nUpgrade to **TwiLite Inferno** and gain access to the Custom Branding module and more!`,
+
+
+
+    // ******* FISH COMMAND
+    FISH_COMMAND_HEADING: `# Fishing Lake`,
+    FISH_COMMAND_USER_WENT_FISHING: `{{0}} went fishing, and reeled in {{1}}`,
+    
+    FISH_COMMAND_FISHED_CATEGORY: `-# Item category: {{0}}`,
+    FISH_COMMAND_CATEGORY_NOTHING: `Nothing`,
+    FISH_COMMAND_CATEGORY_FISH: `Fish`,
+    FISH_COMMAND_CATEGORY_JUNK: `Junk`,
+    FISH_COMMAND_CATEGORY_TREASURE: `Treasure`,
+    FISH_COMMAND_CATEGORY_SELF: `Oneself`,
+
+    FISH_COMMAND_ITEM_FISH_COD: `a codfish!`,
+    FISH_COMMAND_ITEM_FISH_EEL: `an eel!`,
+    FISH_COMMAND_ITEM_FISH_HADDOCK: `a haddock!`,
+    FISH_COMMAND_ITEM_FISH_SQUID: `some squid!`,
+    FISH_COMMAND_ITEM_FISH_PUFFERFISH: `a pufferfish!`,
+    FISH_COMMAND_ITEM_FISH_CLOWNFISH: `a clownfish!`,
+    FISH_COMMAND_ITEM_FISH_TROPICAL: `a tropical fish!`,
+    FISH_COMMAND_ITEM_FISH_SALMON: `some salmon`,
+    FISH_COMMAND_ITEM_FISH_AXOLOTL: `an axolotl!`,
+
+    FISH_COMMAND_ITEM_JUNK_TRASH: `some trash...`,
+    FISH_COMMAND_ITEM_JUNK_BONE: `some bones.`,
+    FISH_COMMAND_ITEM_JUNK_STONE: `some loose gravel.`,
+    FISH_COMMAND_ITEM_JUNK_STICK: `a stick.`,
+    FISH_COMMAND_ITEM_JUNK_NET: `someone else's fishing net!`,
+    FISH_COMMAND_ITEM_JUNK_NITRO: `an expired code for Discord Nitro.`,
+
+    FISH_COMMAND_ITEM_TREASURE_GOLD: `some gold!`,
+    FISH_COMMAND_ITEM_TREASURE_COIN: `some loose coins!`,
+    FISH_COMMAND_ITEM_TREASURE_CHEST: `a whole pirate treasure chest!`,
+    FISH_COMMAND_ITEM_TREASURE_JEWELLERY: `some jewellery.`,
+    FISH_COMMAND_ITEM_TREASURE_DIAMOND: `a diamond!`,
+
+    FISH_COMMAND_ITEM_NOTHING: `nothing.`,
+    FISH_COMMAND_ITEM_SELF: `themselves!?`,
+
+
+
+    // ******* TWITCH NOTIFICATION MODULE
+    TWITCH_NOTIF_PREMIUM_EARLY_ACCESS: `The Twitch Notification Module is still in early access for **TwiLite Inferno** powered Servers only.\n\nWant to unlock early access to this module, and more features such as Custom Branding? Upgrade to **TwiLite Inferno**!`,
+
+    TWITCH_NOTIF_PANEL_HEADING: `# Twitch Notifications`,
+    TWITCH_NOTIF_PANEL_DESCRIPTION: `Add or manage receiving "Going Live" Notifications in this Server for linked Twitch Channels.\n\n-# Please remember that this module is still in early access for **TwiLite Inferno** powered Servers. As such, it is still in active development and will be disabled should this Server's **TwiLite Inferno** subscription expires or is cancelled.`,
+    TWITCH_NOTIF_PANEL_EMPTY_PLACEHOLDER: `This Server currently has no Twitch Notifications setup. Use the button below to begin adding Twitch Notifications for this Server!`,
+    TWITCH_NOTIF_PANEL_ITEM_POSTS_IN_CHANNEL: `Posts in {{0}}`,
+    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_SINGLAR: `Pings 1 Role`,
+    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_MULTIPLE: `Pings {{0}} Roles`,
+    TWITCH_NOTIF_PANEL_ITEM_HAS_CUSTOM_MESSAGE: `Has custom message`,
+    TWITCH_NOTIF_PANEL_ITEM_AUTO_PUBLISH: `Auto-publishing enabled`,
+    
+    TWITCH_NOTIF_PANEL_NOTE_MAXIMUM_LIMIT_REACHED: `Maximum number of Twitch Notifications reached.`,
+
+    TWITCH_NOTIF_PANEL_BUTTON_ADD_NEW: `Add Twitch channel`,
+    TWITCH_NOTIF_PANEL_BUTTON_RESET: `Reset all`,
+    TWITCH_NOTIF_PANEL_BUTTON_EDIT: `Edit`,
+
+    TWITCH_NOTIF_ADD_MODAL_TITLE: `Add Twitch Notification`,
+    TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_NAME: `Twitch Channel`,
+    TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_DESCRIPTION: `The Twitch Channel's username this "go live" notification should be for`,
+    TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
+    TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `The Server Channel you want to post this notification in`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_NAME: `Role(s) to ping [Optional]`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Roles you want to ping in this notification. Will be prefixed to the notification's message.`,
+    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message [Optional]`,
+    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Use {streamerName} to include the streamer's name.`,
+    TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
+    TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `If posting to an Announcement Channel, should the notification be auto-published?`,
+
+    TWITCH_NOTIF_ADD_ERROR_INVALID_TWITCH_USERNAME: `Sorry, {{0}} could not be found as a real account on Twitch.\nPlease try again, ensuring you are typing the Twitch username exactly as it appears in Twitch.`,
+    TWITCH_NOTIF_ADD_ERROR_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "View Channel" Permission for {{1}}`,
+    TWITCH_NOTIF_ADD_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "Send Messages" Permission for {{1}}`,
+
+    TWITCH_NOTIF_ADD_ERROR_GENERIC: `There was an error trying to save your new Twitch Notification for **{{0}}**. Please try again later, or report this issue to my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED: `This Server has already added Twitch Notifications for {{0}}!`,
+
+    TWITCH_NOTIF_EDIT_MODAL_TITLE: `Edit Twitch Notification`,
+    TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\nIf you don't want to change any setting, then leave them unchanged.\n\nIf you wish to stop receiving notifications for this Twitch channel, select the "Delete Notification" checkbox at the bottom of this modal.\nIf you do *NOT* wish to delete, then leave that checkbox *blank/empty*.`,
+    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
+    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `Set where this Twitch Notification is posted to.`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_NAME: `Roles(s) to ping`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Set which Roles are pinged in this notification. Will be prefixed to the notification's message`,
+    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message`,
+    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Set the custom message for this notification. Use {streamerName} to include the streamer's name.`,
+    TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
+    TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `Set if the notification should be auto-published if posting to an Announcement Channel`,
+    TWITCH_NOTIF_EDIT_DELETION_LABEL_NAME: `Delete this Notification`,
+    TWITCH_NOTIF_EDIT_DELETION_LABEL_DESCRIPTION: `Select to fully delete receiving notifications for the {{0}} Twitch channel.`,
+
+    TWITCH_NOTIF_DELETE_ERROR_GENERIC: `Sorry, there was an error preventing deletion of Twitch Notifications for {{0}} in this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_EDIT_ERROR_GENERIC: `Sorry, there was an error preventing saving of your edited Twitch Notification settings for {{0}}.\nPlease try again, or contact my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_EDIT_ERROR_FIELDS_UNCHANGED: `The Twitch Notification settings for {{0}} were unchanged due to no edits being made to the settings.`,
+    TWITCH_NOTIF_EDIT_ERROR_DISCORD_CHANNEL_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, I cannot set {{0}} as your new notification channel due to missing the "View Channel" Permission.`,
+    TWITCH_NOTIF_EDIT_ERROR_DISCORD_CHANNEL_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, I cannot set {{0}} as your new notification channel due to missing the "Send Messages" Permission.`,
+
+    TWITCH_NOTIF_RESET_MODAL_TITLE: `Reset Twitch Notifications`,
+    TWITCH_NOTIF_RESET_MODAL_CONFIRM_LABEL_NAME: `Confirm reset`,
+    TWITCH_NOTIF_RESET_MODAL_CONFIRM_LABEL_DESCRIPTION: `Please confirm you want to fully remove *all* saved Twitch Notifications for this Server.`,
+    
+    TWITCH_NOTIF_RESET_ERROR_GENERIC: `Sorry, there was an error preventing removal of Twitch Notifications for this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
+
+    TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE: `{{0}} went live!`,
+    TWITCH_NOTIFICATION_GOING_LIVE_CATEGORY: `Category:`,
+    TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE: `Went live: {{0}}`,
+    TWITCH_NOTIFICATION_GOING_LIVE_WATCH_BUTTON_LABEL: `Watch on Twitch`,
 }

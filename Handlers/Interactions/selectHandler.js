@@ -11,10 +11,11 @@ import { JsonResponse } from '../../Utility/utilityMethods.js';
 /**
  * Handles & Runs Buttons
  * @param {import('discord-api-types/v10').APIMessageComponentSelectMenuInteraction} interaction 
+ * @param {*} cfEnv 
  * 
  * @returns {JsonResponse}
  */
-export async function handleSelect(interaction) {
+export async function handleSelect(interaction, cfEnv) {
     // Grab select's name from Custom ID
     const SelectName = interaction.data.custom_id.split("_").shift();
     const Select = await Selects[SelectName]();
@@ -116,7 +117,7 @@ export async function handleSelect(interaction) {
 
 
     // Attempt to execute Interaction
-    try { return await Select.Select.executeSelect(interaction, interactionUser); }
+    try { return await Select.Select.executeSelect(interaction, interactionUser, cfEnv); }
     catch (err) {
         console.error(err);
         return new JsonResponse({

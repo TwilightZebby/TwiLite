@@ -35,3 +35,9 @@ export const EMOJI_ROLE_ADD = {
     id: `1372493339190104094`,
     markdown: `<:RoleAdd:1372493339190104094>`
 };
+
+export const EMOJI_TWITCH_LOGO = {
+    name: `TwitchLogo`,
+    id: `1479465553088479232`,
+    markdown: `<:TwitchLogo:1479465553088479232>`
+};

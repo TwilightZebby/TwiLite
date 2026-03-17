@@ -22,8 +22,9 @@ export const Select = {
     /** Runs the Select
      * @param {import('discord-api-types/v10').APIMessageComponentSelectMenuInteraction} interaction 
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
+     * @param {*} cfEnv 
      */
-    async executeSelect(interaction, interactionUser) {
+    async executeSelect(interaction, interactionUser, cfEnv) {
         return new JsonResponse({
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {

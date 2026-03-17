@@ -11,10 +11,11 @@ import { JsonResponse } from '../../Utility/utilityMethods.js';
 /**
  * Handles & Runs Slash Commands
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * @param {*} cfEnv 
  * 
  * @returns {JsonResponse}
  */
-export async function handleSlashCommand(interaction) {
+export async function handleSlashCommand(interaction, cfEnv) {
     const Command = await SlashCommands[interaction.data.name]();
 
     // If no Command found, return
@@ -144,7 +145,7 @@ export async function handleSlashCommand(interaction) {
 
 
     // Attempt to execute Command
-    try { return await Command.SlashCommand.executeCommand(interaction, interactionUser, commandName); }
+    try { return await Command.SlashCommand.executeCommand(interaction, interactionUser, commandName, cfEnv); }
     catch (err) {
         console.error(err);
         return new JsonResponse({

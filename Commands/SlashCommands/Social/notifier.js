@@ -1,30 +1,33 @@
-import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType } from 'discord-api-types/v10';
-import { JsonResponse } from '../Utility/utilityMethods.js';
+import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, InteractionResponseType, PermissionFlagsBits, ApplicationCommandOptionType, MessageFlags, ComponentType, ButtonStyle } from 'discord-api-types/v10';
+import { listTwitchNotifications } from '../../../Modules/Notifications/TwitchNotifications.js';
+import { checkForInfernoSku, JsonResponse } from '../../../Utility/utilityMethods.js';
+import { localize } from '../../../Utility/localizeResponses.js';
+import { SKU_INFERNO_ID } from '../../../config.js';
 
 
 export const SlashCommand = {
     /** Command's Name, in fulllowercase (can include hyphens)
      * @type {String}
      */
-    name: "command-name",
+    name: "notifier",
 
     /** Command's Description
      * @type {String}
      */
-    description: "Command Description",
+    description: "Manage the Notification Module in this Server",
 
     /** Command's Localised Descriptions
      * @type {import('discord-api-types/v10').LocalizationMap}
      */
     localizedDescriptions: {
-        'en-GB': 'British Description',
-        'en-US': 'American Description'
+        'en-GB': 'Manage the Notification Module in this Server',
+        'en-US': 'Manage the Notification Module in this Server'
     },
 
     /** Command's cooldown, in seconds (whole number integers!)
      * @type {Number}
      */
-    cooldown: 3,
+    cooldown: 5,
 
     /**
      * Cooldowns for specific Subcommands
@@ -33,7 +36,7 @@ export const SlashCommand = {
     //  For ease in handling cooldowns, this should also include the root Command name as a prefix
     // In either "rootCommandName_subcommandName" or "rootCommandName_groupName_subcommandName" formats
     subcommandCooldown: {
-        "exampleName": 3
+        "notifier_twitch": 3
     },
     
 
@@ -54,6 +57,18 @@ export const SlashCommand = {
         // Contexts - 0 for GUILD, 1 for BOT_DM (DMs with the App), 2 for PRIVATE_CHANNEL (DMs/GDMs that don't include the App).
         //  MUST include at least one. PRIVATE_CHANNEL can only be used if integration_types includes USER_INSTALL
         CommandData.contexts = [ InteractionContextType.Guild ];
+        // Default Permissions
+        CommandData.default_member_permissions = String(PermissionFlagsBits.ManageGuild);
+        // Options
+        CommandData.options = [{
+            type: ApplicationCommandOptionType.Subcommand,
+            name: "twitch",
+            description: "Manage Twitch Notifications for this Server",
+            description_localizations: {
+                'en-GB': "Manage Twitch Notifications for this Server",
+                'en-US': "Manage Twitch Notifications for this Server"
+            }
+        }];
 
         return CommandData;
     },
@@ -78,12 +93,34 @@ export const SlashCommand = {
      * @param {*} cfEnv 
      */
     async executeCommand(interaction, interactionUser, usedCommandName, cfEnv) {
-        return new JsonResponse({
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: {
-                flags: MessageFlags.Ephemeral,
-                content: "This Command has not yet been implemented yet!"
+        const InputSubcommand = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Subcommand);
+
+        if ( InputSubcommand.name === "twitch" ) {
+            // Do the Premium Early Access check first
+            let hasInferno = checkForInfernoSku(interaction);
+
+            if ( hasInferno === false ) {
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
+                        /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
+                        components: [{
+                            type: ComponentType.TextDisplay,
+                            content: localize(interaction.locale, 'TWITCH_NOTIF_PREMIUM_EARLY_ACCESS')
+                        }, {
+                            type: ComponentType.ActionRow,
+                            components: [{
+                                type: ComponentType.Button,
+                                style: ButtonStyle.Premium,
+                                sku_id: SKU_INFERNO_ID
+                            }]
+                        }]
+                    }
+                });
             }
-        });
+
+            return await listTwitchNotifications(interaction, cfEnv, 'NEW');
+        }
     }
 }

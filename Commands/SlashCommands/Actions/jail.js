@@ -79,7 +79,7 @@ export const SlashCommand = {
                 required: false,
                 max_length: 500
             },
-            {
+            /* {
                 type: ApplicationCommandOptionType.Boolean,
                 name: "include-minigame",
                 description: "Set to true to include the \"break free from jail\" buttons",
@@ -88,7 +88,7 @@ export const SlashCommand = {
                     'en-US': "Set to true to include the \"break free from jail\" buttons"
                 },
                 required: false
-            },
+            }, */
         ];
 
         return CommandData;
@@ -116,7 +116,7 @@ export const SlashCommand = {
         // Grab Inputs
         const InputTarget = interaction.data.options.find(option => option.name === "target");
         const InputReason = interaction.data.options.find(option => option.name === "reason");
-        const InputIncludeMinigame = interaction.data.options.find(option => option.name === "include-minigame");
+        const InputIncludeMinigame = interaction.data.options.find(option => option.name === "include-minigame") ?? { name: "include-minigame", type: ApplicationCommandOptionType.Boolean, value: true };
 
         // Prevent usage on self
         if ( InputTarget.value === interactionUser.id ) {

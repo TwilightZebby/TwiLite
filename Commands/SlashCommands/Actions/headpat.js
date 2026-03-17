@@ -78,7 +78,7 @@ export const SlashCommand = {
                 },
                 required: false
             },
-            {
+            /* {
                 type: ApplicationCommandOptionType.Boolean,
                 name: "block-return",
                 description: "Set to TRUE to prevent the \"Return Headpat\" Button from being included in the response",
@@ -87,7 +87,7 @@ export const SlashCommand = {
                     'en-US': "Set to TRUE to prevent the \"Return Headpat\" Button from being included in the response"
                 },
                 required: false
-            },
+            }, */
             {
                 type: ApplicationCommandOptionType.String,
                 name: "reason",

@@ -170,9 +170,6 @@ export const SlashCommand = {
                 });
             }
             else {
-                console.log(`Entitlement Grant Status: ${requestGrantEntitlement.status} ${requestGrantEntitlement.statusText}`);
-                console.log(JSON.stringify(await requestGrantEntitlement.json()));
-
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
@@ -201,9 +198,6 @@ export const SlashCommand = {
                 });
             }
             else {
-                console.log(`Entitlement Grant Status: ${requestRevokeEntitlement.status} ${requestRevokeEntitlement.statusText}`);
-                console.log(JSON.stringify(await requestRevokeEntitlement.json()));
-
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {

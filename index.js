@@ -255,9 +255,6 @@ async function verifyDiscordRequest(request, env) {
 async function verifyTwitchRequest(request, env) {
     let twitchMessage = await getHmacMessage(request);
     let hmac = HMAC_PREFIX + getHmac(RANDOMLY_GENERATED_FIXED_STRING, twitchMessage);
-    //console.log(`${hmac}`);
-    //console.log(`${request.headers.get(TWITCH_MESSAGE_SIGNATURE)}`);
-    //console.log(`SIMPLE MATCHING: ${hmac == request.headers.get(TWITCH_MESSAGE_SIGNATURE)}, SECURE MATCHING: ${verifyTwitchMessage(hmac, request.headers.get(TWITCH_MESSAGE_SIGNATURE))}`);
 
     if ( true === verifyTwitchMessage(hmac, request.headers.get(TWITCH_MESSAGE_SIGNATURE)) ) {
         return { isValid: true };

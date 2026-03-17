@@ -307,7 +307,6 @@ export async function getTwitchAccessToken(cfEnv) {
 
   // Safety net for if there is no stored token
   if ( storedToken != undefined ) {
-    //console.log("Twitch token found in store. Validate it");
     let validateTokenRequest = await fetch(`https://id.twitch.tv/oauth2/validate`, {
       method: 'GET',
       headers: {
@@ -316,7 +315,6 @@ export async function getTwitchAccessToken(cfEnv) {
     });
 
     if ( validateTokenRequest.status === 200 ) {
-      //console.log("Existing Twitch Token validated.");
       return storedToken;
     }
   }
@@ -330,10 +328,7 @@ export async function getTwitchAccessToken(cfEnv) {
     }
   });
 
-  //console.log(`TWITCH TOKEN REQUEST: ${newTokenRequest.status} ${newTokenRequest.statusText}`);
-
   let resolvedTokenBody = await newTokenRequest.json();
-  //console.log(`TOKEN EXPIRES IN: ${resolvedTokenBody.expires_in}`);
 
   // Store new token && return to calling method
   await cfEnv.crimsonkv.put(`twitchToken`, resolvedTokenBody.access_token);

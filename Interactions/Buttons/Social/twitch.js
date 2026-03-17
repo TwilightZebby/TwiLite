@@ -88,6 +88,15 @@ export const Button = {
                         "max_length": 250,
                         "required": false,
                     }
+                }, {
+                    // Checkbox for setting auto-publishing state
+                    "type": ComponentType.Label,
+                    "label": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME'),
+                    "description": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION'),
+                    "component": {
+                        "type": ComponentType.Checkbox,
+                        "custom_id": `auto-publish`
+                    }
                 }]
             };
 

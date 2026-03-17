@@ -1,4 +1,4 @@
-import { ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
+import { ChannelType, ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 import { checkForPermissionInChannel, getTwitchAccessToken, JsonResponse } from '../../../Utility/utilityMethods.js';
 import { TwitchApiClient } from '../../../Utility/utilityConstants.js';
 import { localize } from '../../../Utility/localizeResponses.js';
@@ -37,10 +37,14 @@ export const Modal = {
             let inputTwitchName = null;
             /** @type {?String} */
             let inputDiscordChannelId = null;
+            /** @type {import('discord-api-types/v10').APIInteractionDataResolvedChannel|null} */
+            let resolvedInputChannel = null;
             /** @type {?Array<String>} */
             let inputRoleIds = null;
             /** @type {?String} */
             let inputCustomMessage = null;
+            /** @type {Boolean} */
+            let inputAutoPublishAnnouncement = false;
 
             for (let i = 0; i <= ModalComponents.length - 1; i++) {
                 // Safety Net
@@ -53,6 +57,7 @@ export const Modal = {
                     // Discord Channel Id
                     else if ( tempTopLevelComp.custom_id === "discord-channel" ) {
                         inputDiscordChannelId = tempTopLevelComp.values.shift();
+                        resolvedInputChannel = interaction.data.resolved?.channels[inputDiscordChannelId];
                     }
                     // Role Ids
                     else if ( tempTopLevelComp.custom_id === "roles-pinged" ) {
@@ -61,6 +66,10 @@ export const Modal = {
                     // Custom Message
                     else if ( tempTopLevelComp.custom_id === "custom-message" ) {
                         inputCustomMessage = tempTopLevelComp.value;
+                    }
+                    // Auto-publish
+                    else if ( tempTopLevelComp.custom_id === "auto-publish" ) {
+                        inputAutoPublishAnnouncement = tempTopLevelComp.value;
                     }
                 }
             }
@@ -125,6 +134,10 @@ export const Modal = {
             }
 
 
+            // If input channel is not an Announcement-type Channel, force-set the "Auto Publish" field to `false`
+            if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { inputAutoPublishAnnouncement = false; }
+
+
             // Validation complete, now create Twitch Webhook & store to KV
             try {
                 // Create Twitch EventSub Webhook subscription
@@ -166,6 +179,7 @@ export const Modal = {
                 // Store to DB
                 /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchGoLiveConfig}*/
                 let storeData = {
+                    TwitchWebhookSubscriptionId: "",
                     TwitchChannelId: twitchUser.id,
                     TwitchChannelName: twitchUser.name,
                     DiscordChannelId: inputDiscordChannelId,
@@ -173,7 +187,7 @@ export const Modal = {
                     DiscordGuildLocale: interaction.guild_locale,
                     CustomMessage: inputCustomMessage != "" ? inputCustomMessage : "",
                     PingRoleIds: inputRoleIds.length > 0 ? inputRoleIds : [],
-                    TwitchWebhookSubscriptionId: ""
+                    AutoPublishAnnouncement: inputAutoPublishAnnouncement
                 };
 
                 if ( twitchApiRequest.status === 202 ) {
@@ -226,6 +240,8 @@ export const Modal = {
             // Grab inputs
             /** @type {?String} */
             let inputDiscordChannelId = null;
+            /** @type {import('discord-api-types/v10').APIInteractionDataResolvedChannel|null} */
+            let resolvedInputChannel = null;
             /** @type {?Array<String>} */
             let inputRoleIds = null;
             /** @type {?String} */
@@ -240,6 +256,7 @@ export const Modal = {
                     // Discord Channel Id
                     if ( tempTopLevelComp.custom_id === "discord-channel" ) {
                         inputDiscordChannelId = tempTopLevelComp.values.shift();
+                        resolvedInputChannel = interaction.data.resolved?.channels[inputDiscordChannelId];
                     }
                     // Role Ids
                     else if ( tempTopLevelComp.custom_id === "roles-pinged" ) {
@@ -375,6 +392,11 @@ export const Modal = {
                 // Validation successful, set new value
                 selectedTwitchNotificationObject.DiscordChannelId = inputDiscordChannelId;
             }
+
+            // If input channel is not an Announcement-type Channel, force-set the "Auto Publish" field to `false`
+            //   NOTE: Since Discord has a max limit of 5 top-level components per Modal, and the "Edit" Modal is already at that limit - I cannot allow for editing this field after creation.
+            //         As such, I will have to handle the Channel's type changing here and ignore the fact the User cannot edit this setting without deleting & re-creating the notification config
+            if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { selectedTwitchNotificationObject.AutoPublishAnnouncement = false; }
 
             // Pinged Roles
             if ( (clonedInputRoleIds.sort().toString() !== clonedStorageRoleId.sort().toString()) ) {

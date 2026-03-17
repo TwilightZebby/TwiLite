@@ -4,6 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  undici@>=7.0.0 <7.24.0: '>=7.24.0'
+  undici@>=7.17.0 <7.24.0: '>=7.24.0'
+
 importers:
 
   .:
@@ -43,8 +47,8 @@ importers:
         version: 7.24.4
     devDependencies:
       wrangler:
-        specifier: ^4.73.0
-        version: 4.73.0
+        specifier: ^4.74.0
+        version: 4.74.0
 
 packages:
 
@@ -568,8 +572,8 @@ packages:
   lodash@4.17.23:
     resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==, tarball: https://registry.npmjs.org/lodash/-/lodash-4.17.23.tgz}
 
-  miniflare@4.20260312.0:
-    resolution: {integrity: sha512-pieP2rfXynPT6VRINYaiHe/tfMJ4c5OIhqRlIdLF6iZ9g5xgpEmvimvIgMpgAdDJuFlrLcwDUi8MfAo2R6dt/w==, tarball: https://registry.npmjs.org/miniflare/-/miniflare-4.20260312.0.tgz}
+  miniflare@4.20260312.1:
+    resolution: {integrity: sha512-YSWxec9ssisqkQgaCgcIQxZlB41E9hMiq1nxUgxXHRrE9NsfyC6ptSt8yfgBobsKIseAVKLTB/iEDpMumBv8oA==, tarball: https://registry.npmjs.org/miniflare/-/miniflare-4.20260312.1.tgz}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -623,10 +627,6 @@ packages:
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==, tarball: https://registry.npmjs.org/undici-types/-/undici-types-7.18.2.tgz}
 
-  undici@7.18.2:
-    resolution: {integrity: sha512-y+8YjDFzWdQlSE9N5nzKMT3g4a5UBX1HKowfdXh0uvAnTaqqwqB92Jt4UXBAeKekDs5IaDKyJFR4X1gYVCgXcw==, tarball: https://registry.npmjs.org/undici/-/undici-7.18.2.tgz}
-    engines: {node: '>=20.18.1'}
-
   undici@7.24.4:
     resolution: {integrity: sha512-BM/JzwwaRXxrLdElV2Uo6cTLEjhSb3WXboncJamZ15NgUURmvlXvxa6xkwIOILIjPNo9i8ku136ZvWV0Uly8+w==, tarball: https://registry.npmjs.org/undici/-/undici-7.24.4.tgz}
     engines: {node: '>=20.18.1'}
@@ -643,8 +643,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@4.73.0:
-    resolution: {integrity: sha512-VJXsqKDFCp6OtFEHXITSOR5kh95JOknwPY8m7RyQuWJQguSybJy43m4vhoCSt42prutTef7eeuw7L4V4xiynGw==, tarball: https://registry.npmjs.org/wrangler/-/wrangler-4.73.0.tgz}
+  wrangler@4.74.0:
+    resolution: {integrity: sha512-3qprbhgdUyqYGHZ+Y1k0gsyHLMOlLrKL/HU0LDqLlCkbsKPprUA0/ThE4IZsxD84xAAXY6pv5JUuxS2+OnMa3A==, tarball: https://registry.npmjs.org/wrangler/-/wrangler-4.74.0.tgz}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -1115,11 +1115,11 @@ snapshots:
 
   lodash@4.17.23: {}
 
-  miniflare@4.20260312.0:
+  miniflare@4.20260312.1:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       sharp: 0.34.5
-      undici: 7.18.2
+      undici: 7.24.4
       workerd: 1.20260312.1
       ws: 8.18.0
       youch: 4.1.0-beta.10
@@ -1189,8 +1189,6 @@ snapshots:
 
   undici-types@7.18.2: {}
 
-  undici@7.18.2: {}
-
   undici@7.24.4: {}
 
   unenv@2.0.0-rc.24:
@@ -1207,13 +1205,13 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260312.1
       '@cloudflare/workerd-windows-64': 1.20260312.1
 
-  wrangler@4.73.0:
+  wrangler@4.74.0:
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
       '@cloudflare/unenv-preset': 2.15.0(unenv@2.0.0-rc.24)(workerd@1.20260312.1)
       blake3-wasm: 2.1.5
       esbuild: 0.27.3
-      miniflare: 4.20260312.0
+      miniflare: 4.20260312.1
       path-to-regexp: 6.3.0
       unenv: 2.0.0-rc.24
       workerd: 1.20260312.1

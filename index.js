@@ -56,10 +56,8 @@ const HMAC_PREFIX = 'sha256=';
 router.post('/twitch-webhooks', async (request, env) => {
     // Verify request
     const { isValid } = await verifyTwitchRequest(request.clone(), env);
-    //console.log(`IS VALID: ${isValid}`);
 
     if ( !isValid ) {
-        console.log(`Invalid request for Twitch Module`);
         return new Response(null, { status: 403 });
     }
 
@@ -67,11 +65,8 @@ router.post('/twitch-webhooks', async (request, env) => {
     
     // Response for Challenge Requests
     if ( request.headers.get(TWITCH_MESSAGE_TYPE) === 'webhook_callback_verification' ) {
-        console.log(`Twitch validation request made`);
         return new Response(`${eventBody.challenge}`, { status: 200, headers: { "Content-Type": "text/plain" } });
     }
-
-    console.log(`Twitch Webhook Event handled.`);
 
     // Fetch stored notification config here, so that we are not fetching it for each and every single Twitch EventSub notification (future-proofing)
     /** @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/

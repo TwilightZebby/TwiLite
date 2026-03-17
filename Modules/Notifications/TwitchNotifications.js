@@ -6,6 +6,7 @@ import { EMOJI_TWITCH_LOGO } from '../../Assets/AppEmojis.js';
 
 /**
  * @typedef {Object} TwitchGoLiveConfig
+ * @property {String} TwitchWebhookSubscriptionId The ID of the Twitch Webhook Subscription
  * @property {String} TwitchChannelId ID of the Twitch Channel this notification is for
  * @property {String} TwitchChannelName Username of the Twitch Channel this notification is for
  * @property {String} DiscordChannelId ID of the Discord Channel to post this notification in
@@ -13,7 +14,7 @@ import { EMOJI_TWITCH_LOGO } from '../../Assets/AppEmojis.js';
  * @property {import('discord-api-types/v10').Locale} DiscordGuildLocale The locale for the Discord Guild. Used so we don't have to call Discord's API every time a new Notification is sent.
  * @property {String} CustomMessage A custom notification message for going live, or an empty string if Default Message is wanted instead
  * @property {Array<String>} PingRoleIds An array of Role IDs for Roles to ping in the go live notification, or an empty array for no Roles
- * @property {String} TwitchWebhookSubscriptionId The ID of the Twitch Webhook Subscription
+ * @property {Boolean} AutoPublishAnnouncement Should the notification be automatically published, if posting to an Announcement Channel on Discord. Will be force set to FALSE if `DiscordChannelId` does not point to an Announcement-type Channel.
  * @public
  */
 
@@ -366,6 +367,19 @@ export async function processStreamOnlineEvents(streamUpEventData, twitchStreamD
     });
     
     console.log(`Attempt to send Twitch Notification to Discord: ${requestCreateMessage.status} ${requestCreateMessage.statusText}`);
+
+    // If posting to an announcement channel AND `AutoPublishAnnouncement` config field is `true`, cross-post the message
+    if ( (requestCreateMessage.status === 200) && (goLiveConfig.AutoPublishAnnouncement === true) ) {
+        /** @type {import('discord-api-types/v10').APIMessage} */
+        let returnedCreatedMessage = await requestCreateMessage.json();
+
+        let requestPublishMessage = await fetch(`https://discord.com/api/v10/channels/${goLiveConfig.DiscordChannelId}/messages/${returnedCreatedMessage.id}/crosspost`, {
+            method: 'POST',
+            headers: DefaultDiscordRequestHeaders
+        });
+
+        console.log(`Attempt to cross-post message in Announcement Channel: ${requestPublishMessage.status} ${requestPublishMessage.statusText}`);
+    }
     
     return;
 }

@@ -108,27 +108,33 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
 
     // atEveryone
     if ( InputTarget.value === interaction.guild_id ) {
+        InputBlockReturn.value = true;
         displayMessage = localize(CurrentLocale, `ACTION_COMMAND_EVERYONE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
     }
     // atRole
     else if ( interaction.data.resolved.roles?.[InputTarget.value] != undefined ) {
         forceDisplayEmbed = true;
+        InputBlockReturn.value = true;
         displayMessage = localize(CurrentLocale, `ACTION_COMMAND_ROLE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@&${InputTarget.value}>`);
     }
     // atUser (used on self)
     else if ( InputTarget.value === InteractionTriggeringUserId ) {
+        InputBlockReturn.value = true;
         displayMessage = localize(CurrentLocale, `ACTION_COMMAND_SELF_USER_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
     }
     // atUser (used on this app)
     else if ( InputTarget.value === DISCORD_APP_USER_ID ) {
+        InputBlockReturn.value = true;
         displayMessage = localize(CurrentLocale, `ACTION_COMMAND_TWILITE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
     }
     // atUser (used on the yucky Mee6 app)
     else if ( InputTarget.value === '159985870458322944' ) {
+        InputBlockReturn.value = true;
         displayMessage = localize(CurrentLocale, `ACTION_COMMAND_MEE6_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@159985870458322944>`);
     }
     // atUser (used on any app that isn't TwiLite or Mee6)
     else if ( interaction.data.resolved.users?.[InputTarget.value]?.bot === true ) {
+        InputBlockReturn.value = true;
         displayMessage = localize(CurrentLocale, `ACTION_COMMAND_OTHER_APPS_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@${InputTarget.value}>`);
     }
     // atUser (used on any human User)

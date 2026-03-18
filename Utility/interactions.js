@@ -10,6 +10,9 @@ export const SlashCommands = {
     'slap': () => import('../Commands/SlashCommands/Actions/slap.js'),
     'yeet': () => import('../Commands/SlashCommands/Actions/yeet.js'),
     'bite': () => import('../Commands/SlashCommands/Actions/bite.js'),
+    'lick': () => import('../Commands/SlashCommands/Actions/lick.js'),
+    'glare': () => import('../Commands/SlashCommands/Actions/glare.js'),
+    'explode': () => import('../Commands/SlashCommands/Actions/explode.js'),
     'fish': () => import('../Commands/SlashCommands/Actions/fish.js'),
 
     // ***** FOR ROLE MENUS

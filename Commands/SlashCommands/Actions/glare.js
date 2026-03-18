@@ -8,19 +8,19 @@ export const SlashCommand = {
     /** Command's Name, in fulllowercase (can include hyphens)
      * @type {String}
      */
-    name: "slap",
+    name: "glare",
 
     /** Command's Description
      * @type {String}
      */
-    description: "Slaps the selected target",
+    description: "Glare at someone",
 
     /** Command's Localised Descriptions
      * @type {import('discord-api-types/v10').LocalizationMap}
      */
     localizedDescriptions: {
-        'en-GB': 'Slaps the selected target',
-        'en-US': 'Slaps the selected target'
+        'en-GB': 'Glare at someone',
+        'en-US': 'Glare at someone'
     },
 
     /** Command's cooldown, in seconds (whole number integers!)
@@ -61,10 +61,10 @@ export const SlashCommand = {
             {
                 type: ApplicationCommandOptionType.Mentionable,
                 name: "target",
-                description: "The target you want to slap",
+                description: "The target you want to glare at",
                 description_localizations: {
-                    'en-GB': "The target you want to slap",
-                    'en-US': "The target you want to slap"
+                    'en-GB': "The target you want to glare at",
+                    'en-US': "The target you want to glare at"
                 },
                 required: true
             },
@@ -78,16 +78,6 @@ export const SlashCommand = {
                 },
                 required: false
             },
-            /* {
-                type: ApplicationCommandOptionType.Boolean,
-                name: "block-return",
-                description: "Set to TRUE to prevent the \"Return Slap\" Button from being included in the response",
-                description_localizations: {
-                    'en-GB': "Set to TRUE to prevent the \"Return Slap\" Button from being included in the response",
-                    'en-US': "Set to TRUE to prevent the \"Return Slap\" Button from being included in the response"
-                },
-                required: false
-            }, */
             {
                 type: ApplicationCommandOptionType.String,
                 name: "reason",

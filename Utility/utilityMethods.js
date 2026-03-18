@@ -335,6 +335,15 @@ export async function getTwitchAccessToken(cfEnv) {
   return resolvedTokenBody.access_token;
 }
 
+/**
+ * Forces a synchronous pause in code
+ * 
+ * @param {Number} ms Number of milliseconds to pause for
+ */
+export function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Json Response Class
 export class JsonResponse extends Response {
     constructor(body, init) {

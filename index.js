@@ -16,7 +16,7 @@ import { handleEntitlementCreate } from './Handlers/WebhookEvents/entitlementCre
 import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpdate.js';
 import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
-import { JsonResponse } from './Utility/utilityMethods.js';
+import { delay, JsonResponse } from './Utility/utilityMethods.js';
 import { TwitchApiClient } from './Utility/utilityConstants.js';
 import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
 
@@ -74,6 +74,9 @@ router.post('/twitch-webhooks', async (request, env) => {
 
     // ******* STREAM UP/ONLINE NOTIFICATION
     if ( eventBody["subscription"]["type"] === "stream.online" ) {
+        // Force-pause for 30 seconds so that we can be EXTRA SURE Twitch's API does update to reflect there is a stream going on now
+        await delay(30000);
+        
         // Grab Twitch data needed
         /** @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchStreamUpEventSubData} */
         let streamUpData = eventBody["event"];

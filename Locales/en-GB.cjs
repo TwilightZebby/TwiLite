@@ -78,6 +78,9 @@ module.exports = {
     ACTION_COMMAND_OTHER_USER_SLAP: `**{{0}}** slapped **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_JAIL: `**{{0}}** was sent to jail by **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_BITE: `**{{0}}** gave **{{1}}** an affectionate bite`,
+    ACTION_COMMAND_OTHER_USER_LICK: `**{{0}}** gave **{{1}}** an affectionate lick`,
+    ACTION_COMMAND_OTHER_USER_GLARE: `**{{0}}** glares at **{{1}}**...`,
+    ACTION_COMMAND_OTHER_USER_EXPLODE: `**{{0}}** wants to explode **{{1}}** with their mind!`,
 
     ACTION_COMMAND_SELF_USER_HEADPAT: `**{{0}}** gave themself a headpat`,
     ACTION_COMMAND_SELF_USER_HUG: `**{{0}}** gave themself a cuddle`,
@@ -88,6 +91,9 @@ module.exports = {
     ACTION_COMMAND_SELF_USER_COOKIE: `**{{0}}** snuck a cookie out of the cookie jar for themselves`,
     ACTION_COMMAND_SELF_USER_SLAP: `**{{0}}** slapped themselves`,
     ACTION_COMMAND_SELF_USER_BITE: `**{{0}}** took a bite out of themselves`,
+    ACTION_COMMAND_SELF_USER_LICK: `**{{0}}** licked themselves`,
+    ACTION_COMMAND_SELF_USER_GLARE: `**{{0}}** glares at themself in the mirror`,
+    ACTION_COMMAND_SELF_USER_EXPLODE: `**{{0}}** thought they were a Minecraft Creeper and self-exploded!`,
 
     ACTION_COMMAND_ROLE_HEADPAT: `**{{0}}** gave everyone with **{{1}}** headpats`,
     ACTION_COMMAND_ROLE_HUG: `**{{0}}** gave everyone with **{{1}}** a group hug`,
@@ -98,6 +104,9 @@ module.exports = {
     ACTION_COMMAND_ROLE_COOKIE: `**{{0}}** gave **{{1}}** a cookie`,
     ACTION_COMMAND_ROLE_SLAP: `**{{0}}** collectively slapped **{{1}}**`,
     ACTION_COMMAND_ROLE_BITE: `**{{0}}** took a collectively bite out of **{{1}}**`,
+    ACTION_COMMAND_ROLE_LICK: `**{{0}}** collectively licked **{{1}}**`,
+    ACTION_COMMAND_ROLE_GLARE: `**{{0}}** glares collectively at **{{1}}**`,
+    ACTION_COMMAND_ROLE_EXPLODE: `**{{0}}** caught **{{1}}** in a Minecraft TNT trap!`,
 
     ACTION_COMMAND_EVERYONE_HEADPAT: `**{{0}}** gave \`@everyone\` a headpat`,
     ACTION_COMMAND_EVERYONE_HUG: `**{{0}}** gave \`@everyone\` a group hug`,
@@ -108,6 +117,9 @@ module.exports = {
     ACTION_COMMAND_EVERYONE_COOKIE: `**{{0}}** gave \`@everyone\` a cookie`,
     ACTION_COMMAND_EVERYONE_SLAP: `**{{0}}** slapped \`@everyone\``,
     ACTION_COMMAND_EVERYONE_BITE: `**{{0}}** collectively bites \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_LICK: `**{{0}}** collectively licks \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_GLARE: `**{{0}}** glares \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_EXPLODE: `**{{0}}** used \`/tnt\` on \`@everyone\`?!`,
 
     ACTION_COMMAND_OTHER_APPS_HEADPAT: `**{{0}}** gave **{{1}}** a virtual headpat`,
     ACTION_COMMAND_OTHER_APPS_HUG: `**{{0}}** virtually cuddled **{{1}}**`,
@@ -118,6 +130,9 @@ module.exports = {
     ACTION_COMMAND_OTHER_APPS_COOKIE: `**{{0}}** gave **{{1}}** a virtual cookie`,
     ACTION_COMMAND_OTHER_APPS_SLAP: `**{{0}}** slapped **{{1}}**'s physical servers`,
     ACTION_COMMAND_OTHER_APPS_BITE: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
+    ACTION_COMMAND_OTHER_APPS_LICK: `**{{0}}** discovered electricity by licking **{{1}}**'s internal circuits`,
+    ACTION_COMMAND_OTHER_APPS_GLARE: `**{{0}}** glared at **{{1}}**'s code`,
+    ACTION_COMMAND_OTHER_APPS_EXPLODE: `**{{0}}** wants to explode **{{1}}**'s internal servers`,
 
     ACTION_COMMAND_TWILITE_HEADPAT: `**{{0}}** gave me a headpat <3`,
     ACTION_COMMAND_TWILITE_HUG: `**{{0}}** cuddled me <3`,
@@ -128,6 +143,9 @@ module.exports = {
     ACTION_COMMAND_TWILITE_COOKIE: `**{{0}}** gave me a virtual cookie!`,
     ACTION_COMMAND_TWILITE_SLAP: `**{{0}}** slapped me?! How dare you!`,
     ACTION_COMMAND_TWILITE_BITE: `**{{0}}** took a bite out of my code?!`,
+    ACTION_COMMAND_TWILITE_LICK: `**{{0}}** licked me?! Well now you know what electricity tastes like...`,
+    ACTION_COMMAND_TWILITE_GLARE: `**{{0}}** glared at me, and I glare back <:squint:1418164398404669500>`,
+    ACTION_COMMAND_TWILITE_EXPLODE: `**{{0}}** exploded...ME?!`,
 
     ACTION_COMMAND_MEE6_HEADPAT: `***{{0}}** gave **{{1}}** a headpat...*`,
     ACTION_COMMAND_MEE6_HUG: `***{{0}}** hugged **{{1}}**...*`,
@@ -138,6 +156,9 @@ module.exports = {
     ACTION_COMMAND_MEE6_COOKIE: `**{{0}}** gave **{{1}}** a cookie from the Dark Side`,
     ACTION_COMMAND_MEE6_SLAP: `**{{0}}** gave **{{1}}** a royal slapping`,
     ACTION_COMMAND_MEE6_BITE: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
+    ACTION_COMMAND_MEE6_LICK: `**{{0}}** licked **{{1}}**'s rotten code, and became ill from doing so`,
+    ACTION_COMMAND_MEE6_GLARE: `**{{0}}** glares menancingly at **{{1}}**`,
+    ACTION_COMMAND_MEE6_EXPLODE: `**{{0}}** explodes **{{1}}** over and over again!`,
 
     ACTION_RETURN_BUTTON_LABEL_HEADPAT: `Return Headpat`,
     ACTION_RETURN_BUTTON_LABEL_HUG: `Return Hug`,

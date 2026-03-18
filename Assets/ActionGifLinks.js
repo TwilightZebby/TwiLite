@@ -120,5 +120,39 @@ export const ActionGifs = {
         "https://twilite.is-from.space/r/action-bite-0007.gif",
         "https://twilite.is-from.space/r/action-bite-0008.gif",
         "https://twilite.is-from.space/r/action-bite-0009.gif"
-    ]
+    ],
+
+    "lick": [
+        "https://twilite.is-from.space/r/action-lick-0001.gif",
+        "https://twilite.is-from.space/r/action-lick-0002.gif",
+        "https://twilite.is-from.space/r/action-lick-0003.gif",
+        "https://twilite.is-from.space/r/action-lick-0004.gif",
+        "https://twilite.is-from.space/r/action-lick-0005.gif",
+        "https://twilite.is-from.space/r/action-lick-0006.gif",
+        "https://twilite.is-from.space/r/action-lick-0007.gif",
+        "https://twilite.is-from.space/r/action-lick-0008.gif",
+        "https://twilite.is-from.space/r/action-lick-0009.gif"
+    ],
+
+    "glare": [
+        "https://twilite.is-from.space/r/action-glare-0001.gif",
+        "https://twilite.is-from.space/r/action-glare-0002.gif",
+        "https://twilite.is-from.space/r/action-glare-0003.gif",
+        "https://twilite.is-from.space/r/action-glare-0004.gif",
+        "https://twilite.is-from.space/r/action-glare-0005.gif",
+        "https://twilite.is-from.space/r/action-glare-0006.gif",
+        "https://twilite.is-from.space/r/action-glare-0007.gif",
+        "https://twilite.is-from.space/r/action-glare-0008.gif"
+    ],
+
+    "explode": [
+        "https://twilite.is-from.space/r/action-explode-0001.gif",
+        "https://twilite.is-from.space/r/action-explode-0002.gif",
+        "https://twilite.is-from.space/r/action-explode-0003.gif",
+        "https://twilite.is-from.space/r/action-explode-0004.gif",
+        "https://twilite.is-from.space/r/action-explode-0005.gif",
+        "https://twilite.is-from.space/r/action-explode-0006.gif",
+        "https://twilite.is-from.space/r/action-explode-0007.gif",
+        "https://twilite.is-from.space/r/action-explode-0008.gif"
+    ],
 };

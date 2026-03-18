@@ -82,6 +82,7 @@ router.post('/twitch-webhooks', async (request, env) => {
         if ( fetchedStreamData == null ) {
             // Since this is being run on a CF Worker, we don't get a lot of time in order to do stuff.
             //   As such, I cannot do a "loop with few minutes pause between each cycle in order to wait for Twitch's API to cache it" thing here
+            console.log(`No Twitch Stream Data found for ${streamUpData.broadcaster_user_name}`);
             return new Response(null, { status: 204 });
         }
 

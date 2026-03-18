@@ -2,6 +2,7 @@ import { ComponentType, InteractionResponseType, MessageFlags, TextInputStyle } 
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { DefaultDiscordRequestHeaders } from '../../../Utility/utilityConstants.js';
+import { showBrandingPanel } from '../../../Modules/BrandingModule.js';
 
 
 export const Button = {
@@ -36,29 +37,19 @@ export const Button = {
             let resetRequest = await fetch(`https://discord.com/api/v10/guilds/${interaction.guild_id}/members/@me`, {
                 method: 'PATCH',
                 headers: DefaultDiscordRequestHeaders,
-                body: {
+                body: JSON.stringify({
                     "banner": null,
                     "avatar": null,
                     "bio": null
-                }
+                })
             });
 
             if ( resetRequest.status === 200 ) {
-                return new JsonResponse({
-                    type: InteractionResponseType.UpdateMessage,
-                    data: {
-                        flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
-                        /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
-                        components: [{
-                            "type": ComponentType.TextDisplay,
-                            "content": localize(interaction.locale, 'BRANDING_COMMAND_PROFILE_RESET_ALL_SUCCESS')
-                        }]
-                    }
-                });
+                return await showBrandingPanel(interaction, 'EDIT');
             }
             else {
                 return new JsonResponse({
-                    type: InteractionResponseType.UpdateMessage,
+                    type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
                         flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
                         /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */

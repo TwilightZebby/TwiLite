@@ -448,9 +448,6 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     BRANDING_COMMAND_PANEL_BUTTON_EDIT_LABEL: `Bulk Edit`,
     BRANDING_COMMAND_PANEL_BUTTON_RESET_ALL_LABEL: `Reset Branding`,
 
-    BRANDING_COMMAND_PROFILE_EDIT_SUCCESS: `Successfully set TwiLite's new custom profile branding for this Server!`,
-    BRANDING_COMMAND_PROFILE_RESET_ALL_SUCCESS: `Successfully reset TwiLite's profile branding back to its default.`,
-
     BRANDING_COMMAND_MODAL_TITLE: `Edit Custom Branding`,
     BRANDING_COMMAND_MODAL_AVATAR_LABEL: `Avatar`,
     BRANDING_COMMAND_MODAL_AVATAR_DESCRIPTION: `Must be a PNG/JPG/GIF under 10MB`,
@@ -466,7 +463,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     BRANDING_COMMAND_MODAL_ERROR_FILE_AVATAR_AND_BANNER_PREFIX: `Both the Avatar and Banner are`,
     BRANDING_COMMAND_MODAL_ERROR_BANNER_DIMENSIONS_TOO_SMALL: `Error: The Banner's dimensions are too small.\nPlease try again, ensuring the Banner image you upload is at least 620 x 240 pixels.`,
 
-    BRANDING_COMMAND_ERROR_PROFILE_EDIT_FAILED: `Failed to set TwiLite's new custom profile branding for this Server.\nPlease see below for more details:\n\n\`\`\`{{0}}\`\`\``,
+    BRANDING_COMMAND_ERROR_PROFILE_EDIT_FAILED: `Failed to set TwiLite's new custom profile branding for this Server.\nPlease see below for more details:\n\n\`\`\`json\n{{0}}\`\`\``,
     BRANDING_COMMAND_ERROR_PROFILE_RESET_ALL_FAILED: `Failed to reset TwiLite's profile branding back to default.`,
     BRANDING_COMMAND_ERROR_GUILD_MISSING_INFERNO_SUBSCRIPTION: `Sorry, this Server does not have access to TwiLite's Custom Branding module.\n\nWant to customise TwiLite's profile picture, banner, and bio for this Server?\nUpgrade to **TwiLite Inferno** and gain access to the Custom Branding module and more!`,
 

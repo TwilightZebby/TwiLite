@@ -2,6 +2,7 @@ import { ComponentType, InteractionResponseType, MessageFlags } from 'discord-ap
 import { JsonResponse, resolveImage } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { DefaultDiscordRequestHeaders } from '../../../Utility/utilityConstants.js';
+import { showBrandingPanel } from '../../../Modules/BrandingModule.js';
 
 
 const AcceptedFileTypes = [ "image/png", "image/jpeg", "image/gif" ];
@@ -197,23 +198,13 @@ export const Modal = {
         });
 
         if ( requestUpdateCurrentMember.status === 200 ) {
-            return new JsonResponse({
-                type: InteractionResponseType.UpdateMessage,
-                data: {
-                    flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
-                    /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
-                    components: [{
-                        "type": ComponentType.TextDisplay,
-                        "content": localize(interaction.locale, 'BRANDING_COMMAND_PROFILE_EDIT_SUCCESS')
-                    }]
-                }
-            });
+            return await showBrandingPanel(interaction, 'EDIT');
         }
         else {
             let resolveReturnedData = await requestUpdateCurrentMember.json();
 
             return new JsonResponse({
-                type: InteractionResponseType.UpdateMessage,
+                type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
                     /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */

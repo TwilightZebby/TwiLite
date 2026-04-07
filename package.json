@@ -24,10 +24,11 @@
     "@twurple/auth": "8.0.3",
     "@twurple/eventsub-base": "8.0.3",
     "@twurple/eventsub-http": "8.0.3",
-    "discord-api-types": "0.38.41",
+    "discord-api-types": "0.38.44",
     "discord-interactions": "4.4.0",
     "emoji-regex": "10.6.0",
     "itty-router": "5.0.23",
+    "mongodb": "7.1.1",
     "undici": "7.24.5"
   },
   "devDependencies": {

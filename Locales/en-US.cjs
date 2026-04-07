@@ -78,6 +78,9 @@ module.exports = {
     ACTION_COMMAND_OTHER_USER_SLAP: `**{{0}}** slapped **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_JAIL: `**{{0}}** was sent to jail by **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_BITE: `**{{0}}** gave **{{1}}** an affectionate bite`,
+    ACTION_COMMAND_OTHER_USER_LICK: `**{{0}}** gave **{{1}}** an affectionate lick`,
+    ACTION_COMMAND_OTHER_USER_GLARE: `**{{0}}** glares at **{{1}}**...`,
+    ACTION_COMMAND_OTHER_USER_EXPLODE: `**{{0}}** wants to explode **{{1}}** with their mind!`,
 
     ACTION_COMMAND_SELF_USER_HEADPAT: `**{{0}}** gave themself a headpat`,
     ACTION_COMMAND_SELF_USER_HUG: `**{{0}}** gave themself a cuddle`,
@@ -88,6 +91,9 @@ module.exports = {
     ACTION_COMMAND_SELF_USER_COOKIE: `**{{0}}** snuck a cookie out of the cookie jar for themselves`,
     ACTION_COMMAND_SELF_USER_SLAP: `**{{0}}** slapped themselves`,
     ACTION_COMMAND_SELF_USER_BITE: `**{{0}}** took a bite out of themselves`,
+    ACTION_COMMAND_SELF_USER_LICK: `**{{0}}** licked themselves`,
+    ACTION_COMMAND_SELF_USER_GLARE: `**{{0}}** glares at themself in the mirror`,
+    ACTION_COMMAND_SELF_USER_EXPLODE: `**{{0}}** thought they were a Minecraft Creeper and self-exploded!`,
 
     ACTION_COMMAND_ROLE_HEADPAT: `**{{0}}** gave everyone with **{{1}}** headpats`,
     ACTION_COMMAND_ROLE_HUG: `**{{0}}** gave everyone with **{{1}}** a group hug`,
@@ -98,6 +104,9 @@ module.exports = {
     ACTION_COMMAND_ROLE_COOKIE: `**{{0}}** gave **{{1}}** a cookie`,
     ACTION_COMMAND_ROLE_SLAP: `**{{0}}** collectively slapped **{{1}}**`,
     ACTION_COMMAND_ROLE_BITE: `**{{0}}** took a collectively bite out of **{{1}}**`,
+    ACTION_COMMAND_ROLE_LICK: `**{{0}}** collectively licked **{{1}}**`,
+    ACTION_COMMAND_ROLE_GLARE: `**{{0}}** glares collectively at **{{1}}**`,
+    ACTION_COMMAND_ROLE_EXPLODE: `**{{0}}** caught **{{1}}** in a Minecraft TNT trap!`,
 
     ACTION_COMMAND_EVERYONE_HEADPAT: `**{{0}}** gave \`@everyone\` a headpat`,
     ACTION_COMMAND_EVERYONE_HUG: `**{{0}}** gave \`@everyone\` a group hug`,
@@ -108,6 +117,9 @@ module.exports = {
     ACTION_COMMAND_EVERYONE_COOKIE: `**{{0}}** gave \`@everyone\` a cookie`,
     ACTION_COMMAND_EVERYONE_SLAP: `**{{0}}** slapped \`@everyone\``,
     ACTION_COMMAND_EVERYONE_BITE: `**{{0}}** collectively bites \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_LICK: `**{{0}}** collectively licks \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_GLARE: `**{{0}}** glares \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_EXPLODE: `**{{0}}** used \`/tnt\` on \`@everyone\`?!`,
 
     ACTION_COMMAND_OTHER_APPS_HEADPAT: `**{{0}}** gave **{{1}}** a virtual headpat`,
     ACTION_COMMAND_OTHER_APPS_HUG: `**{{0}}** virtually cuddled **{{1}}**`,
@@ -118,6 +130,9 @@ module.exports = {
     ACTION_COMMAND_OTHER_APPS_COOKIE: `**{{0}}** gave **{{1}}** a virtual cookie`,
     ACTION_COMMAND_OTHER_APPS_SLAP: `**{{0}}** slapped **{{1}}**'s physical servers`,
     ACTION_COMMAND_OTHER_APPS_BITE: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
+    ACTION_COMMAND_OTHER_APPS_LICK: `**{{0}}** discovered electricity by licking **{{1}}**'s internal circuits`,
+    ACTION_COMMAND_OTHER_APPS_GLARE: `**{{0}}** glared at **{{1}}**'s code`,
+    ACTION_COMMAND_OTHER_APPS_EXPLODE: `**{{0}}** wants to explode **{{1}}**'s internal servers`,
 
     ACTION_COMMAND_TWILITE_HEADPAT: `**{{0}}** gave me a headpat <3`,
     ACTION_COMMAND_TWILITE_HUG: `**{{0}}** cuddled me <3`,
@@ -128,6 +143,9 @@ module.exports = {
     ACTION_COMMAND_TWILITE_COOKIE: `**{{0}}** gave me a virtual cookie!`,
     ACTION_COMMAND_TWILITE_SLAP: `**{{0}}** slapped me?! How dare you!`,
     ACTION_COMMAND_TWILITE_BITE: `**{{0}}** took a bite out of my code?!`,
+    ACTION_COMMAND_TWILITE_LICK: `**{{0}}** licked me?! Well now you know what electricity tastes like...`,
+    ACTION_COMMAND_TWILITE_GLARE: `**{{0}}** glared at me, and I glare back <:squint:1418164398404669500>`,
+    ACTION_COMMAND_TWILITE_EXPLODE: `**{{0}}** exploded...ME?!`,
 
     ACTION_COMMAND_MEE6_HEADPAT: `***{{0}}** gave **{{1}}** a headpat...*`,
     ACTION_COMMAND_MEE6_HUG: `***{{0}}** hugged **{{1}}**...*`,
@@ -138,6 +156,9 @@ module.exports = {
     ACTION_COMMAND_MEE6_COOKIE: `**{{0}}** gave **{{1}}** a cookie from the Dark Side`,
     ACTION_COMMAND_MEE6_SLAP: `**{{0}}** gave **{{1}}** a royal slapping`,
     ACTION_COMMAND_MEE6_BITE: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
+    ACTION_COMMAND_MEE6_LICK: `**{{0}}** licked **{{1}}**'s rotten code, and became ill from doing so`,
+    ACTION_COMMAND_MEE6_GLARE: `**{{0}}** glares menancingly at **{{1}}**`,
+    ACTION_COMMAND_MEE6_EXPLODE: `**{{0}}** explodes **{{1}}** over and over again!`,
 
     ACTION_RETURN_BUTTON_LABEL_HEADPAT: `Return Headpat`,
     ACTION_RETURN_BUTTON_LABEL_HUG: `Return Hug`,
@@ -201,7 +222,8 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 - Right-click/long-press on the Message containing the Role Menu -> Select "Apps" -> Select " [Delete Role Menu]({{0}}) "
 - OR simply delete the Message containing the Role Menu`,
 
-    ROLE_MENU_ERROR_INVALID_CHANNEL: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.`,
+    ROLE_MENU_ERROR_INVALID_CHANNEL_FREE: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels.\n\nWant to create Role Menus in Public Threads & Forum Posts? Upgrade to **TwiLite Inferno** to create Role Menus in more Channel types!`,
+    ROLE_MENU_ERROR_INVALID_CHANNEL_INFERNO: `Sorry, you can only create self-assignable Role Menus inside of standard Text Channels, Public Threads in Text Channels, and Forum Posts.`,
     ROLE_MENU_ERROR_MISSING_MANAGE_ROLES_PERMISSION: `I do not seem to have the **Manage Roles** Permission!\nPlease ensure I have been granted it in order for my Role Menu Module to work, *and* that my highest Role is positioned above all the Roles you want to add to my Role Menus. (I cannot grant or revoke Roles above my highest Role)`,
     ROLE_MENU_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, but I cannot create a Role Menu in this Channel without having the **Send Messages** Permission!`,
 
@@ -408,4 +430,79 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     INVITE_GUEST_COMMAND_ERROR_GUILD_HAS_INVITES_DISABLED_BY_DISCORD: `Sorry, this Server cannot make any Invites due to Discord's Trust & Safety team revoking that ability from this Server.`,
     INVITE_GUEST_COMMAND_ERROR_APP_MISSING_CREATE_INVITE_PERMISSION: `Sorry, I cannot make a Guest Voice Invite for {{0}} since I do *not* have "Create Invite" Permission for that Voice Channel.\nPlease try again once I have been granted that Permission.`,
     INVITE_GUEST_COMMAND_ERROR_FAILED_TO_CREATE_INVITE: `Sorry, an error occurred while trying to make a Guest Voice Invite for {{0}}`,
+
+
+
+    // ******* BRANDING COMMAND
+    BRANDING_COMMAND_PANEL_HEADING: `# TwiLite's Server Branding`,
+    BRANDING_COMMAND_PANEL_DESCRIPTION: `Manage TwiLite's branding & appearance for this Server.\nEditing TwiLite's branding/appearance will *not* affect how TwiLite appears in other Servers, *only* for this Server.\n\n-# Please remember that TwiLite's custom branding/appearance will be reset if this Server's **TwiLite Inferno** subscription expires or is cancelled.`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_LABEL: `### TwiLite's Avatar`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_NO_AVATAR_SET: `:x: No custom Bot profile avatar set.`,
+    BRANDING_COMMAND_PANEL_AVATAR_SECTION_HAS_AVATAR_SET: `:white_check_mark: A custom Bot profile avatar is currently set.`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_LABEL: `### TwiLite's Banner`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_NO_BANNER_SET: `:x: No custom Bot profile banner set.`,
+    BRANDING_COMMAND_PANEL_BANNER_SECTION_HAS_BANNER_SET: `:white_check_mark: A custom Bot profile banner is currently set.`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_LABEL: `### TwiLite's Bio (About Me)`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_NO_BIO_SET: `:x: No custom Bot profile bio set.`,
+    BRANDING_COMMAND_PANEL_BIO_SECTION_HAS_BIO_SET: `:white_check_mark: A custom Bot profile bio is currently set.`,
+    BRANDING_COMMAND_PANEL_BUTTON_EDIT_LABEL: `Bulk Edit`,
+    BRANDING_COMMAND_PANEL_BUTTON_RESET_ALL_LABEL: `Reset Branding`,
+
+    BRANDING_COMMAND_MODAL_TITLE: `Edit Custom Branding`,
+    BRANDING_COMMAND_MODAL_AVATAR_LABEL: `Avatar`,
+    BRANDING_COMMAND_MODAL_AVATAR_DESCRIPTION: `Must be a PNG/JPG/GIF under 10MB`,
+    BRANDING_COMMAND_MODAL_BANNER_LABEL: `Banner`,
+    BRANDING_COMMAND_MODAL_BANNER_DESCRIPTION: `Must be a PNG/JPG/GIF under 10MB and at least 680 x 240 pixels`,
+    BRANDING_COMMAND_MODAL_BIO_LABEL: `Bio`,
+    BRANDING_COMMAND_MODAL_BIO_DESCRIPTION: `Supports use of default & custom emoji, and formatting markdown (excluding Masked Links & Headers)`,
+
+    BRANDING_COMMAND_MODAL_ERROR_FILE_INVALID_TYPE: `Error: {{0}} an invalid file type.\nPlease try again, making sure you upload a PNG, JPG, or GIF file.`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_SIZE_TOO_LARGE: `Error: {{0}} too large of a file.\nPlease try again, ensuring the image you upload is *less than* 10MB.`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_AVATAR_PREFIX: `The Avatar is`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_BANNER_PREFIX: `The Banner is`,
+    BRANDING_COMMAND_MODAL_ERROR_FILE_AVATAR_AND_BANNER_PREFIX: `Both the Avatar and Banner are`,
+    BRANDING_COMMAND_MODAL_ERROR_BANNER_DIMENSIONS_TOO_SMALL: `Error: The Banner's dimensions are too small.\nPlease try again, ensuring the Banner image you upload is at least 620 x 240 pixels.`,
+
+    BRANDING_COMMAND_ERROR_PROFILE_EDIT_FAILED: `Failed to set TwiLite's new custom profile branding for this Server.\nPlease see below for more details:\n\n\`\`\`json\n{{0}}\`\`\``,
+    BRANDING_COMMAND_ERROR_PROFILE_RESET_ALL_FAILED: `Failed to reset TwiLite's profile branding back to default.`,
+    BRANDING_COMMAND_ERROR_GUILD_MISSING_INFERNO_SUBSCRIPTION: `Sorry, this Server does not have access to TwiLite's Custom Branding module.\n\nWant to customise TwiLite's profile picture, banner, and bio for this Server?\nUpgrade to **TwiLite Inferno** and gain access to the Custom Branding module and more!`,
+
+
+
+    // ******* FISH COMMAND
+    FISH_COMMAND_HEADING: `# Fishing Lake`,
+    FISH_COMMAND_USER_WENT_FISHING: `{{0}} went fishing, and reeled in {{1}}`,
+    
+    FISH_COMMAND_FISHED_CATEGORY: `-# Item category: {{0}}`,
+    FISH_COMMAND_CATEGORY_NOTHING: `Nothing`,
+    FISH_COMMAND_CATEGORY_FISH: `Fish`,
+    FISH_COMMAND_CATEGORY_JUNK: `Junk`,
+    FISH_COMMAND_CATEGORY_TREASURE: `Treasure`,
+    FISH_COMMAND_CATEGORY_SELF: `Oneself`,
+
+    FISH_COMMAND_ITEM_FISH_COD: `a codfish!`,
+    FISH_COMMAND_ITEM_FISH_EEL: `an eel!`,
+    FISH_COMMAND_ITEM_FISH_HADDOCK: `a haddock!`,
+    FISH_COMMAND_ITEM_FISH_SQUID: `some squid!`,
+    FISH_COMMAND_ITEM_FISH_PUFFERFISH: `a pufferfish!`,
+    FISH_COMMAND_ITEM_FISH_CLOWNFISH: `a clownfish!`,
+    FISH_COMMAND_ITEM_FISH_TROPICAL: `a tropical fish!`,
+    FISH_COMMAND_ITEM_FISH_SALMON: `some salmon`,
+    FISH_COMMAND_ITEM_FISH_AXOLOTL: `an axolotl!`,
+
+    FISH_COMMAND_ITEM_JUNK_TRASH: `some trash...`,
+    FISH_COMMAND_ITEM_JUNK_BONE: `some bones.`,
+    FISH_COMMAND_ITEM_JUNK_STONE: `some loose gravel.`,
+    FISH_COMMAND_ITEM_JUNK_STICK: `a stick.`,
+    FISH_COMMAND_ITEM_JUNK_NET: `someone else's fishing net!`,
+    FISH_COMMAND_ITEM_JUNK_NITRO: `an expired code for Discord Nitro.`,
+
+    FISH_COMMAND_ITEM_TREASURE_GOLD: `some gold!`,
+    FISH_COMMAND_ITEM_TREASURE_COIN: `some loose coins!`,
+    FISH_COMMAND_ITEM_TREASURE_CHEST: `a whole pirate treasure chest!`,
+    FISH_COMMAND_ITEM_TREASURE_JEWELLERY: `some jewellery.`,
+    FISH_COMMAND_ITEM_TREASURE_DIAMOND: `a diamond!`,
+
+    FISH_COMMAND_ITEM_NOTHING: `nothing.`,
+    FISH_COMMAND_ITEM_SELF: `themselves!?`,
 }

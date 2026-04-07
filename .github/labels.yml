@@ -70,6 +70,9 @@
 - name: feature:twitch notification
   description: Affects or relates to the Twitch Notification sub-module
   color: 'FBCA04'
+- name: feature:premium
+  description: Affects or relates to any Premium feature
+  color: 'FBCA04'
 - name: feature:developer
   description: Affects or relates to any Developer-specific Commands
   color: 'FBCA04'

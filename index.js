@@ -2,7 +2,6 @@ import { ApplicationWebhookEventType, ApplicationWebhookType, InteractionRespons
 import { isChatInputApplicationCommandInteraction, isContextMenuApplicationCommandInteraction, isMessageComponentButtonInteraction, isMessageComponentSelectMenuInteraction } from 'discord-api-types/utils';
 import { AutoRouter } from 'itty-router';
 import { verifyKey } from 'discord-interactions';
-import * as crypto from 'crypto'; // THIS IS SECURITY CRYPTO NOT YUCKY BLOCKCHAIN CRYPTOCURRENCIES 💀
 
 import { handleSlashCommand } from './Handlers/Commands/slashCommandHandler.js';
 import { handleContextCommand } from './Handlers/Commands/contextCommandHandler.js';
@@ -15,10 +14,8 @@ import { handleAppDeauthorized } from './Handlers/WebhookEvents/applicationDeaut
 import { handleEntitlementCreate } from './Handlers/WebhookEvents/entitlementCreate.js';
 import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpdate.js';
 import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
-import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
-import { delay, JsonResponse } from './Utility/utilityMethods.js';
-import { TwitchApiClient } from './Utility/utilityConstants.js';
-import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
+import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID } from './config.js';
+import { JsonResponse } from './Utility/utilityMethods.js';
 
 
 
@@ -36,75 +33,6 @@ const router = AutoRouter();
 /** Wave to verify CF worker is working */
 router.get('/', (request, env) => {
     return new Response(`👏 ${DISCORD_APP_USER_ID}`);
-});
-
-
-
-
-
-
-
-
-// *******************************
-// For receiving Twitch's Webhook Events
-const TWITCH_MESSAGE_ID = 'twitch-eventsub-message-id';
-const TWITCH_MESSAGE_TIMESTAMP = 'twitch-eventsub-message-timestamp';
-const TWITCH_MESSAGE_SIGNATURE = 'twitch-eventsub-message-signature';
-const TWITCH_MESSAGE_TYPE = 'twitch-eventsub-message-type';
-const HMAC_PREFIX = 'sha256=';
-
-router.post('/twitch-webhooks', async (request, env) => {
-    // Verify request
-    const { isValid } = await verifyTwitchRequest(request.clone(), env);
-
-    if ( !isValid ) {
-        return new Response(null, { status: 403 });
-    }
-
-    let eventBody = await request.json();
-    
-    // Response for Challenge Requests
-    if ( request.headers.get(TWITCH_MESSAGE_TYPE) === 'webhook_callback_verification' ) {
-        return new Response(`${eventBody.challenge}`, { status: 200, headers: { "Content-Type": "text/plain" } });
-    }
-
-    // Fetch stored notification config here, so that we are not fetching it for each and every single Twitch EventSub notification (future-proofing)
-    /** @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
-    let fetchedTwitchNotifs = JSON.parse(await env.crimsonkv.get(`twitchNotifications`));
-
-    // ******* STREAM UP/ONLINE NOTIFICATION
-    if ( eventBody["subscription"]["type"] === "stream.online" ) {
-        // Force-pause for 30 seconds so that we can be EXTRA SURE Twitch's API does update to reflect there is a stream going on now
-        await delay(30000);
-        
-        // Grab Twitch data needed
-        /** @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchStreamUpEventSubData} */
-        let streamUpData = eventBody["event"];
-        let fetchedStreamData = await TwitchApiClient.streams.getStreamByUserId(streamUpData.broadcaster_user_id);
-
-        if ( fetchedStreamData == null ) {
-            // Since this is being run on a CF Worker, we don't get a lot of time in order to do stuff.
-            //   As such, I cannot do a "loop with few minutes pause between each cycle in order to wait for Twitch's API to cache it" thing here
-            console.log(`No Twitch Stream Data found for ${streamUpData.broadcaster_user_name}`);
-            return new Response(null, { status: 204 });
-        }
-
-        let fetchedGameData = await TwitchApiClient.games.getGameById(fetchedStreamData.gameId);
-
-        // Now process the Twitch notification for Discord Guilds that are expecting this streamer's notifications
-        fetchedTwitchNotifs.forEach(notifConfig => {
-            notifConfig.TwitchGoLiveConfig.forEach(async goLiveConfig => {
-
-                // Make sure it's actually enabled first, AND that the config is expecting this streamer
-                if ( goLiveConfig.TwitchChannelId === streamUpData.broadcaster_user_id && goLiveConfig.IsNotificationEnabled ) {
-                    await processStreamOnlineEvents(streamUpData, fetchedStreamData, fetchedGameData, goLiveConfig, env);
-                }
-            });
-        });
-
-    }
-
-    return new Response(null, { status: 204 });
 });
 
 
@@ -255,58 +183,9 @@ async function verifyDiscordRequest(request, env) {
   
     return { interaction: JSON.parse(body), isValid: true, cfEnv: env };
 }
-
-async function verifyTwitchRequest(request, env) {
-    let twitchMessage = await getHmacMessage(request);
-    let hmac = HMAC_PREFIX + getHmac(RANDOMLY_GENERATED_FIXED_STRING, twitchMessage);
-
-    if ( true === verifyTwitchMessage(hmac, request.headers.get(TWITCH_MESSAGE_SIGNATURE)) ) {
-        return { isValid: true };
-    }
-    else {
-        return { isValid: false };
-    }
-}
-
-/**
- * Builds message used to get HMAC for Twitch Webhook Events
- * 
- * @param {import('itty-router').IRequest} request 
- * @private
- */
-async function getHmacMessage(request) {
-    return (request.headers.get(TWITCH_MESSAGE_ID) +
-        request.headers.get(TWITCH_MESSAGE_TIMESTAMP) +
-        await request.text());
-}
-
-/**
- * Gets the HMAC for Twitch Webhook Events
- * 
- * @param {String} secret 
- * @param {*} message 
- * @private
- */
-function getHmac(secret, message) {
-    return crypto.createHmac('sha256', secret)
-        .update(message)
-        .digest('hex');
-}
-
-/**
- * Verifies our signature matches Twitch's signature
- * 
- * @param {String} hmac 
- * @param {*} verifySignature 
- * @private
- */
-function verifyTwitchMessage(hmac, verifySignature) {
-    return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
-}
   
 const server = {
     verifyDiscordRequest,
-    verifyTwitchRequest,
     fetch: router.fetch,
 };
 

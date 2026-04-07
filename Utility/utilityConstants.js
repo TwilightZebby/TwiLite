@@ -1,20 +1,10 @@
 import { Collection } from '@discordjs/collection';
 import { MessageType } from 'discord-api-types/v10';
-import { AppTokenAuthProvider } from '@twurple/auth';
-import { ApiClient } from '@twurple/api';
-import { DISCORD_TOKEN, superProperties, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
-
-
-const TwitchAuthProvider = new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+import { DISCORD_TOKEN, superProperties } from '../config.js';
 
 
 // *******************************
 //  Exports
-
-/**
- * API client for interacting with Twitch's API
- */
-export const TwitchApiClient = new ApiClient({ authProvider: TwitchAuthProvider });
 
 /**
  * Base64-encoded Super Properties for accessing experimental API features

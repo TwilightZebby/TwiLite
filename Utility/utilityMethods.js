@@ -2,7 +2,7 @@ import { InteractionContextType, PermissionFlagsBits } from 'discord-api-types/v
 import { Buffer } from 'node:buffer';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import { DISCORD_APP_USER_ID, DISCORD_TOKEN, SKU_INFERNO_ID, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
+import { DISCORD_APP_USER_ID, DISCORD_TOKEN, SKU_INFERNO_ID } from '../config.js';
 import { DefaultDiscordRequestHeaders } from './utilityConstants.js';
 
 
@@ -292,47 +292,6 @@ export async function checkForPermissionInChannel(permission, serverId, channelI
   if ( hasUserChannelOverrideRevoke ) { result = false; }
 
   return result;
-}
-
-/**
- * Gets a valid Access Token for use in Twitch's API
- * 
- * @param {*} cfEnv 
- * 
- * @returns {Promise<String>}
- */
-export async function getTwitchAccessToken(cfEnv) {
-  // First check stored Token to see if it is still valid
-  let storedToken = await cfEnv.crimsonkv.get(`twitchToken`);
-
-  // Safety net for if there is no stored token
-  if ( storedToken != undefined ) {
-    let validateTokenRequest = await fetch(`https://id.twitch.tv/oauth2/validate`, {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${storedToken}`
-      }
-    });
-
-    if ( validateTokenRequest.status === 200 ) {
-      return storedToken;
-    }
-  }
-
-
-  // Token not valid, get a new one
-  let newTokenRequest = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`, {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    }
-  });
-
-  let resolvedTokenBody = await newTokenRequest.json();
-
-  // Store new token && return to calling method
-  await cfEnv.crimsonkv.put(`twitchToken`, resolvedTokenBody.access_token);
-  return resolvedTokenBody.access_token;
 }
 
 /**

@@ -10,7 +10,7 @@ const MentionEveryoneRegex = new RegExp(/@(everyone|here)/g);
 const MentionRoleRegex = new RegExp(/<@&(\d{17,20})>/g);
 
 /** Actions that should NEVER include the Return Action Button */
-const NoReturnActions = [ "JAIL", "YEET", "COOKIE", "BITE" ];
+const NoReturnActions = [ "JAIL", "YEET", "COOKIE", "BITE", "EXPLODE", "BITE", "FISH", "LICK", "GLARE" ];
 
 
 /**
@@ -160,7 +160,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     // GIF was requested to be included
     let wasGifRequested = false;
     if ( InputIncludeGif != undefined ) {
-        if ( InputIncludeGif?.value === true ) { wasGifRequested = true; }
+        if ( InputIncludeGif?.value === true ) { wasGifRequested = false; }
     }
 
     if ( wasGifRequested ) {

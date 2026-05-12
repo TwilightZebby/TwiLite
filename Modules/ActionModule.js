@@ -160,7 +160,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     // GIF was requested to be included
     let wasGifRequested = false;
     if ( InputIncludeGif != undefined ) {
-        if ( InputIncludeGif?.value === true ) { wasGifRequested = false; }
+        if ( InputIncludeGif?.value === true ) { wasGifRequested = true; }
     }
 
     if ( wasGifRequested ) {

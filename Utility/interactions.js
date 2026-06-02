@@ -28,6 +28,9 @@ export const SlashCommands = {
     // ***** FOR MANAGEMENT COMMANDS
     'lock-emoji': () => import('../Commands/SlashCommands/Management/lock-emoji.js'),
 
+    // ***** FOR SOCIAL COMMANDS
+    'notifier': () => import('../Commands/SlashCommands/Social/notifier.js'),
+
     // ***** FOR PREMIUM COMMANDS
     'branding': () => import('../Commands/SlashCommands/Premium/branding.js'),
 
@@ -63,6 +66,9 @@ export const Buttons = {
     'role': () => import('../Interactions/Buttons/RoleMenus/role.js'),
     'menu-delete': () => import('../Interactions/Buttons/RoleMenus/menu-delete.js'),
 
+    // ***** FOR SOCIAL
+    'twitch': () => import('../Interactions/Buttons/Social/twitch.js'),
+
     // ***** FOR PREMIUM
     'branding': () => import('../Interactions/Buttons/Premium/branding.js'),
 }
@@ -82,6 +88,9 @@ export const Modals = {
     'menu-remove-role': () => import('../Interactions/Modals/RoleMenus/menu-remove-role.js'),
     'menu-set-details': () => import('../Interactions/Modals/RoleMenus/menu-set-details.js'),
     'menu-set-type': () => import('../Interactions/Modals/RoleMenus/menu-set-type.js'),
+
+    // ***** FOR SOCIAL
+    'twitch': () => import('../Interactions/Modals/Social/twitch.js'),
 
     // ***** FOR PREMIUM
     'branding': () => import('../Interactions/Modals/Premium/branding.js'),

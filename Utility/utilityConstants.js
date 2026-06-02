@@ -119,6 +119,12 @@ export const SystemMessageTypes = [
     61, // REPORT_TO_MOD_BAN_USER - A Server Mod Report was resolved via banning the reported user from the Server (VERY limited experiment)
     62, // REPORT_TO_MOD_CLOSED_REPORT - A Server Mod Report was resolved via closing the report with no further action (VERY limited experiment)
     63, // EMOJI_ADDED - System Channel message sent when a new Custom Emoji is added to the Server. (scrapped experiment)
+    64, // PREMIUM_GROUP_INVITE - Sent in DMs when a User invites another User to join a group Nitro subscription (experiment)
+    65, // VOICE_SESSION - Sent in the Server's System Channel (for small Servers), when any Member starts a Voice Channel session in said Server. (reverted experiment)
+    66, // GUILD_BOOST_UPSELL - Client-side emphemeral message, asking the User to be the first to Boost the Server this shows in. (scrapped after CTO realised this wasn't acceptable to do in-chat)
+    67, // FRIEND_REQUEST_ACCEPTED - Sent in DMs when a User accepts another User's friend request.
+    68, // MEDIA_MENTION_MESSAGE - Currently unknown what this is for
+
 ];
 
 

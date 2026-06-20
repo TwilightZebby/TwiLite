@@ -505,4 +505,20 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 
     FISH_COMMAND_ITEM_NOTHING: `nothing.`,
     FISH_COMMAND_ITEM_SELF: `themselves!?`,
+
+
+
+    // ******* (UN)PIN MESSAGE IN THREAD COMMAND
+    PIN_THREAD_MESSAGE_COMMAND_PIN_SUCCESS: `Successfully pinned that Thread/Post Message for you!`,
+    PIN_THREAD_MESSAGE_COMMAND_UNPIN_SUCCESS: `Successfully unpinned that Thread/Post Message for you.`,
+    PIN_THREAD_MESSAGE_COMMAND_AUDIT_LOG_REASON_PIN: `Message pinned by Thread Owner @{{0}} using TwiLite's Context Command`,
+    PIN_THREAD_MESSAGE_COMMAND_AUDIT_LOG_REASON_UNPIN: `Message unpinned by Thread Owner @{{0}} using TwiLite's Context Command`,
+
+    PIN_THREAD_MESSAGE_COMMAND_MISSING_INFERNO_ACCESS: `Whoops! You have discovered a feature that's in Inferno Early Access!\nThis Command is currently only available for Servers with TwiLite's Inferno subscription active. This will be made free to use once it is considered a stable feature.\n\nIf you want to gain try out this command now, feel free to subscribe your Server to TwiLite Inferno :)`,
+
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_GENERIC: `Sorry, there was an unhandled error trying to pin or unpin that Thread/Post Message for you.\nPlease try again later...`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_USER_IS_NOT_THREAD_OWNER: `This command can only be used by the owner of this Thread or Forum Post.`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_MESSAGE_NOT_IN_THREAD: `This command is intended for use on messages inside of Threads or Forum Posts. As such, it cannot be used on messages outside of Threads or Forums.`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_APP_MISSING_PIN_MESSAGES_PERMISSION: `Sorry, I am missing the "**Pin Messages**" Permission in this Channel.\nI need that for this command to work!`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_APP_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, I cannot pin or unpin messages in Threads or Forums that I do not have "**View Channel**" Permission for!\nIf I am meant to be able to see this Thread or Forum Post, please make sure I have the "**View Channel**" Permission in the parent Channel.`,
 }

@@ -48,6 +48,9 @@ export const ContextCommands = {
 
     // ***** FOR GENERAL COMMANDS
     'Convert Temperature': () => import('../Commands/ContextCommands/General/Convert_Temperature.js'),
+
+    // ***** FOR MANAGEMENT COMMANDS
+    'Pin or Unpin Thread Message': () => import('../Commands/ContextCommands/Management/Pin_or_Unpin_Thread_Message.js'),
 }
 
 export const Autocompletes = {

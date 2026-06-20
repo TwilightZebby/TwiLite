@@ -29,7 +29,7 @@
     "emoji-regex": "10.6.0",
     "itty-router": "5.0.23",
     "mongodb": "7.1.1",
-    "undici": "7.24.5"
+    "undici": "7.28.0"
   },
   "devDependencies": {
     "wrangler": "4.76.0"

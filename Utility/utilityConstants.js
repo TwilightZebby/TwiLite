@@ -1,5 +1,5 @@
 import { Collection } from '@discordjs/collection';
-import { MessageType } from 'discord-api-types/v10';
+import { ChannelType, MessageType } from 'discord-api-types/v10';
 import { AppTokenAuthProvider } from '@twurple/auth';
 import { ApiClient } from '@twurple/api';
 import { MongoClient } from 'mongodb';
@@ -124,7 +124,12 @@ export const SystemMessageTypes = [
     66, // GUILD_BOOST_UPSELL - Client-side emphemeral message, asking the User to be the first to Boost the Server this shows in. (scrapped after CTO realised this wasn't acceptable to do in-chat)
     67, // FRIEND_REQUEST_ACCEPTED - Sent in DMs when a User accepts another User's friend request.
     68, // MEDIA_MENTION_MESSAGE - Currently unknown what this is for
+];
 
+
+/** Thread-like Channel Types (just for ease) */
+export const ThreadLikeChannelTypes = [
+    ChannelType.AnnouncementThread, ChannelType.PublicThread, ChannelType.PrivateThread
 ];
 
 
@@ -134,6 +139,14 @@ export const DefaultDiscordRequestHeaders = {
     'content-type': 'application/json',
     Authorization: `Bot ${DISCORD_TOKEN}`,
 }
+
+/** Default request headers for Discord API requests, but with audit log entry supported */
+export const DefaultDiscordRequestHeadersWithAuditLog = {
+    'content-type': 'application/json',
+    Authorization: `Bot ${DISCORD_TOKEN}`,
+    'X-Audit-Log-Reason': ""
+}
+
 
 
 

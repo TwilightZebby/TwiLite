@@ -6,9 +6,6 @@ import { MongoClient } from 'mongodb';
 import { DISCORD_TOKEN, MONGO_URI, superProperties, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
 import { ServerApiVersion } from 'mongodb';
 
-
-const TwitchAuthProvider = new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
-
 let VarMongoClient;
 
 
@@ -37,7 +34,7 @@ export const getMongoClient = async () => {
 /**
  * API client for interacting with Twitch's API
  */
-export const TwitchApiClient = new ApiClient({ authProvider: TwitchAuthProvider });
+export const TwitchApiClient = new ApiClient({ authProvider: new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET) });
 
 /**
  * Base64-encoded Super Properties for accessing experimental API features

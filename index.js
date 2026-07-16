@@ -70,8 +70,8 @@ router.post('/twitch-webhooks', async (request, env) => {
         return new Response('Unauthorized', { status: 403 });
     }
 
-    /* let eventBody = await request.json();
-    console.log(JSON.stringify(eventBody)); */
+    let eventBody = await ClonedRequest.json();
+    //console.log(JSON.stringify(eventBody));
     
     // Response for Challenge Requests
     if ( request.headers.get(TWITCH_MESSAGE_TYPE) === 'webhook_callback_verification' ) {

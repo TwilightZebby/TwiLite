@@ -16,7 +16,7 @@ import { handleEntitlementCreate } from './Handlers/WebhookEvents/entitlementCre
 import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpdate.js';
 import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
-import { delay, JsonResponse } from './Utility/utilityMethods.js';
+import { delay, JsonResponse, verifyTwitchRequest } from './Utility/utilityMethods.js';
 import { TwitchApiClient } from './Utility/utilityConstants.js';
 import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
 
@@ -47,20 +47,28 @@ router.get('/', (request, env) => {
 
 // *******************************
 // For receiving Twitch's Webhook Events
-const TWITCH_MESSAGE_ID = 'twitch-eventsub-message-id';
-const TWITCH_MESSAGE_TIMESTAMP = 'twitch-eventsub-message-timestamp';
-const TWITCH_MESSAGE_SIGNATURE = 'twitch-eventsub-message-signature';
-const TWITCH_MESSAGE_TYPE = 'twitch-eventsub-message-type';
+const TWITCH_MESSAGE_ID = 'Twitch-Eventsub-Message-Id';
+const TWITCH_MESSAGE_TIMESTAMP = 'Twitch-Eventsub-Message-Timestamp';
+const TWITCH_MESSAGE_SIGNATURE = 'Twitch-Eventsub-Message-Signature';
+const TWITCH_MESSAGE_TYPE = 'Twitch-Eventsub-Message-Type';
 const HMAC_PREFIX = 'sha256=';
 
 router.post('/twitch-webhooks', async (request, env) => {
-    // Verify request
-    //const { isValid } = await verifyTwitchRequest(request.clone(), env);
+    // Clone request (to not affect original)
+    const ClonedRequest = request.clone();
 
-    /* if ( !isValid ) {
+    // Verify request
+    const MessageId = request.headers.get(TWITCH_MESSAGE_ID);
+    const MessageTimestamp = request.headers.get(TWITCH_MESSAGE_TIMESTAMP);
+    const MessageSignature = request.headers.get(TWITCH_MESSAGE_SIGNATURE);
+    const RequestBody = await request.text();
+
+    const isValid = await verifyTwitchRequest(MessageId, MessageTimestamp, MessageSignature, RequestBody, RANDOMLY_GENERATED_FIXED_STRING);
+
+    if ( !isValid ) {
         console.log("PLEASE LET THIS LOG NOT TRIGGER");
-        return new Response(null, { status: 403 });
-    } */
+        return new Response('Unauthorized', { status: 403 });
+    }
 
     /* let eventBody = await request.json();
     console.log(JSON.stringify(eventBody)); */
@@ -283,61 +291,9 @@ async function verifyDiscordRequest(request, env) {
   
     return { interaction: JSON.parse(body), isValid: true, cfEnv: env };
 }
-
-async function verifyTwitchRequest(request, env) {
-    let twitchMessage = await getHmacMessage(request);
-    let hmac = HMAC_PREFIX + getHmac(RANDOMLY_GENERATED_FIXED_STRING, twitchMessage);
-
-    if ( true === verifyTwitchMessage(hmac, request.headers.get(TWITCH_MESSAGE_SIGNATURE)) ) {
-        return { isValid: true };
-    }
-    else {
-        console.log(`HEADERS - MsgSig: ${request.headers.get(TWITCH_MESSAGE_SIGNATURE)}`);
-        console.log(`Hmac: ${hmac}`);
-        console.log(`Compare: ${verifyTwitchMessage(hmac, request.headers.get(TWITCH_MESSAGE_SIGNATURE))}`);
-        return { isValid: false };
-    }
-}
-
-/**
- * Builds message used to get HMAC for Twitch Webhook Events
- * 
- * @param {import('itty-router').IRequest} request 
- * @private
- */
-async function getHmacMessage(request) {
-    return (request.headers.get(TWITCH_MESSAGE_ID) +
-        request.headers.get(TWITCH_MESSAGE_TIMESTAMP) +
-        await request.text());
-}
-
-/**
- * Gets the HMAC for Twitch Webhook Events
- * 
- * @param {String} secret 
- * @param {*} message 
- * @private
- */
-function getHmac(secret, message) {
-    return crypto.createHmac('sha256', secret)
-        .update(message)
-        .digest('hex');
-}
-
-/**
- * Verifies our signature matches Twitch's signature
- * 
- * @param {String} hmac 
- * @param {*} verifySignature 
- * @private
- */
-function verifyTwitchMessage(hmac, verifySignature) {
-    return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
-}
   
 const server = {
     verifyDiscordRequest,
-    verifyTwitchRequest,
     fetch: router.fetch,
 };
 

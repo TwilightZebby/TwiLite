@@ -2,7 +2,7 @@ import { ButtonStyle, ChannelType, ComponentType, InteractionResponseType, Messa
 import { hexToRgb, JsonResponse, rgbArrayToInteger } from '../../Utility/utilityMethods.js';
 import { localize } from '../../Utility/localizeResponses.js';
 import { EMOJI_TWITCH_LOGO } from '../../Assets/AppEmojis.js';
-import { DefaultDiscordRequestHeaders, TwitchApiClient } from '../../Utility/utilityConstants.js';
+import { DefaultDiscordRequestHeaders, getTwitchApiClient } from '../../Utility/utilityConstants.js';
 
 
 /**
@@ -365,6 +365,7 @@ export async function processStreamOnlineEvents(streamUpEventData, twitchStreamD
 
 
     // Get VOD link, if one exists
+    const TwitchApiClient = getTwitchApiClient();
     let fetchVod = await TwitchApiClient.videos.getVideosByUser(streamUpEventData.broadcaster_user_id, {
         type: 'archive',
         limit: 1

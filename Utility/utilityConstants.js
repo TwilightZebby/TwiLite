@@ -7,6 +7,8 @@ import { DISCORD_TOKEN, MONGO_URI, superProperties, TWITCH_CLIENT_ID, TWITCH_CLI
 import { ServerApiVersion } from 'mongodb';
 
 let VarMongoClient;
+/** @type {?ApiClient} */
+let lazyTwitchApiClient = null;
 
 
 // *******************************
@@ -34,7 +36,12 @@ export const getMongoClient = async () => {
 /**
  * API client for interacting with Twitch's API
  */
-export const TwitchApiClient = new ApiClient({ authProvider: new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET) });
+export const getTwitchApiClient = () => {
+    if ( !lazyTwitchApiClient ) {
+        lazyTwitchApiClient = new ApiClient({ authProvider: new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET) });
+    }
+    return lazyTwitchApiClient;
+}
 
 /**
  * Base64-encoded Super Properties for accessing experimental API features

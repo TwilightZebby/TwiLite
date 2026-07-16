@@ -1,6 +1,6 @@
 import { ChannelType, ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 import { checkForPermissionInChannel, getTwitchAccessToken, JsonResponse } from '../../../Utility/utilityMethods.js';
-import { getMongoClient, TwitchApiClient } from '../../../Utility/utilityConstants.js';
+import { getMongoClient, getTwitchApiClient } from '../../../Utility/utilityConstants.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { listTwitchNotifications } from '../../../Modules/Notifications/TwitchNotifications.js';
 import { CF_WORKER_URL, RANDOMLY_GENERATED_FIXED_STRING, TWITCH_CLIENT_ID } from '../../../config.js';
@@ -80,6 +80,7 @@ export const Modal = {
 
 
             // Validate given Twitch Channel name is a valid Twitch Channel
+            const TwitchApiClient = getTwitchApiClient();
             let twitchUser = await TwitchApiClient.users.getUserByName(inputTwitchName);
 
             if ( twitchUser == null ) {

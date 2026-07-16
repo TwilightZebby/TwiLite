@@ -17,7 +17,7 @@ import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpd
 import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
 import { delay, JsonResponse, verifyTwitchRequest } from './Utility/utilityMethods.js';
-import { TwitchApiClient } from './Utility/utilityConstants.js';
+import { getTwitchApiClient } from './Utility/utilityConstants.js';
 import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
 
 
@@ -104,7 +104,7 @@ router.post('/twitch-webhooks', async (request, env) => {
     // TODO: Setup a dedicated `.js` file to handle that CRON job
 
 
-
+    //const TwitchApiClient = getTwitchApiClient();
     // Fetch stored notification config here, so that we are not fetching it for each and every single Twitch EventSub notification (future-proofing)
     /* * @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
     /* let fetchedTwitchNotifs = JSON.parse(await env.crimsonkv.get(`twitchNotifications`));

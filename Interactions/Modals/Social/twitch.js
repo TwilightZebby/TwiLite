@@ -3,7 +3,7 @@ import { v7 as uuidv7 } from 'uuid';
 import { checkForPermissionInChannel, getTwitchAccessToken, JsonResponse } from '../../../Utility/utilityMethods.js';
 import { getTwitchApiClient } from '../../../Utility/utilityConstants.js';
 import { localize } from '../../../Utility/localizeResponses.js';
-import { listTwitchNotifications } from '../../../Modules/Notifications/TwitchNotifications.js';
+import { listTwitchNotifications, showManageTwitchNotificationPage } from '../../../Modules/Notifications/TwitchNotifications.js';
 import { CF_WORKER_URL, RANDOMLY_GENERATED_FIXED_STRING, TWITCH_CLIENT_ID } from '../../../config.js';
 
 
@@ -267,8 +267,6 @@ export const Modal = {
             let inputRoleIds = null;
             /** @type {?String} */
             let inputCustomMessage = null;
-            /** @type {?Boolean} */
-            let inputDeletionState = null;
 
             for (let i = 0; i <= ModalComponents.length - 1; i++) {
                 // Safety Net
@@ -287,10 +285,6 @@ export const Modal = {
                     else if ( tempTopLevelComp.custom_id === "custom-message" ) {
                         inputCustomMessage = tempTopLevelComp.value == "" ? null : tempTopLevelComp.value;
                     }
-                    // Deletion state
-                    else if ( tempTopLevelComp.custom_id === "deletion-state" ) {
-                        inputDeletionState = tempTopLevelComp.value;
-                    }
                 }
             }
 
@@ -302,63 +296,9 @@ export const Modal = {
                 .run();
 
 
-            // FIRST CHECK DELETION STATE
-            //   If true (selected), ignore all other values and DELETE the stored notification settings
-            if ( inputDeletionState === true ) {
-                const { success } = await cfEnv.DATABASE
-                    .prepare("DELETE FROM TwitchNotifications WHERE discord_guild_id = ? AND twitch_channel_id = ?")
-                    .bind(interaction.guild_id, twitchId)
-                    .run();
-
-                // If there are no other Discord Guilds also subscribed to that same Twitch Channel's "Go Live" events, remove the Twitch subscription
-                let keepTwitchWebhookEvent = false;
-
-                const queryTwitchId = await cfEnv.DATABASE
-                    .prepare("SELECT notification_id FROM TwitchNotifications WHERE twitch_channel_id = ?")
-                    .bind(twitchId)
-                    .run();
-
-                if ( queryTwitchId.results?.length > 0 ) {
-                    keepTwitchWebhookEvent = true;
-                }
-
-                if ( keepTwitchWebhookEvent === false ) {
-                    // Remove Twitch webhook subscription
-                    let twitchToken = await getTwitchAccessToken(cfEnv);
-
-                    let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
-                        method: 'DELETE',
-                        headers: {
-                            "Authorization": `Bearer ${twitchToken}`,
-                            "Client-ID": `${TWITCH_CLIENT_ID}`,
-                            "Content-Type": `application/json`
-                        },
-                        body: JSON.stringify({
-                            "id": `${results[0].twitch_golive_webhook_subscription_id}`
-                        })
-                    });
-                }
-
-                // Deletion success, save & ACK
-                try {
-                    return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
-                }
-                catch (err) {
-                    console.error(err);
-
-                    return new JsonResponse({
-                        type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'TWITCH_NOTIF_DELETE_ERROR_GENERIC', `**${results[0].twitch_channel_name}**`)
-                        }
-                    });
-                }
-            }
-
-
-            // Deletion not requested, thus edit instead!
-            let extractedInputRoleId = inputRoleIds.shift() ?? null;
+            // Validate edits have actually been made
+            let extractedInputRoleId = inputRoleIds != null ? inputRoleIds.shift() : null;
+            let extractedInputCustomMessage = inputCustomMessage == "" || inputCustomMessage == null ? null : inputCustomMessage;
 
             if (
                 (inputDiscordChannelId === results[0].discord_channel_id)
@@ -411,8 +351,7 @@ export const Modal = {
             }
 
             // If input channel is not an Announcement-type Channel, force-set the "Auto Publish" field to `false`
-            //   NOTE: Since Discord has a max limit of 5 top-level components per Modal, and the "Edit" Modal is already at that limit - I cannot allow for editing this field after creation.
-            //         As such, I will have to handle the Channel's type changing here and ignore the fact the User cannot edit this setting without deleting & re-creating the notification config
+            //   TODO: Allow editing "Auto Publish" state
             if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { editableClonedData.auto_publish_announcement = 0; }
 
             // Pinged Roles
@@ -421,15 +360,15 @@ export const Modal = {
             }
 
             // Custom Message
-            if ( (inputCustomMessage !== results[0].custom_message) ) {
-                editableClonedData.custom_message = inputCustomMessage;
+            if ( (extractedInputCustomMessage !== results[0].custom_message) ) {
+                editableClonedData.custom_message = extractedInputCustomMessage;
             }
 
 
             // Attempt saving new values to DB
             const { success } = await cfEnv.DATABASE
-                .prepare("UPDATE TwitchNotifications SET discord_guild_locale = ?, discord_channel_id = ?, custom_message = ?, ping_role_id = ? WHERE notification_id = ?")
-                .bind(interaction.guild_locale, editableClonedData.discord_channel_id, editableClonedData.custom_message, editableClonedData.ping_role_id, results[0].notification_id)
+                .prepare("UPDATE TwitchNotifications SET discord_guild_locale = ?, discord_channel_id = ?, custom_message = ?, ping_role_id = ?, auto_publish_announcement = ? WHERE notification_id = ?")
+                .bind(interaction.guild_locale, editableClonedData.discord_channel_id, editableClonedData.custom_message, editableClonedData.ping_role_id, editableClonedData.auto_publish_announcement, results[0].notification_id)
                 .run();
 
             if ( success === false ) {
@@ -445,6 +384,78 @@ export const Modal = {
                 return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
             }
 
+        }
+        // Deleting a specific Twitch Notification for the Server
+        else if ( InputAction === 'delete' ) {
+            // Grab input
+            /** @type {?Boolean} */
+            let inputConfirmation = null;
+            let twitchId = SplitCustomId.pop();
+
+            for (let i = 0; i <= ModalComponents.length - 1; i++) {
+                // Safety Net
+                if ( ModalComponents[i].type === ComponentType.Label ) {
+                    let tempTopLevelComp = ModalComponents[i].component;
+                    // Confirmation
+                    if ( tempTopLevelComp.custom_id === "confirmation" ) {
+                        inputConfirmation = tempTopLevelComp.value;
+                    }
+                }
+            }
+
+
+            if ( inputConfirmation === true ) {
+                // Deletion confirmed
+
+                /** @type {{results: Array<import('../../../Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications>}} */
+                const { results } = await cfEnv.DATABASE
+                    .prepare("SELECT * FROM TwitchNotifications WHERE discord_guild_id = ? AND twitch_channel_id = ? LIMIT 1")
+                    .bind(interaction.guild_id, twitchId)
+                    .run();
+
+                const { success } = await cfEnv.DATABASE
+                    .prepare("DELETE FROM TwitchNotifications WHERE discord_guild_id = ? AND twitch_channel_id = ?")
+                    .bind(interaction.guild_id, twitchId)
+                    .run();
+
+                // If there are no other Discord Guilds also subscribed to that same Twitch Channel's "Go Live" events, remove the Twitch subscription
+                let keepTwitchWebhookEvent = false;
+
+                const queryTwitchId = await cfEnv.DATABASE
+                    .prepare("SELECT notification_id FROM TwitchNotifications WHERE twitch_channel_id = ?")
+                    .bind(twitchId)
+                    .run();
+
+                if ( queryTwitchId.results?.length > 0 ) {
+                    keepTwitchWebhookEvent = true;
+                }
+
+                if ( keepTwitchWebhookEvent === false ) {
+                    // Remove Twitch webhook subscription
+                    let twitchToken = await getTwitchAccessToken(cfEnv);
+
+                    let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                        method: 'DELETE',
+                        headers: {
+                            "Authorization": `Bearer ${twitchToken}`,
+                            "Client-ID": `${TWITCH_CLIENT_ID}`,
+                            "Content-Type": `application/json`
+                        },
+                        body: JSON.stringify({
+                            "id": `${results[0].twitch_golive_webhook_subscription_id}`
+                        })
+                    });
+                }
+
+                // Deletion success, save & ACK
+                return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
+            }
+            else {
+                // Reset cancelled (checkbox not selected)
+                //   This is just a faked Edit Message response so we can clear away the Modal from the User's screen
+
+                return await showManageTwitchNotificationPage(interaction, cfEnv, twitchId);
+            }
         }
         // Resetting all Twitch Notifications for the Server
         else if ( InputAction === 'reset' ) {

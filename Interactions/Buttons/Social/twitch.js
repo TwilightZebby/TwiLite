@@ -1,7 +1,7 @@
 import { ChannelType, ComponentType, InteractionResponseType, MessageFlags, TextInputStyle } from 'discord-api-types/v10';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
-import { editTwitchNotification } from '../../../Modules/Notifications/TwitchNotifications.js';
+import { editTwitchNotification, listTwitchNotifications, showManageTwitchNotificationPage } from '../../../Modules/Notifications/TwitchNotifications.js';
 
 
 export const Button = {
@@ -19,7 +19,7 @@ export const Button = {
     /** Button's cooldown, in seconds (whole number integers!)
      * @type {Number}
      */
-    cooldown: 8,
+    cooldown: 4,
 
     /** Runs the Button
      * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 
@@ -29,7 +29,7 @@ export const Button = {
     async executeButton(interaction, interactionUser, cfEnv) {
         // Split up custom ID
         const SplitCustomId = interaction.data.custom_id.split("_");
-        /** @type {'add'|'edit'|'reset'} */
+        /** @type {'add'|'manage'|'edit'|'delete'|'reset'|'return'} */
         const InputAction = SplitCustomId[1];
 
 
@@ -107,6 +107,14 @@ export const Button = {
             });
             
         }
+        // MANAGE - Shows the management page for a specific Twitch Notification
+        else if ( InputAction === 'manage' ) {
+            // Grab Twitch ID from the Button
+            let customId = interaction.data.custom_id.split("_");
+            let selectedTwitchId = customId.pop();
+
+            return await showManageTwitchNotificationPage(interaction, cfEnv, selectedTwitchId);
+        }
         // EDIT - Show a modal with options to edit or delete the selected Twitch Notification
         else if ( InputAction === 'edit' ) {
             // Grab Twitch ID from the Button
@@ -115,6 +123,36 @@ export const Button = {
 
             return await editTwitchNotification(interaction, cfEnv, selectedTwitchId);
 
+        }
+        // DELETE - Show confirmation modal for deleting *ONE SPECIFIC* Twitch Notification in this Server
+        else if ( InputAction === 'delete' ) {
+            // Grab Twitch ID & name from the Button
+            let customId = interaction.data.custom_id.split("_");
+            let selectedTwitchName = customId.pop();
+            let selectedTwitchId = customId.pop();
+
+            // Construct modal
+            /** @type {import('discord-api-types/v10').APIModalInteractionResponseCallbackData} */
+            let responseDeleteModal = {
+                "custom_id": `twitch_delete_${selectedTwitchId}`,
+                "title": localize(interaction.locale, 'TWITCH_NOTIF_DELETION_MODAL_TITLE'),
+                "components": [{
+                    // Twitch Channel
+                    "type": ComponentType.Label,
+                    "label": localize(interaction.locale, 'TWITCH_NOTIF_DELETION_MODAL_CHECKBOX_LABEL_NAME'),
+                    "description": localize(interaction.locale, 'TWITCH_NOTIF_DELETION_MODAL_CHECKBOX_LABEL_DESCRIPTION', selectedTwitchName),
+                    "component": {
+                        "type": ComponentType.Checkbox,
+                        "custom_id": `confirmation`
+                    }
+                }]
+            };
+
+            // ACK
+            return new JsonResponse({
+                type: InteractionResponseType.Modal,
+                data: responseDeleteModal
+            });
         }
         // RESET - Show confirmation modal for removing *all* added Twitch Notifications for this Server
         else if ( InputAction === 'reset' ) {
@@ -140,6 +178,10 @@ export const Button = {
                 type: InteractionResponseType.Modal,
                 data: responseResetModal
             });
+        }
+        // CANCEL - returns to main page
+        else if ( InputAction === 'return' ) {
+            return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
         }
 
 

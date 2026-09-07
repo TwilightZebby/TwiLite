@@ -540,7 +540,24 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 
     TWITCH_NOTIF_PANEL_BUTTON_ADD_NEW: `Add Twitch channel`,
     TWITCH_NOTIF_PANEL_BUTTON_RESET: `Reset all`,
-    TWITCH_NOTIF_PANEL_BUTTON_EDIT: `Edit`,
+    TWITCH_NOTIF_PANEL_BUTTON_EDIT: `Manage`,
+
+    TWITCH_NOTIF_EDIT_PANEL_HEADING: `# Manage Twitch Notification`,
+    TWITCH_NOTIF_EDIT_PANEL_DESCRIPTION: `Below are the current notification settings for the Twitch Channel **{{0}}** in this Discord Server.\nUse the attached Buttons to either edit or delete this notification.`,
+    TWITCH_NOTIF_EDIT_PANEL_CURRENT_SETTINGS: `## Current Settings`,
+    TWITCH_NOTIF_EDIT_PANEL_DISCORD_CHANNEL: `Posts in: {{0}}`,
+    TWITCH_NOTIF_EDIT_PANEL_PINGS_ROLE: `Pings the Role: {{0}}`,
+    TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_PING_ROLE: `No Roles are pinged`,
+    TWITCH_NOTIF_EDIT_PANEL_CUSTOM_MESSAGE: `Has the following custom "Going Live" message:\n>>> \`\`\`\n{{0}}\n\`\`\``,
+    TWITCH_NOTIF_EDIT_PANEL_HAS_NO_CUSTOM_MESSAGE: `Uses the default "Going Live" message`,
+    TWITCH_NOTIF_EDIT_PANEL_AUTO_PUBLISHES: `Does auto-publish in Announcements Channel`,
+    TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_AUTO_PUBLISH: `Does not auto-publish announcement`,
+    TWITCH_NOTIF_EDIT_PANEL_UPDATES_ON_STREAM_END: `Notification message is updated when stream ends`,
+    TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_UPDATE_ON_STREAM_END: `Does not update notification message when stream ends`,
+
+    TWITCH_NOTIF_EDIT_PANEL_BUTTON_CANCEL: `Cancel`,
+    TWITCH_NOTIF_EDIT_PANEL_BUTTON_EDIT: `Edit`,
+    TWITCH_NOTIF_EDIT_PANEL_BUTTON_DELETE: `Delete`,
 
     TWITCH_NOTIF_ADD_MODAL_TITLE: `Add Twitch Notification`,
     TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_NAME: `Twitch Channel`,
@@ -562,7 +579,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED: `This Server has already added Twitch Notifications for {{0}}!`,
 
     TWITCH_NOTIF_EDIT_MODAL_TITLE: `Edit Twitch Notification`,
-    TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\nIf you don't want to change any setting, then leave them unchanged.\n\nIf you wish to stop receiving notifications for this Twitch channel, select the "Delete Notification" checkbox at the bottom of this modal.\nIf you do *NOT* wish to delete, then leave that checkbox *blank/empty*.`,
+    TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\nIf you don't want to change any setting, then leave them unchanged.`,
     TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
     TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `Set where this Twitch Notification is posted to.`,
     TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_NAME: `Role to ping`,
@@ -571,8 +588,10 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Set the custom message for this notification. Use {streamerName} to include the streamer's name.`,
     TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
     TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `Set if the notification should be auto-published if posting to an Announcement Channel`,
-    TWITCH_NOTIF_EDIT_DELETION_LABEL_NAME: `Delete this Notification`,
-    TWITCH_NOTIF_EDIT_DELETION_LABEL_DESCRIPTION: `Select to fully delete receiving notifications for the {{0}} Twitch channel.`,
+    
+    TWITCH_NOTIF_DELETION_MODAL_TITLE: `Delete Twitch Notification`,
+    TWITCH_NOTIF_DELETION_MODAL_CHECKBOX_LABEL_NAME: `Delete this Notification`,
+    TWITCH_NOTIF_DELETION_MODAL_CHECKBOX_LABEL_DESCRIPTION: `Select to fully disable receiving notifications for the {{0}} Twitch channel.`,
 
     TWITCH_NOTIF_DELETE_ERROR_GENERIC: `Sorry, there was an error preventing deletion of Twitch Notifications for {{0}} in this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
     TWITCH_NOTIF_EDIT_ERROR_GENERIC: `Sorry, there was an error preventing saving of your edited Twitch Notification settings for {{0}}.\nPlease try again, or contact my developers if this error keeps occurring.`,

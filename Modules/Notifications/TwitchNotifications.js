@@ -194,7 +194,7 @@ export async function listTwitchNotifications(interaction, cfEnv, outputType) {
                 "accessory": {
                     "type": ComponentType.Button,
                     "style": ButtonStyle.Secondary,
-                    "custom_id": `twitch_edit_${item.twitch_channel_id}`,
+                    "custom_id": `twitch_manage_${item.twitch_channel_id}`,
                     "label": localize(interaction.locale, 'TWITCH_NOTIF_PANEL_BUTTON_EDIT')
                 },
                 "components": [{
@@ -284,6 +284,111 @@ export async function listTwitchNotifications(interaction, cfEnv, outputType) {
 
 
 /**
+ * Shows the page used to edit or delete a single, specific, Twitch Notification
+ * 
+ * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
+ * @param {*} cfEnv 
+ * @param {String} twitchChannelId The Twitch ID of the Channel to show this management page for
+ */
+export async function showManageTwitchNotificationPage(interaction, cfEnv, twitchChannelId) {
+    // Grab the config for this specific Twitch Notification
+    /** @type {{results: Array<SchemaTwitchGoLiveNotifications>}} */
+    const { results } = await cfEnv.DATABASE
+        .prepare("SELECT * FROM TwitchNotifications WHERE discord_guild_id = ? AND twitch_channel_id = ? LIMIT 1")
+        .bind(interaction.guild_id, twitchChannelId)
+        .run();
+
+    const FetchedTwitchNotif = results.shift();
+
+    
+    // Basic components for management panel
+    /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
+    let responseComponents = [{
+        "type": ComponentType.Container,
+        "accent_color": rgbArrayToInteger(hexToRgb('#8956FB')),
+        "spoiler": false,
+        "components": [{
+            "type": ComponentType.TextDisplay,
+            "content": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_HEADING')
+        }, {
+            "type": ComponentType.TextDisplay,
+            "content": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DESCRIPTION', FetchedTwitchNotif.twitch_channel_name)
+        }, {
+            "type": ComponentType.Separator,
+            "divider": true,
+            "spacing": SeparatorSpacingSize.Small
+        }]
+    }];
+
+    
+    // Assemble current settings into a displayed string
+    let currentSettingsString = "";
+
+    currentSettingsString += `${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_CURRENT_SETTINGS')}`;
+    // Discord Channel
+    currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DISCORD_CHANNEL', `<#${FetchedTwitchNotif.discord_channel_id}>`)}`;
+    // Pings Role
+    if ( FetchedTwitchNotif.ping_role_id != null ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_PINGS_ROLE', `<@&${FetchedTwitchNotif.ping_role_id}>`)}`; }
+    else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_PING_ROLE')}`; }
+    // Auto Publishes
+    if ( FetchedTwitchNotif.auto_publish_announcement === 1 ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_AUTO_PUBLISHES')}`; }
+    else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_AUTO_PUBLISH')}`; }
+    // Update on stream end (PLACEHOLDER FOR NOW)
+    //if ( FetchedTwitchNotif.update_on_stream_end === 1 ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_UPDATES_ON_STREAM_END')}`; }
+    //else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_UPDATE_ON_STREAM_END')}`; }
+    // Custom Message
+    if ( FetchedTwitchNotif.custom_message != null ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_CUSTOM_MESSAGE', FetchedTwitchNotif.custom_message)}`; }
+    else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_HAS_NO_CUSTOM_MESSAGE')}`; }
+
+    responseComponents[0].components.push({
+        "type": ComponentType.TextDisplay,
+        "content": currentSettingsString
+    });
+
+
+    // Add Buttons
+    responseComponents[0].components.push({
+        "type": ComponentType.Separator,
+        "divider": true,
+        "spacing": SeparatorSpacingSize.Small
+    }, {
+        "type": ComponentType.ActionRow,
+        "components": [{
+            "type": ComponentType.Button,
+            "style": ButtonStyle.Secondary,
+            "custom_id": `twitch_return`,
+            "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_BUTTON_CANCEL')
+        }, {
+            "type": ComponentType.Button,
+            "style": ButtonStyle.Secondary,
+            "custom_id": `twitch_edit_${FetchedTwitchNotif.twitch_channel_id}`,
+            "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_BUTTON_EDIT')
+        }, {
+            "type": ComponentType.Button,
+            "style": ButtonStyle.Danger,
+            "custom_id": `twitch_delete_${FetchedTwitchNotif.twitch_channel_id}_${FetchedTwitchNotif.twitch_channel_name}`,
+            "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_BUTTON_DELETE')
+        }]
+    });
+
+
+    // Display response to User
+    return new JsonResponse({
+        type: InteractionResponseType.UpdateMessage,
+        data: {
+            components: responseComponents
+        }
+    });
+}
+
+
+
+
+
+
+
+
+/**
  * Shows a modal to allow the User to edit a selected Twitch Notification, including an option to delete it.
  * 
  * @param {import('discord-api-types/v10').APIChatInputApplicationCommandInteraction} interaction 
@@ -355,7 +460,7 @@ export async function editTwitchNotification(interaction, cfEnv, twitchId) {
                 "required": false,
                 "value": FetchedConfig.custom_message != null ? FetchedConfig.custom_message : undefined
             }
-        }, {
+        }/* , {
             // Checkbox for setting deletion state
             "type": ComponentType.Label,
             "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_DELETION_LABEL_NAME'),
@@ -364,7 +469,7 @@ export async function editTwitchNotification(interaction, cfEnv, twitchId) {
                 "type": ComponentType.Checkbox,
                 "custom_id": `deletion-state`
             }
-        }]
+        } */]
     };
 
 

@@ -460,16 +460,16 @@ export async function editTwitchNotification(interaction, cfEnv, twitchId) {
                 "required": false,
                 "value": FetchedConfig.custom_message != null ? FetchedConfig.custom_message : undefined
             }
-        }/* , {
-            // Checkbox for setting deletion state
+        }, {
+            // Checkbox for setting auto publish state
             "type": ComponentType.Label,
-            "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_DELETION_LABEL_NAME'),
-            "description": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_DELETION_LABEL_DESCRIPTION', `${FetchedConfig.twitch_channel_name}`),
+            "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME'),
+            "description": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION'),
             "component": {
                 "type": ComponentType.Checkbox,
-                "custom_id": `deletion-state`
+                "custom_id": `auto-publish`
             }
-        } */]
+        }]
     };
 
 

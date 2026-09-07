@@ -267,6 +267,8 @@ export const Modal = {
             let inputRoleIds = null;
             /** @type {?String} */
             let inputCustomMessage = null;
+            /** @type {?Boolean} */
+            let inputAutoPublish = null;
 
             for (let i = 0; i <= ModalComponents.length - 1; i++) {
                 // Safety Net
@@ -285,6 +287,10 @@ export const Modal = {
                     else if ( tempTopLevelComp.custom_id === "custom-message" ) {
                         inputCustomMessage = tempTopLevelComp.value == "" ? null : tempTopLevelComp.value;
                     }
+                    // Auto Publish
+                    else if ( tempTopLevelComp.custom_id === "auto-publish" ) {
+                        inputAutoPublish = tempTopLevelComp.value;
+                    }
                 }
             }
 
@@ -299,11 +305,13 @@ export const Modal = {
             // Validate edits have actually been made
             let extractedInputRoleId = inputRoleIds != null ? inputRoleIds.shift() : null;
             let extractedInputCustomMessage = inputCustomMessage == "" || inputCustomMessage == null ? null : inputCustomMessage;
+            let extractedInputAutoPublish = inputAutoPublish === true ? 1 : 0;
 
             if (
                 (inputDiscordChannelId === results[0].discord_channel_id)
                 && (extractedInputRoleId === results[0].ping_role_id)
                 && (inputCustomMessage === results[0].custom_message)
+                && (extractedInputAutoPublish === results[0].auto_publish_announcement)
             ) {
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
@@ -351,8 +359,8 @@ export const Modal = {
             }
 
             // If input channel is not an Announcement-type Channel, force-set the "Auto Publish" field to `false`
-            //   TODO: Allow editing "Auto Publish" state
             if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { editableClonedData.auto_publish_announcement = 0; }
+            else if ( extractedInputAutoPublish !== results[0].auto_publish_announcement ) { editableClonedData.auto_publish_announcement === extractedInputAutoPublish; }
 
             // Pinged Roles
             if ( (extractedInputRoleId !== results[0].ping_role_id) ) {

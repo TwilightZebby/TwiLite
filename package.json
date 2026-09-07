@@ -24,14 +24,14 @@
     "@twurple/auth": "8.0.3",
     "@twurple/eventsub-base": "8.0.3",
     "@twurple/eventsub-http": "8.0.3",
-    "discord-api-types": "0.38.49",
+    "discord-api-types": "0.38.54",
     "discord-interactions": "4.4.0",
     "emoji-regex": "10.6.0",
     "itty-router": "5.0.23",
-    "mongodb": "7.1.1",
-    "undici": "7.28.0"
+    "undici": "8.10.0",
+    "uuid": "^14.0.2"
   },
   "devDependencies": {
-    "wrangler": "4.76.0"
+    "wrangler": "4.127.1"
   }
 }

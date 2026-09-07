@@ -1,10 +1,26 @@
 import { Collection } from '@discordjs/collection';
 import { ChannelType, MessageType } from 'discord-api-types/v10';
-import { DISCORD_TOKEN, superProperties } from '../config.js';
+import { AppTokenAuthProvider } from '@twurple/auth';
+import { ApiClient } from '@twurple/api';
+import { DISCORD_TOKEN, superProperties, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
+
+let lazyTwitchApiClient = null;
 
 
 // *******************************
 //  Exports
+
+/**
+ * API client for interacting with Twitch's API
+ * 
+ * @returns {ApiClient}
+ */
+export const getTwitchApiClient = () => {
+    if ( !lazyTwitchApiClient ) {
+        lazyTwitchApiClient = new ApiClient({ authProvider: new AppTokenAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET) });
+    }
+    return lazyTwitchApiClient;
+}
 
 /**
  * Base64-encoded Super Properties for accessing experimental API features

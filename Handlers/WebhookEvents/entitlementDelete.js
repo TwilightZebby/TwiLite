@@ -8,10 +8,11 @@ import { JsonResponse } from '../../Utility/utilityMethods.js';
 /**
  * Handles ENTITLEMENT_DELETE Webhook Events
  * @param {import('discord-api-types/v10').APIWebhookEvent} webhookEvent 
+ * @param {*} cfEnv
  * 
  * @returns {JsonResponse}
  */
-export async function handleEntitlementDelete(webhookEvent) {
+export async function handleEntitlementDelete(webhookEvent, cfEnv) {
     // Grab entitlement & check to see if it has expired
     /** @type {import('discord-api-types/v10').APIEntitlement} */
     let eventData = webhookEvent.event.data;
@@ -19,7 +20,7 @@ export async function handleEntitlementDelete(webhookEvent) {
     if ( (eventData.deleted === true) || (eventData.ends_at != null && (new Date(eventData.ends_at).getTime() < Date.now())) ) {
         // Entitlement has expired.
 
-        await handleExpiredInfernoCleanUp(eventData.guild_id);
+        await handleExpiredInfernoCleanUp(eventData.guild_id, cfEnv);
     }
 
     // ACK Webhook Event

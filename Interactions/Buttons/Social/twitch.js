@@ -66,14 +66,14 @@ export const Button = {
                         "required": true
                     }
                 }, {
-                    // Roles to ping in "go live" notification
+                    // Role to ping in "go live" notification
                     "type": ComponentType.Label,
                     "label": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_NAME'),
                     "description": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION'),
                     "component": {
                         "type": ComponentType.RoleSelect,
                         "custom_id": `roles-pinged`,
-                        "max_values": 2,
+                        "max_values": 1,
                         "required": false
                     }
                 }, {
@@ -148,7 +148,7 @@ export const Button = {
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
                 flags: MessageFlags.Ephemeral,
-                content: "This Button has not yet been implemented yet!"
+                content: localize(interaction.locale, 'ERROR_GENERIC_THAT_SHOULD_NOT_APPEAR')
             }
         });
     }

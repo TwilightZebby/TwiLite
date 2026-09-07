@@ -1,6 +1,7 @@
 import { ChannelType, ComponentType, InteractionResponseType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
+import { v7 as uuidv7 } from 'uuid';
 import { checkForPermissionInChannel, getTwitchAccessToken, JsonResponse } from '../../../Utility/utilityMethods.js';
-import { getMongoClient, getTwitchApiClient } from '../../../Utility/utilityConstants.js';
+import { getTwitchApiClient } from '../../../Utility/utilityConstants.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { listTwitchNotifications } from '../../../Modules/Notifications/TwitchNotifications.js';
 import { CF_WORKER_URL, RANDOMLY_GENERATED_FIXED_STRING, TWITCH_CLIENT_ID } from '../../../config.js';
@@ -29,9 +30,6 @@ export const Modal = {
         const SplitCustomId = interaction.data.custom_id.split("_");
         const InputAction = SplitCustomId[1];
 
-        const MongoClient = await getMongoClient();
-        const Database = MongoClient.db('production');
-        const TwitchNotificationCollection = Database.collection('twitch-notifications');
 
 
         // Adding a new Twitch notification
@@ -95,25 +93,20 @@ export const Modal = {
             }
 
             // Validate given Twitch Channel hasn't already been added for this Discord Server
-            /* * @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
-            /* let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
-            let guildTwitchNotifs = fetchedTwitchNotifs?.find(item => item.DiscordGuildId === interaction.guild_id); */
+            /** @type {{results: Array<import('../../../Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications>}} */
+            const { results } = await cfEnv.DATABASE
+                .prepare("SELECT * FROM TwitchNotifications WHERE discord_guild_id = ? AND twitch_channel_id = ? LIMIT 1")
+                .bind(interaction.guild_id, twitchUser.id)
+                .run();
 
-            let findExistingItem;
-            // TODO: Switch to Mongo
-            // TODO: Plan MongoDB layout
-            
-            if ( fetchedTwitchNotifs != null && fetchedTwitchNotifs.length !== 0 && guildTwitchNotifs != undefined && guildTwitchNotifs.TwitchGoLiveConfig.length !== 0 ) {
-                let doesTwitchChannelAlreadyExist = guildTwitchNotifs.TwitchGoLiveConfig.find(item => item.TwitchChannelId === twitchUser.id);
-                if ( doesTwitchChannelAlreadyExist != undefined ) {
-                    return new JsonResponse({
-                        type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED', `**${inputTwitchName}**`)
-                        }
-                    });
-                }
+            if ( results != null && results.length > 0 ) {
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        flags: MessageFlags.Ephemeral,
+                        content: localize(interaction.locale, 'TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED', `**${inputTwitchName}**`)
+                    }
+                });
             }
 
 
@@ -147,7 +140,7 @@ export const Modal = {
             if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { inputAutoPublishAnnouncement = false; }
 
 
-            // Validation complete, now create Twitch Webhook & store to KV
+            // Validation complete, now create Twitch Webhook & store to DB
             try {
                 // Create Twitch EventSub Webhook subscription
                 let twitchToken = await getTwitchAccessToken(cfEnv);
@@ -186,48 +179,67 @@ export const Modal = {
                 }
 
                 // Store to DB
-                /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchGoLiveConfig}*/
+                /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications}*/
                 let storeData = {
-                    TwitchWebhookSubscriptionId: "",
-                    TwitchChannelId: twitchUser.id,
-                    TwitchChannelName: twitchUser.name,
-                    DiscordChannelId: inputDiscordChannelId,
-                    IsNotificationEnabled: true, // For now, only settable by TwiLite itself when a Server looses TwiLite Inferno or re-gains Inferno
-                    DiscordGuildLocale: interaction.guild_locale,
-                    CustomMessage: inputCustomMessage != "" ? inputCustomMessage : "",
-                    PingRoleIds: inputRoleIds.length > 0 ? inputRoleIds : [],
-                    AutoPublishAnnouncement: inputAutoPublishAnnouncement
+                    notification_id: uuidv7(),
+                    discord_guild_id: interaction.guild_id,
+                    twitch_channel_id: twitchUser.id,
+                    twitch_channel_name: twitchUser.name,
+                    discord_guild_locale: interaction.guild_locale,
+                    is_notification_enabled: 1,
+                    twitch_golive_webhook_subscription_id: "",
+                    twitch_categoryupdate_webhook_subscription_id: null,
+                    twitch_streamend_webhook_subscription_id: null,
+                    discord_channel_id: inputDiscordChannelId,
+                    custom_message: inputCustomMessage != "" ? inputCustomMessage : null,
+                    ping_role_id: inputRoleIds.length > 0 ? inputRoleIds.shift() : null,
+                    auto_publish_announcement: inputAutoPublishAnnouncement === false ? 0 : 1,
+                    update_on_category_change: 0,
+                    update_on_stream_end: 0
                 };
 
                 if ( twitchApiRequest.status === 202 ) {
                     let twitchApiData = await twitchApiRequest.json();
-                    storeData.TwitchWebhookSubscriptionId = twitchApiData.data[0].id;
+                    storeData.twitch_golive_webhook_subscription_id = twitchApiData.data[0].id;
                 }
                 else if ( twitchApiRequest.status === 409 ) {
                     // Since we won't get a returned Subscription ID from Twitch, we need to copy it from another instance for the same Twitch Channel.
-                    for ( let i = 0; i <= fetchedTwitchNotifs.length; i++ ) {
-                        if ( fetchedTwitchNotifs[i].DiscordGuildId === interaction.guild_id ) { continue; }
+                    let queryFindTwitchWebhook = await cfEnv.DATABASE
+                        .prepare("SELECT * FROM TwitchNotifications WHERE twitch_channel_id = ? LIMIT 5")
+                        .bind(twitchUser.id)
+                        .run();
 
-                        for ( let j = 0; j <= fetchedTwitchNotifs[i].TwitchGoLiveConfig.length; j++ ) {
-                            if ( fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchChannelId === twitchUser.id ) {
-                                storeData.TwitchWebhookSubscriptionId = fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchWebhookSubscriptionId;
-                                break;
-                            }
+                    for ( let i = 0; i <= queryFindTwitchWebhook.results.length - 1; i++ ) {
+                        if ( queryFindTwitchWebhook.results[i].discord_guild_id === interaction.guild_id ) { continue; }
+
+                        if ( queryFindTwitchWebhook.results[i].twitch_golive_webhook_subscription_id.length > 0 ) {
+                            storeData.twitch_golive_webhook_subscription_id = queryFindTwitchWebhook.results[i].twitch_golive_webhook_subscription_id;
+                            break;
                         }
                     }
                 }
 
-                if ( fetchedTwitchNotifs == null ) { fetchedTwitchNotifs = []; }
-                if ( fetchedTwitchNotifs.length === 0 || guildTwitchNotifs == undefined ) {
-                    fetchedTwitchNotifs.push({ DiscordGuildId: interaction.guild_id, TwitchGoLiveConfig: [storeData] });
+                // Save to DB (using INSERT)
+                const { success } = await cfEnv.DATABASE
+                    .prepare("INSERT INTO TwitchNotifications ('notification_id', 'discord_guild_id', 'twitch_channel_id', 'twitch_channel_name', 'discord_guild_locale', 'is_notification_enabled', 'twitch_golive_webhook_subscription_id', 'twitch_categoryupdate_webhook_subscription_id', 'twitch_streamend_webhook_subscription_id', 'discord_channel_id', 'custom_message', 'ping_role_id', 'auto_publish_announcement', 'update_on_category_change', 'update_on_stream_end') VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                    .bind(storeData.notification_id, storeData.discord_guild_id, storeData.twitch_channel_id, storeData.twitch_channel_name, storeData.discord_guild_locale, storeData.is_notification_enabled, storeData.twitch_golive_webhook_subscription_id, storeData.twitch_categoryupdate_webhook_subscription_id, storeData.twitch_streamend_webhook_subscription_id, storeData.discord_channel_id, storeData.custom_message, storeData.ping_role_id, storeData.auto_publish_announcement, storeData.update_on_category_change, storeData.update_on_stream_end)
+                    .run();
+
+                if ( success === false ) {
+                    // PURELY so I can manually remove the Twitch Webhook if need be
+                    console.warn(`Saving new Twitch Notification failed. Here is the Twitch Webhook Subscription ID for this: ${storeData.twitch_golive_webhook_subscription_id}`)
+
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'TWITCH_NOTIF_ADD_ERROR_GENERIC', `${inputTwitchName}`)
+                        }
+                    });
                 }
                 else {
-                    guildTwitchNotifs.TwitchGoLiveConfig.push(storeData);
+                    return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
                 }
-
-                await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
-
-                return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
             }
             catch (err) {
                 console.error(err);
@@ -269,11 +281,11 @@ export const Modal = {
                     }
                     // Role Ids
                     else if ( tempTopLevelComp.custom_id === "roles-pinged" ) {
-                        inputRoleIds = tempTopLevelComp.values;
+                        inputRoleIds = tempTopLevelComp.values == null || tempTopLevelComp.values.length === 0 ? null : tempTopLevelComp.values;
                     }
                     // Custom Message
                     else if ( tempTopLevelComp.custom_id === "custom-message" ) {
-                        inputCustomMessage = tempTopLevelComp.value;
+                        inputCustomMessage = tempTopLevelComp.value == "" ? null : tempTopLevelComp.value;
                     }
                     // Deletion state
                     else if ( tempTopLevelComp.custom_id === "deletion-state" ) {
@@ -283,30 +295,31 @@ export const Modal = {
             }
 
 
-            /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
-            let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
-            let guildTwitchNotificationIndex = fetchedTwitchNotifs.findIndex(item => item.DiscordGuildId === interaction.guild_id);
-            let guildTwitchNotificationObject = fetchedTwitchNotifs.find(item => item.DiscordGuildId === interaction.guild_id);
-            let selectedTwitchNotificationIndex = guildTwitchNotificationObject.TwitchGoLiveConfig.findIndex(item => item.TwitchChannelId === twitchId);
-            let selectedTwitchNotificationObject = guildTwitchNotificationObject.TwitchGoLiveConfig.find(item => item.TwitchChannelId === twitchId);
+            /** @type {{results: Array<import('../../../Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications>}} */
+            const { results } = await cfEnv.DATABASE
+                .prepare("SELECT * FROM TwitchNotifications WHERE discord_guild_id = ? AND twitch_channel_id = ? LIMIT 1")
+                .bind(interaction.guild_id, twitchId)
+                .run();
 
 
             // FIRST CHECK DELETION STATE
             //   If true (selected), ignore all other values and DELETE the stored notification settings
             if ( inputDeletionState === true ) {
-                let catchDeletedObject = guildTwitchNotificationObject.TwitchGoLiveConfig.splice(selectedTwitchNotificationIndex, 1);
-                fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1, guildTwitchNotificationObject);
+                const { success } = await cfEnv.DATABASE
+                    .prepare("DELETE FROM TwitchNotifications WHERE discord_guild_id = ? AND twitch_channel_id = ?")
+                    .bind(interaction.guild_id, twitchId)
+                    .run();
 
                 // If there are no other Discord Guilds also subscribed to that same Twitch Channel's "Go Live" events, remove the Twitch subscription
                 let keepTwitchWebhookEvent = false;
 
-                for (let i = 0; i <= fetchedTwitchNotifs.length - 1; i++) {
-                    for (let j = 0; j <= fetchedTwitchNotifs[i].TwitchGoLiveConfig.length - 1; j++) {
-                        if ( fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchChannelId === selectedTwitchNotificationObject.TwitchChannelId ) {
-                            keepTwitchWebhookEvent = true;
-                            break;
-                        }
-                    }
+                const queryTwitchId = await cfEnv.DATABASE
+                    .prepare("SELECT notification_id FROM TwitchNotifications WHERE twitch_channel_id = ?")
+                    .bind(twitchId)
+                    .run();
+
+                if ( queryTwitchId.results?.length > 0 ) {
+                    keepTwitchWebhookEvent = true;
                 }
 
                 if ( keepTwitchWebhookEvent === false ) {
@@ -321,15 +334,13 @@ export const Modal = {
                             "Content-Type": `application/json`
                         },
                         body: JSON.stringify({
-                            "id": `${selectedTwitchNotificationObject.TwitchWebhookSubscriptionId}`
+                            "id": `${results[0].twitch_golive_webhook_subscription_id}`
                         })
                     });
                 }
 
                 // Deletion success, save & ACK
                 try {
-                    await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
-
                     return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
                 }
                 catch (err) {
@@ -339,7 +350,7 @@ export const Modal = {
                         type: InteractionResponseType.ChannelMessageWithSource,
                         data: {
                             flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'TWITCH_NOTIF_DELETE_ERROR_GENERIC', `**${selectedTwitchNotificationObject.TwitchChannelName}**`)
+                            content: localize(interaction.locale, 'TWITCH_NOTIF_DELETE_ERROR_GENERIC', `**${results[0].twitch_channel_name}**`)
                         }
                     });
                 }
@@ -347,31 +358,28 @@ export const Modal = {
 
 
             // Deletion not requested, thus edit instead!
-            
-            // Check there were actually changes made to the settings
-            //   (Using duplicated arrays so we don't accidentally break something somehow by accident)
-            let clonedInputRoleIds = inputRoleIds;
-            let clonedStorageRoleId = selectedTwitchNotificationObject.PingRoleIds;
+            let extractedInputRoleId = inputRoleIds.shift() ?? null;
 
             if (
-                (inputDiscordChannelId === selectedTwitchNotificationObject.DiscordChannelId)
-                && (clonedInputRoleIds.sort().toString() === clonedStorageRoleId.sort().toString())
-                && (inputCustomMessage === selectedTwitchNotificationObject.CustomMessage)
+                (inputDiscordChannelId === results[0].discord_channel_id)
+                && (extractedInputRoleId === results[0].ping_role_id)
+                && (inputCustomMessage === results[0].custom_message)
             ) {
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
                         flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'TWITCH_NOTIF_EDIT_ERROR_FIELDS_UNCHANGED', `**${selectedTwitchNotificationObject.TwitchChannelName}**`)
+                        content: localize(interaction.locale, 'TWITCH_NOTIF_EDIT_ERROR_FIELDS_UNCHANGED', `**${results[0].twitch_channel_name}**`)
                     }
                 });
             }
 
             
             // Update changed values
+            let editableClonedData = results[0];
 
             // Discord Channel Id
-            if ( (inputDiscordChannelId !== selectedTwitchNotificationObject.DiscordChannelId) ) {
+            if ( (inputDiscordChannelId !== results[0].discord_channel_id) ) {
                 // Validate new channel is usable
                 // Validate given Discord Channel is both viewable and chattable for TwiLite
                 let hasViewPermission = await checkForPermissionInChannel(PermissionFlagsBits.ViewChannel, interaction.guild_id, inputDiscordChannelId);
@@ -399,46 +407,42 @@ export const Modal = {
                 }
 
                 // Validation successful, set new value
-                selectedTwitchNotificationObject.DiscordChannelId = inputDiscordChannelId;
+                editableClonedData.discord_channel_id = inputDiscordChannelId;
             }
 
             // If input channel is not an Announcement-type Channel, force-set the "Auto Publish" field to `false`
             //   NOTE: Since Discord has a max limit of 5 top-level components per Modal, and the "Edit" Modal is already at that limit - I cannot allow for editing this field after creation.
             //         As such, I will have to handle the Channel's type changing here and ignore the fact the User cannot edit this setting without deleting & re-creating the notification config
-            if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { selectedTwitchNotificationObject.AutoPublishAnnouncement = false; }
+            if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { editableClonedData.auto_publish_announcement = 0; }
 
             // Pinged Roles
-            if ( (clonedInputRoleIds.sort().toString() !== clonedStorageRoleId.sort().toString()) ) {
-                selectedTwitchNotificationObject.PingRoleIds = inputRoleIds;
-
+            if ( (extractedInputRoleId !== results[0].ping_role_id) ) {
+                editableClonedData.ping_role_id = extractedInputRoleId;
             }
 
             // Custom Message
-            if ( (inputCustomMessage !== selectedTwitchNotificationObject.CustomMessage) ) {
-                selectedTwitchNotificationObject.CustomMessage = inputCustomMessage;
-
+            if ( (inputCustomMessage !== results[0].custom_message) ) {
+                editableClonedData.custom_message = inputCustomMessage;
             }
 
 
             // Attempt saving new values to DB
-            guildTwitchNotificationObject.TwitchGoLiveConfig.splice(selectedTwitchNotificationIndex, 1, selectedTwitchNotificationObject);
-            fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1, guildTwitchNotificationObject);
+            const { success } = await cfEnv.DATABASE
+                .prepare("UPDATE TwitchNotifications SET discord_guild_locale = ?, discord_channel_id = ?, custom_message = ?, ping_role_id = ? WHERE notification_id = ?")
+                .bind(interaction.guild_locale, editableClonedData.discord_channel_id, editableClonedData.custom_message, editableClonedData.ping_role_id, results[0].notification_id)
+                .run();
 
-            try {
-                await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
-
-                return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
-            }
-            catch (err) {
-                console.error(err);
-                    
+            if ( success === false ) {
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
                     data: {
                         flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'TWITCH_NOTIF_EDIT_ERROR_GENERIC', `**${selectedTwitchNotificationObject.TwitchChannelName}**`)
+                        content: localize(interaction.locale, 'TWITCH_NOTIF_EDIT_ERROR_GENERIC', `${results[0].twitch_channel_name}`)
                     }
                 });
+            }
+            else {
+                return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
             }
 
         }
@@ -462,61 +466,52 @@ export const Modal = {
 
             if ( inputConfirmation === true ) {
                 // Reset confirmed, so remove all Twitch Notifications for that Guild from DB
-                /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').TwitchNotificationConfig[]}*/
-                let fetchedTwitchNotifs = JSON.parse(await cfEnv.crimsonkv.get(`twitchNotifications`));
-                let guildTwitchNotificationIndex = fetchedTwitchNotifs.findIndex(item => item.DiscordGuildId === interaction.guild_id);
-                let catchThisDeletedObject = fetchedTwitchNotifs.splice(guildTwitchNotificationIndex, 1);
 
-                // Remove all Twitch webhook subscriptions
+                /** @type {{results: Array<import('../../../Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications>}} */
+                let { results } = await cfEnv.DATABASE
+                    .prepare("SELECT * FROM TwitchNotifications WHERE discord_guild_id = ?")
+                    .bind(interaction.guild_id)
+                    .run();
+
+                // Remove all Twitch webhook subscriptions, as long as no other Guilds are also subscribed to that Twitch Channel's notifications
                 let twitchToken = await getTwitchAccessToken(cfEnv);
 
-                catchThisDeletedObject.forEach(configItem => {
-                    configItem.TwitchGoLiveConfig.forEach(async goLiveItem => {
-                        // If there are no other Discord Guilds also subscribed to that same Twitch Channel's "Go Live" events, remove the Twitch subscription
-                        let keepTwitchWebhook = false;
 
-                        for (let i = 0; i <= fetchedTwitchNotifs.length - 1; i++) {
-                            for (let j = 0; j <= fetchedTwitchNotifs[i].TwitchGoLiveConfig.length - 1; j++) {
-                                if ( fetchedTwitchNotifs[i].TwitchGoLiveConfig[j].TwitchChannelId === goLiveItem.TwitchChannelId ) {
-                                    keepTwitchWebhook = true;
-                                    break;
-                                }
-                            }
-                        }
+                results.forEach(async item => {
+                    let keepTwitchWebhook = false;
 
-                        if ( keepTwitchWebhook === false ) {
-                            let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
-                                method: 'DELETE',
-                                headers: {
-                                    "Authorization": `Bearer ${twitchToken}`,
-                                    "Client-ID": `${TWITCH_CLIENT_ID}`,
-                                    "Content-Type": `application/json`
-                                },
-                                body: JSON.stringify({
-                                    "id": `${goLiveItem.TwitchWebhookSubscriptionId}`
-                                })
-                            });
-                        }
+                    let queryOtherGuildConfigs = await cfEnv.DATABASE
+                        .prepare("SELECT twitch_channel_name FROM TwitchNotifications WHERE twitch_channel_id = ? AND NOT discord_guild_id = ?")
+                        .bind(item.twitch_channel_id, interaction.guild_id)
+                        .run()
 
-                    });
+                    if ( queryOtherGuildConfigs?.results != null && queryOtherGuildConfigs.results.length !== 0 ) {
+                        keepTwitchWebhook = true;
+                    }
+
+                    if ( keepTwitchWebhook === false ) {
+                        let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                            method: 'DELETE',
+                            headers: {
+                                "Authorization": `Bearer ${twitchToken}`,
+                                "Client-ID": `${TWITCH_CLIENT_ID}`,
+                                "Content-Type": `application/json`
+                            },
+                            body: JSON.stringify({
+                                "id": `${item.twitch_golive_webhook_subscription_id}`
+                            })
+                        });
+                    }
                 });
 
-                try {
-                    await cfEnv.crimsonkv.put(`twitchNotifications`, JSON.stringify(fetchedTwitchNotifs));
 
-                    return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
-                }
-                catch (err) {
-                    console.error(err);
-
-                    return new JsonResponse({
-                        type: InteractionResponseType.ChannelMessageWithSource,
-                        data: {
-                            flags: MessageFlags.Ephemeral,
-                            content: localize(interaction.locale, 'TWITCH_NOTIF_RESET_ERROR_GENERIC')
-                        }
-                    });
-                }
+                // Now actually delete from DB
+                let queryResetGuildNotifs = cfEnv.DATABASE
+                    .prepare("DELETE FROM TwitchNotifications WHERE discord_guild_id = ?")
+                    .bind(interaction.guild_id)
+                    .run();
+                
+                return await listTwitchNotifications(interaction, cfEnv, 'EDIT');
             }
             else {
                 // Reset cancelled (checkbox not selected)

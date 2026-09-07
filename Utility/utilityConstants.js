@@ -2,12 +2,8 @@ import { Collection } from '@discordjs/collection';
 import { ChannelType, MessageType } from 'discord-api-types/v10';
 import { AppTokenAuthProvider } from '@twurple/auth';
 import { ApiClient } from '@twurple/api';
-import { MongoClient } from 'mongodb';
-import { DISCORD_TOKEN, MONGO_URI, superProperties, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
-import { ServerApiVersion } from 'mongodb';
+import { DISCORD_TOKEN, superProperties, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET } from '../config.js';
 
-let VarMongoClient;
-/** @type {?ApiClient} */
 let lazyTwitchApiClient = null;
 
 
@@ -15,26 +11,9 @@ let lazyTwitchApiClient = null;
 //  Exports
 
 /**
- * Mongo Client Connection
- * @returns {Promise<MongoClient>}
- */
-export const getMongoClient = async () => {
-    if (VarMongoClient) { return VarMongoClient; }
-    else {
-        let createdClient = new MongoClient(MONGO_URI, {
-            serverApi: {
-                version: ServerApiVersion.v1,
-                strict: true,
-                deprecationErrors: true
-            }
-        });
-        await createdClient.connect();
-        VarMongoClient = createdClient;
-    }
-}
-
-/**
  * API client for interacting with Twitch's API
+ * 
+ * @returns {ApiClient}
  */
 export const getTwitchApiClient = () => {
     if ( !lazyTwitchApiClient ) {

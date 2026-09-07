@@ -7,6 +7,7 @@ module.exports = {
 
     ERROR_GENERIC: `An error has occurred.`,
     ERROR_GENERIC_WITH_PREVIEW: `An error has occurred. A preview of the raw error is as follows:\n\`\`\`{{0}}\`\`\``,
+    ERROR_GENERIC_THAT_SHOULD_NOT_APPEAR: `Oh no, you have found an error that should not appear!\nIf this error keeps appearing, please let my developers know via GitHub (found in my \`/support\` command)`,
     ERROR_INVALID_COLOR_HEX: `That wasn't a valid hex colour code! Please try again, using a valid hex colour code, including the \`#\` (hash) at the start. For example: \`#62af4d\``,
 
 
@@ -531,8 +532,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_PANEL_DESCRIPTION: `Add or manage receiving "Going Live" Notifications in this Server for linked Twitch Channels.\n\n-# Please remember that this module is still in early access for **TwiLite Inferno** powered Servers. As such, it is still in active development and will be disabled should this Server's **TwiLite Inferno** subscription expires or is cancelled.`,
     TWITCH_NOTIF_PANEL_EMPTY_PLACEHOLDER: `This Server currently has no Twitch Notifications setup. Use the button below to begin adding Twitch Notifications for this Server!`,
     TWITCH_NOTIF_PANEL_ITEM_POSTS_IN_CHANNEL: `Posts in {{0}}`,
-    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_SINGLAR: `Pings 1 Role`,
-    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING_COUNT_MULTIPLE: `Pings {{0}} Roles`,
+    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING: `Pings Role: {{0}}`,
     TWITCH_NOTIF_PANEL_ITEM_HAS_CUSTOM_MESSAGE: `Has custom message`,
     TWITCH_NOTIF_PANEL_ITEM_AUTO_PUBLISH: `Auto-publishing enabled`,
     
@@ -547,8 +547,8 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_DESCRIPTION: `The Twitch Channel's username this "go live" notification should be for`,
     TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
     TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `The Server Channel you want to post this notification in`,
-    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_NAME: `Role(s) to ping [Optional]`,
-    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Roles you want to ping in this notification. Will be prefixed to the notification's message.`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_NAME: `Role to ping [Optional]`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `The Role you want to ping in this notification. Will be prefixed to the notification's message.`,
     TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message [Optional]`,
     TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Use {streamerName} to include the streamer's name.`,
     TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
@@ -565,8 +565,8 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\nIf you don't want to change any setting, then leave them unchanged.\n\nIf you wish to stop receiving notifications for this Twitch channel, select the "Delete Notification" checkbox at the bottom of this modal.\nIf you do *NOT* wish to delete, then leave that checkbox *blank/empty*.`,
     TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
     TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `Set where this Twitch Notification is posted to.`,
-    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_NAME: `Roles(s) to ping`,
-    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Set which Roles are pinged in this notification. Will be prefixed to the notification's message`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_NAME: `Role to ping`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Set which Role is pinged in this notification. Will be prefixed to the notification's message`,
     TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message`,
     TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Set the custom message for this notification. Use {streamerName} to include the streamer's name.`,
     TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,

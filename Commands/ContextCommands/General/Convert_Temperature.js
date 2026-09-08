@@ -112,6 +112,8 @@ export const ContextCommand = {
     async executeCommand(interaction, interactionUser) {
         // Grab Message
         const SourceMessage = interaction.data.resolved.messages[interaction.data.target_id];
+        // Check Premium status
+        const checkPremium = checkForInfernoSku(interaction);
 
         // Validate not an App/System Message
         if ( SourceMessage.author.bot || SourceMessage.author.system || SystemMessageTypes.includes(SourceMessage.type) ) {
@@ -171,37 +173,33 @@ export const ContextCommand = {
                 }
             });
         }
-        // If more than 10 temperatures were found
-        else if ( MatchedTemperatures.length > 10 ) {
-            // Check Premium status
-            let checkPremium = checkForInfernoSku(interaction);
-
-            if ( checkPremium === false ) {
-                return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT'),
+        // If more than 10 temperatures were found (and does NOT have Inferno)
+        else if ( MatchedTemperatures.length > 10 && checkPremium === false ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT'),
+                    components: [{
+                        type: ComponentType.ActionRow,
                         components: [{
-                            type: ComponentType.ActionRow,
-                            components: [{
-                                type: ComponentType.Button,
-                                style: ButtonStyle.Premium,
-                                sku_id: SKU_INFERNO_ID
-                            }]
+                            type: ComponentType.Button,
+                            style: ButtonStyle.Premium,
+                            sku_id: SKU_INFERNO_ID
                         }]
-                    }
-                });
-            }
-            else if ( MatchedTemperatures.length > 20 && checkPremium === true ) {
-                return new JsonResponse({
-                    type: InteractionResponseType.ChannelMessageWithSource,
-                    data: {
-                        flags: MessageFlags.Ephemeral,
-                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_PREMIUM')
-                    }
-                });
-            }
+                    }]
+                }
+            });
+        }
+        // If more than 20 temperatures were found (and DOES have Inferno)
+        else if ( MatchedTemperatures.length > 20 && checkPremium === true ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_PREMIUM')
+                }
+            });
         }
         // If one single temperature was found
         else if ( MatchedTemperatures.length === 1 ) {
@@ -213,7 +211,7 @@ export const ContextCommand = {
                 }
             });
         }
-        // If between 2 and 10 temperatures were found (inclusive)
+        // If between 2 and 20 temperatures were found (inclusive)
         else {
             let convertedResults = [];
 

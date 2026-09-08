@@ -1,7 +1,8 @@
-import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, MessageReferenceType } from 'discord-api-types/v10';
-import { JsonResponse } from '../../../Utility/utilityMethods.js';
+import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, MessageReferenceType, ComponentType, ButtonStyle } from 'discord-api-types/v10';
+import { checkForInfernoSku, JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { SystemMessageTypes } from '../../../Utility/utilityConstants.js';
+import { SKU_INFERNO_ID } from '../../../config.js';
 
 // REGEXS
 const TemperatureRegex = new RegExp(/(?<amount>-?\d+(?:\.\d*)?)[^\S\n]*(?<degrees>°|'|deg(?:rees?)?|in)?[^\S\n]*(?<unit>c(?:(?=el[cs]ius\b|entigrades?\b|\b))|f(?:(?=ahrenheit\b|\b))|k(?:(?=elvins?\b|\b)))/gi);
@@ -172,13 +173,35 @@ export const ContextCommand = {
         }
         // If more than 10 temperatures were found
         else if ( MatchedTemperatures.length > 10 ) {
-            return new JsonResponse({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                    flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT')
-                }
-            });
+            // Check Premium status
+            let checkPremium = checkForInfernoSku(interaction);
+
+            if ( checkPremium === false ) {
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        flags: MessageFlags.Ephemeral,
+                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT'),
+                        components: [{
+                            type: ComponentType.ActionRow,
+                            components: [{
+                                type: ComponentType.Button,
+                                style: ButtonStyle.Premium,
+                                sku_id: SKU_INFERNO_ID
+                            }]
+                        }]
+                    }
+                });
+            }
+            else if ( MatchedTemperatures.length > 20 && checkPremium === true ) {
+                return new JsonResponse({
+                    type: InteractionResponseType.ChannelMessageWithSource,
+                    data: {
+                        flags: MessageFlags.Ephemeral,
+                        content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_PREMIUM')
+                    }
+                });
+            }
         }
         // If one single temperature was found
         else if ( MatchedTemperatures.length === 1 ) {

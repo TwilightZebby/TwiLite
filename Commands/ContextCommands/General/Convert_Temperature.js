@@ -1,7 +1,8 @@
-import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, MessageReferenceType } from 'discord-api-types/v10';
-import { JsonResponse } from '../../../Utility/utilityMethods.js';
+import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationType, MessageFlags, InteractionResponseType, MessageReferenceType, ComponentType, ButtonStyle } from 'discord-api-types/v10';
+import { checkForInfernoSku, JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
 import { SystemMessageTypes } from '../../../Utility/utilityConstants.js';
+import { SKU_INFERNO_ID } from '../../../config.js';
 
 // REGEXS
 const TemperatureRegex = new RegExp(/(?<amount>-?\d+(?:\.\d*)?)[^\S\n]*(?<degrees>°|'|deg(?:rees?)?|in)?[^\S\n]*(?<unit>c(?:(?=el[cs]ius\b|entigrades?\b|\b))|f(?:(?=ahrenheit\b|\b))|k(?:(?=elvins?\b|\b)))/gi);
@@ -111,6 +112,8 @@ export const ContextCommand = {
     async executeCommand(interaction, interactionUser) {
         // Grab Message
         const SourceMessage = interaction.data.resolved.messages[interaction.data.target_id];
+        // Check Premium status
+        const checkPremium = checkForInfernoSku(interaction);
 
         // Validate not an App/System Message
         if ( SourceMessage.author.bot || SourceMessage.author.system || SystemMessageTypes.includes(SourceMessage.type) ) {
@@ -170,13 +173,31 @@ export const ContextCommand = {
                 }
             });
         }
-        // If more than 10 temperatures were found
-        else if ( MatchedTemperatures.length > 10 ) {
+        // If more than 10 temperatures were found (and does NOT have Inferno)
+        else if ( MatchedTemperatures.length > 10 && checkPremium === false ) {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT')
+                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT'),
+                    components: [{
+                        type: ComponentType.ActionRow,
+                        components: [{
+                            type: ComponentType.Button,
+                            style: ButtonStyle.Premium,
+                            sku_id: SKU_INFERNO_ID
+                        }]
+                    }]
+                }
+            });
+        }
+        // If more than 20 temperatures were found (and DOES have Inferno)
+        else if ( MatchedTemperatures.length > 20 && checkPremium === true ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_PREMIUM')
                 }
             });
         }
@@ -186,12 +207,11 @@ export const ContextCommand = {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    flags: MessageFlags.Ephemeral,
                     content: `[${localize(interaction.locale, 'JUMP_TO_SOURCE_MESSAGE')}](<https://discord.com/channels/${interaction.guild_id}/${interaction.channel.id}/${SourceMessage.id}>)\n${localize(interaction.locale, 'TEMPERATURE_COMMAND_SUCCESS_SINGLAR')}\n\n- ${ConvertedResult}`
                 }
             });
         }
-        // If between 2 and 10 temperatures were found (inclusive)
+        // If between 2 and 20 temperatures were found (inclusive)
         else {
             let convertedResults = [];
 
@@ -207,7 +227,6 @@ export const ContextCommand = {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    flags: MessageFlags.Ephemeral,
                     content: `[${localize(interaction.locale, 'JUMP_TO_SOURCE_MESSAGE')}](<https://discord.com/channels/${interaction.guild_id}/${interaction.channel.id}/${SourceMessage.id}>)\n${localize(interaction.locale, 'TEMPERATURE_COMMAND_SUCCESS_MULTIPLE')}\n\n${convertedResults.join(`\n`)}`
                 }
             });

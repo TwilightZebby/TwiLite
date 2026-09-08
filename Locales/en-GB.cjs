@@ -610,4 +610,13 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE: `Went live: {{0}}`,
     TWITCH_NOTIFICATION_GOING_LIVE_WATCH_BUTTON_LABEL: `Watch live stream`,
     TWITCH_NOTIFICATION_GOING_LIVE_VOD_BUTTON_LABEL: `Watch VOD`,
+
+
+
+    // ******* SHOUTOUT COMMAND
+    SHOUTOUT_COMMAND_RESPONSE_HEADING: `📣 A Shoutout has been given!`,
+    SHOUTOUT_COMMAND_RESPONSE_DESCRIPTION: `{{0}} is giving {{1}} a shout-out!!`,
+    SHOUTOUT_COMMAND_RESPONSE_AVATAR_ALT_TEXT: `The profile picture of {{0}}`,
+
+    SHOUTOUT_COMMAND_ERROR_CANNOT_SHOUTOUT_SELF: `Sorry, you cannot give yourself a shout-out!`,
 }

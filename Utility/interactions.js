@@ -24,6 +24,7 @@ export const SlashCommands = {
     'invite-guest': () => import('../Commands/SlashCommands/General/invite-guest.js'),
     'support': () => import('../Commands/SlashCommands/General/support.js'),
     'temperature': () => import('../Commands/SlashCommands/General/temperature.js'),
+    'shoutout': () => import('../Commands/SlashCommands/General/shoutout.js'),
 
     // ***** FOR MANAGEMENT COMMANDS
     'lock-emoji': () => import('../Commands/SlashCommands/Management/lock-emoji.js'),

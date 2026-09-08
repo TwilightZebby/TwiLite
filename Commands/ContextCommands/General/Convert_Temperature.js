@@ -186,7 +186,6 @@ export const ContextCommand = {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    flags: MessageFlags.Ephemeral,
                     content: `[${localize(interaction.locale, 'JUMP_TO_SOURCE_MESSAGE')}](<https://discord.com/channels/${interaction.guild_id}/${interaction.channel.id}/${SourceMessage.id}>)\n${localize(interaction.locale, 'TEMPERATURE_COMMAND_SUCCESS_SINGLAR')}\n\n- ${ConvertedResult}`
                 }
             });
@@ -207,7 +206,6 @@ export const ContextCommand = {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
-                    flags: MessageFlags.Ephemeral,
                     content: `[${localize(interaction.locale, 'JUMP_TO_SOURCE_MESSAGE')}](<https://discord.com/channels/${interaction.guild_id}/${interaction.channel.id}/${SourceMessage.id}>)\n${localize(interaction.locale, 'TEMPERATURE_COMMAND_SUCCESS_MULTIPLE')}\n\n${convertedResults.join(`\n`)}`
                 }
             });

@@ -69,6 +69,29 @@ export const SlashCommand = {
                 required: true
             },
             {
+                type: ApplicationCommandOptionType.String,
+                name: "style",
+                description: "How are you biting your target? (Defaults to affectionate)",
+                description_localizations: {
+                    'en-GB': "How are you biting your target? (Defaults to affectionate)",
+                    'en-US': "How are you biting your target? (Defaults to affectionate)"
+                },
+                required: false,
+                choices: [{
+                    name: "Affectionate",
+                    value: "AFFECTIONATE"
+                }, {
+                    name: "Hungry",
+                    value: "HUNGRY"
+                }, {
+                    name: "Feral",
+                    value: "FERAL"
+                }, {
+                    name: "Kinky",
+                    value: "KINKY"
+                }]
+            },
+            {
                 type: ApplicationCommandOptionType.Boolean,
                 name: "include-gif",
                 description: "Should a random GIF be displayed? (default: false)",

@@ -74,7 +74,8 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     const InputTarget = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.Mentionable);
     /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataBooleanOption|undefined}*/
     const InputIncludeGif = interaction.data.options.find(option => option.name === "include-gif");
-    const InputReason = interaction.data.options.find(option => option.type === ApplicationCommandOptionType.String);
+    /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataStringOption|undefined}*/
+    const InputReason = interaction.data.options.find(option => option.name === 'reason');
     /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataBooleanOption|undefined}*/
     const InputBlockReturn = interaction.data.options.find(option => option.name === "block-return") ?? { name: "block-return", type: ApplicationCommandOptionType.Boolean, value: false };
 
@@ -105,37 +106,42 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         "custom_id": `return-action_${interaction.data.name.toUpperCase()}_${InteractionTriggeringUserId}_${InputTarget.value}_${InteractionTriggeringUserDisplayName}` // Add names to the end so we don't need to be limited to not having nicknames
     };
 
+    // Just to handle the special case with `/bite` having styles now
+    /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataStringOption|undefined}*/
+    const InputStyle = interaction.data.options.find(option => option.name === "style");
+    const ActionName = `${interaction.data.name.toUpperCase()}${InputStyle != undefined ? `_${InputStyle.value}` : ""}`;
+
 
     // atEveryone
     if ( InputTarget.value === interaction.guild_id ) {
         InputBlockReturn.value = true;
-        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_EVERYONE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_EVERYONE_${ActionName}`, InteractionTriggeringUserDisplayName);
     }
     // atRole
     else if ( interaction.data.resolved.roles?.[InputTarget.value] != undefined ) {
         forceDisplayEmbed = true;
         InputBlockReturn.value = true;
-        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_ROLE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@&${InputTarget.value}>`);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_ROLE_${ActionName}`, InteractionTriggeringUserDisplayName, `<@&${InputTarget.value}>`);
     }
     // atUser (used on self)
     else if ( InputTarget.value === InteractionTriggeringUserId ) {
         InputBlockReturn.value = true;
-        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_SELF_USER_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_SELF_USER_${ActionName}`, InteractionTriggeringUserDisplayName);
     }
     // atUser (used on this app)
     else if ( InputTarget.value === DISCORD_APP_USER_ID ) {
         InputBlockReturn.value = true;
-        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_TWILITE_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_TWILITE_${ActionName}`, InteractionTriggeringUserDisplayName);
     }
     // atUser (used on the yucky Mee6 app)
     else if ( InputTarget.value === '159985870458322944' ) {
         InputBlockReturn.value = true;
-        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_MEE6_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@159985870458322944>`);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_MEE6_${ActionName}`, InteractionTriggeringUserDisplayName, `<@159985870458322944>`);
     }
     // atUser (used on any app that isn't TwiLite or Mee6)
     else if ( interaction.data.resolved.users?.[InputTarget.value]?.bot === true ) {
         InputBlockReturn.value = true;
-        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_OTHER_APPS_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, `<@${InputTarget.value}>`);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_OTHER_APPS_${ActionName}`, InteractionTriggeringUserDisplayName, `<@${InputTarget.value}>`);
     }
     // atUser (used on any human User)
     else {
@@ -147,7 +153,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         else if ( interaction.data.resolved.members == undefined && interaction.data.resolved.users[InputTarget.value].global_name != null ) { targetDisplayName = interaction.data.resolved.users[InputTarget.value].global_name; }
         else { targetDisplayName = interaction.data.resolved.users[InputTarget.value].username; }
 
-        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_OTHER_USER_${interaction.data.name.toUpperCase()}`, InteractionTriggeringUserDisplayName, targetDisplayName);
+        displayMessage = localize(CurrentLocale, `ACTION_COMMAND_OTHER_USER_${ActionName}`, InteractionTriggeringUserDisplayName, targetDisplayName);
     }
 
 

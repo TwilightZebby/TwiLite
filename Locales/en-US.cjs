@@ -7,6 +7,7 @@ module.exports = {
 
     ERROR_GENERIC: `An error has occurred.`,
     ERROR_GENERIC_WITH_PREVIEW: `An error has occurred. A preview of the raw error is as follows:\n\`\`\`{{0}}\`\`\``,
+    ERROR_GENERIC_THAT_SHOULD_NOT_APPEAR: `Oh no, you have found an error that should not appear!\nIf this error keeps appearing, please let my developers know via GitHub (found in my \`/support\` command)`,
     ERROR_INVALID_COLOR_HEX: `That wasn't a valid hex color code! Please try again, using a valid hex color code, including the \`#\` (hash) at the start. For example: \`#62af4d\``,
 
 
@@ -77,7 +78,10 @@ module.exports = {
     ACTION_COMMAND_OTHER_USER_COOKIE: `**{{0}}** gave a cookie to **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_SLAP: `**{{0}}** slapped **{{1}}**`,
     ACTION_COMMAND_OTHER_USER_JAIL: `**{{0}}** was sent to jail by **{{1}}**`,
-    ACTION_COMMAND_OTHER_USER_BITE: `**{{0}}** gave **{{1}}** an affectionate bite`,
+    ACTION_COMMAND_OTHER_USER_BITE_AFFECTIONATE: `**{{0}}** gave **{{1}}** an affectionate bite`,
+    ACTION_COMMAND_OTHER_USER_BITE_HUNGRY: `**{{0}}** was hungry and took a bite out of **{{1}}**!`,
+    ACTION_COMMAND_OTHER_USER_BITE_FERAL: `**{{0}}** went feral and bit **{{1}}**!`,
+    ACTION_COMMAND_OTHER_USER_BITE_KINKY: `**{{0}}** slowly bit **{{1}}**'s shoulder kinkly...`,
     ACTION_COMMAND_OTHER_USER_LICK: `**{{0}}** gave **{{1}}** an affectionate lick`,
     ACTION_COMMAND_OTHER_USER_GLARE: `**{{0}}** glares at **{{1}}**...`,
     ACTION_COMMAND_OTHER_USER_EXPLODE: `**{{0}}** wants to explode **{{1}}** with their mind!`,
@@ -90,7 +94,10 @@ module.exports = {
     ACTION_COMMAND_SELF_USER_YEET: `**{{0}}** yeeted themselves out of a cannon`,
     ACTION_COMMAND_SELF_USER_COOKIE: `**{{0}}** snuck a cookie out of the cookie jar for themselves`,
     ACTION_COMMAND_SELF_USER_SLAP: `**{{0}}** slapped themselves`,
-    ACTION_COMMAND_SELF_USER_BITE: `**{{0}}** took a bite out of themselves`,
+    ACTION_COMMAND_SELF_USER_BITE_AFFECTIONATE: `**{{0}}** took a bite out of themselves`,
+    ACTION_COMMAND_SELF_USER_BITE_HUNGRY: `**{{0}}** was hungry and mistook themselves as food`,
+    ACTION_COMMAND_SELF_USER_BITE_FERAL: `**{{0}}** went feral and bit themselves in their confusion`,
+    ACTION_COMMAND_SELF_USER_BITE_KINKY: `**{{0}}** took a bite out of themselves`,
     ACTION_COMMAND_SELF_USER_LICK: `**{{0}}** licked themselves`,
     ACTION_COMMAND_SELF_USER_GLARE: `**{{0}}** glares at themself in the mirror`,
     ACTION_COMMAND_SELF_USER_EXPLODE: `**{{0}}** thought they were a Minecraft Creeper and self-exploded!`,
@@ -103,7 +110,10 @@ module.exports = {
     ACTION_COMMAND_ROLE_YEET: `**{{0}}** collectively yeeted **{{1}}**`,
     ACTION_COMMAND_ROLE_COOKIE: `**{{0}}** gave **{{1}}** a cookie`,
     ACTION_COMMAND_ROLE_SLAP: `**{{0}}** collectively slapped **{{1}}**`,
-    ACTION_COMMAND_ROLE_BITE: `**{{0}}** took a collectively bite out of **{{1}}**`,
+    ACTION_COMMAND_ROLE_BITE_AFFECTIONATE: `**{{0}}** took a collective bite out of **{{1}}**`,
+    ACTION_COMMAND_ROLE_BITE_HUNGRY: `**{{0}}** was *very* hungry and took a bite out of **{{1}}**`,
+    ACTION_COMMAND_ROLE_BITE_FERAL: `**{{0}}** went feral like a wild animal and bit **{{1}}**`,
+    ACTION_COMMAND_ROLE_BITE_KINKY: `**{{0}}** took a collective bite out of **{{1}}**`,
     ACTION_COMMAND_ROLE_LICK: `**{{0}}** collectively licked **{{1}}**`,
     ACTION_COMMAND_ROLE_GLARE: `**{{0}}** glares collectively at **{{1}}**`,
     ACTION_COMMAND_ROLE_EXPLODE: `**{{0}}** caught **{{1}}** in a Minecraft TNT trap!`,
@@ -116,7 +126,10 @@ module.exports = {
     ACTION_COMMAND_EVERYONE_YEET: `**{{0}}** yeeted \`@everyone\` with a catapult`,
     ACTION_COMMAND_EVERYONE_COOKIE: `**{{0}}** gave \`@everyone\` a cookie`,
     ACTION_COMMAND_EVERYONE_SLAP: `**{{0}}** slapped \`@everyone\``,
-    ACTION_COMMAND_EVERYONE_BITE: `**{{0}}** collectively bites \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_BITE_AFFECTIONATE: `**{{0}}** took a collective bite out of \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_BITE_HUNGRY: `**{{0}}** was hungry and started to see \`@everyone\` as walking food...`,
+    ACTION_COMMAND_EVERYONE_BITE_FERAL: `**{{0}}** took a collective bite out of \`@everyone\``,
+    ACTION_COMMAND_EVERYONE_BITE_KINKY: `**{{0}}** took a collective bite out of \`@everyone\``,
     ACTION_COMMAND_EVERYONE_LICK: `**{{0}}** collectively licks \`@everyone\``,
     ACTION_COMMAND_EVERYONE_GLARE: `**{{0}}** glares \`@everyone\``,
     ACTION_COMMAND_EVERYONE_EXPLODE: `**{{0}}** used \`/tnt\` on \`@everyone\`?!`,
@@ -129,7 +142,10 @@ module.exports = {
     ACTION_COMMAND_OTHER_APPS_YEET: `**{{0}}** yeeted **{{1}}** out the internet`,
     ACTION_COMMAND_OTHER_APPS_COOKIE: `**{{0}}** gave **{{1}}** a virtual cookie`,
     ACTION_COMMAND_OTHER_APPS_SLAP: `**{{0}}** slapped **{{1}}**'s physical servers`,
-    ACTION_COMMAND_OTHER_APPS_BITE: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
+    ACTION_COMMAND_OTHER_APPS_BITE_AFFECTIONATE: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
+    ACTION_COMMAND_OTHER_APPS_BITE_HUNGRY: `**{{0}}** took a bite out of **{{1}}**'s internal wires, mistaking it for spaghetti`,
+    ACTION_COMMAND_OTHER_APPS_BITE_FERAL: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
+    ACTION_COMMAND_OTHER_APPS_BITE_KINKY: `**{{0}}** took a bite out of **{{1}}**'s internal wires`,
     ACTION_COMMAND_OTHER_APPS_LICK: `**{{0}}** discovered electricity by licking **{{1}}**'s internal circuits`,
     ACTION_COMMAND_OTHER_APPS_GLARE: `**{{0}}** glared at **{{1}}**'s code`,
     ACTION_COMMAND_OTHER_APPS_EXPLODE: `**{{0}}** wants to explode **{{1}}**'s internal servers`,
@@ -142,7 +158,10 @@ module.exports = {
     ACTION_COMMAND_TWILITE_YEET: `I gave **{{0}}** flying lessons for trying to yeet me!`,
     ACTION_COMMAND_TWILITE_COOKIE: `**{{0}}** gave me a virtual cookie!`,
     ACTION_COMMAND_TWILITE_SLAP: `**{{0}}** slapped me?! How dare you!`,
-    ACTION_COMMAND_TWILITE_BITE: `**{{0}}** took a bite out of my code?!`,
+    ACTION_COMMAND_TWILITE_BITE_AFFECTIONATE: `**{{0}}** took a bite out of my code?!`,
+    ACTION_COMMAND_TWILITE_BITE_HUNGRY: `**{{0}}** was hungry and mistook my computer chips as potato chips D:`,
+    ACTION_COMMAND_TWILITE_BITE_FERAL: `**{{0}}** went feral and took a bite out of my code??`,
+    ACTION_COMMAND_TWILITE_BITE_KINKY: `Listen **{{0}}**, I'm not allowing you to bite me in a kinky way.`,
     ACTION_COMMAND_TWILITE_LICK: `**{{0}}** licked me?! Well now you know what electricity tastes like...`,
     ACTION_COMMAND_TWILITE_GLARE: `**{{0}}** glared at me, and I glare back <:squint:1418164398404669500>`,
     ACTION_COMMAND_TWILITE_EXPLODE: `**{{0}}** exploded...ME?!`,
@@ -155,7 +174,10 @@ module.exports = {
     ACTION_COMMAND_MEE6_YEET: `**{{0}}** absolutely YEETED **{{1}}**`,
     ACTION_COMMAND_MEE6_COOKIE: `**{{0}}** gave **{{1}}** a cookie from the Dark Side`,
     ACTION_COMMAND_MEE6_SLAP: `**{{0}}** gave **{{1}}** a royal slapping`,
-    ACTION_COMMAND_MEE6_BITE: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
+    ACTION_COMMAND_MEE6_BITE_AFFECTIONATE: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
+    ACTION_COMMAND_MEE6_BITE_HUNGRY: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
+    ACTION_COMMAND_MEE6_BITE_FERAL: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
+    ACTION_COMMAND_MEE6_BITE_KINKY: `**{{0}}** tried to bite **{{1}}**'s rotten code, but spat it back out again!`,
     ACTION_COMMAND_MEE6_LICK: `**{{0}}** licked **{{1}}**'s rotten code, and became ill from doing so`,
     ACTION_COMMAND_MEE6_GLARE: `**{{0}}** glares menancingly at **{{1}}**`,
     ACTION_COMMAND_MEE6_EXPLODE: `**{{0}}** explodes **{{1}}** over and over again!`,
@@ -381,7 +403,8 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TEMPERATURE_COMMAND_ERROR_INVALID_TEMPERATURE: `:warning: {{0}}{{1}} is a temperature that cannot exist! (It is below Absolute Zero!)`,
     TEMPERATURE_COMMAND_ERROR_MISSING_CONTENT: `Sorry, that Message has no content to it!\n-# *I can only search for temperatures in the actual content of the Message. Not in Embeds, Polls, etc!*`,
     TEMPERATURE_COMMAND_ERROR_TEMPERATURE_NOT_FOUND: `Sorry, but I couldn't find any temperatures to convert from that Message.\n-# *I can only search for temperatures in the actual content of the Message. Not in Embeds, Polls, etc!*`,
-    TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 10 temperatures per Message that I can convert.`,
+    TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 10 temperatures per Message that I can convert.\n\nWant to increase this limit for your Server? Consider upgrading to **TwiLite Inferno** using the button below!`,
+    TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_INFERNO: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 20 temperatures per Message that I can convert.`,
     TEMPERATURE_COMMAND_ERROR_POLLS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Polls.`,
     TEMPERATURE_COMMAND_ERROR_FORWARDS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Forwarded Messages.`,
 
@@ -412,8 +435,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     LOCKEMOJI_COMMAND_AUDIT_LOG_EMOJI_UPLOADED: `Role-locked Custom Emoji uploaded by {{0}} using TwiLite`,
     LOCKEMOJI_COMMAND_UPLOAD_SUCCESS: `Successfully uploaded your new Role-locked Custom Emoji to this Server.\nYou can rename and/or delete your Emoji, much like others, in Server Settings > Emojis, providing you have the **Manage Expressions** Permission.`,
 
-    //LOCKEMOJI_COMMAND_ERROR_MISSING_CREATE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Create Expressions** Permission.\nPlease try again, once I have been granted that Permission!`, // Unused while Discord's API still has Apps use Manage Expressions instead of Create Expressions
-    LOCKEMOJI_COMMAND_ERROR_MISSING_MANAGE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Manage Expressions** Permission.\nPlease try again, once I have been granted that Permission!`,
+    LOCKEMOJI_COMMAND_ERROR_MISSING_CREATE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Create Expressions** Permission.\nPlease try again, once I have been granted that Permission!`,
     LOCKEMOJI_COMMAND_ERROR_INVALID_FILE_TYPE: `Sorry, but that Emoji file wasn't a **PNG**, **JPEG**, or **GIF** file type.\nPlease try again, ensuring you use either a \`.png\`, \`.jpeg\`, or \`.gif\` file for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_FILE_TOO_LARGE: `Sorry, but that Emoji file is too large to be uploaded as a Custom Emoji.\nDiscord requires Custom Emojis to be smaller than 256kb in file size. Please try again, once you have a smaller file size for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_GENERIC: `Whoops, an error occurred while trying to upload that Role-locked Custom Emoji.`,
@@ -505,4 +527,117 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
 
     FISH_COMMAND_ITEM_NOTHING: `nothing.`,
     FISH_COMMAND_ITEM_SELF: `themselves!?`,
+
+
+
+    // ******* (UN)PIN MESSAGE IN THREAD COMMAND
+    PIN_THREAD_MESSAGE_COMMAND_PIN_SUCCESS: `Successfully pinned that Thread/Post Message for you!`,
+    PIN_THREAD_MESSAGE_COMMAND_UNPIN_SUCCESS: `Successfully unpinned that Thread/Post Message for you.`,
+    PIN_THREAD_MESSAGE_COMMAND_AUDIT_LOG_REASON_PIN: `Message pinned by Thread Owner @{{0}} using TwiLite's Context Command`,
+    PIN_THREAD_MESSAGE_COMMAND_AUDIT_LOG_REASON_UNPIN: `Message unpinned by Thread Owner @{{0}} using TwiLite's Context Command`,
+
+    PIN_THREAD_MESSAGE_COMMAND_MISSING_INFERNO_ACCESS: `Whoops! You have discovered a feature that's in Inferno Early Access!\nThis Command is currently only available for Servers with TwiLite's Inferno subscription active. This will be made free to use once it is considered a stable feature.\n\nIf you want to gain try out this command now, feel free to subscribe your Server to TwiLite Inferno :)`,
+
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_GENERIC: `Sorry, there was an unhandled error trying to pin or unpin that Thread/Post Message for you.\nPlease try again later...`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_USER_IS_NOT_THREAD_OWNER: `This command can only be used by the owner of this Thread or Forum Post.`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_MESSAGE_NOT_IN_THREAD: `This command is intended for use on messages inside of Threads or Forum Posts. As such, it cannot be used on messages outside of Threads or Forums.`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_APP_MISSING_PIN_MESSAGES_PERMISSION: `Sorry, I am missing the "**Pin Messages**" Permission in this Channel.\nI need that for this command to work!`,
+    PIN_THREAD_MESSAGE_COMMAND_ERROR_APP_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, I cannot pin or unpin messages in Threads or Forums that I do not have "**View Channel**" Permission for!\nIf I am meant to be able to see this Thread or Forum Post, please make sure I have the "**View Channel**" Permission in the parent Channel.`,
+    
+
+
+    // ******* TWITCH NOTIFICATION MODULE
+    TWITCH_NOTIF_PREMIUM_EARLY_ACCESS: `The Twitch Notification Module is still in early access for **TwiLite Inferno** powered Servers only.\n\nWant to unlock early access to this module, and more features such as Custom Branding? Upgrade to **TwiLite Inferno**!`,
+
+    TWITCH_NOTIF_PANEL_HEADING: `# Twitch Notifications`,
+    TWITCH_NOTIF_PANEL_DESCRIPTION: `Add or manage receiving "Going Live" Notifications in this Server for linked Twitch Channels.\n\n-# Please remember that this module is still in early access for **TwiLite Inferno** powered Servers. As such, it is still in active development and will be disabled should this Server's **TwiLite Inferno** subscription expires or is cancelled.`,
+    TWITCH_NOTIF_PANEL_EMPTY_PLACEHOLDER: `This Server currently has no Twitch Notifications setup. Use the button below to begin adding Twitch Notifications for this Server!`,
+    TWITCH_NOTIF_PANEL_ITEM_POSTS_IN_CHANNEL: `Posts in {{0}}`,
+    TWITCH_NOTIF_PANEL_ITEM_ROLE_PING: `Pings Role: {{0}}`,
+    TWITCH_NOTIF_PANEL_ITEM_HAS_CUSTOM_MESSAGE: `Has custom message`,
+    TWITCH_NOTIF_PANEL_ITEM_AUTO_PUBLISH: `Auto-publishing enabled`,
+    
+    TWITCH_NOTIF_PANEL_NOTE_MAXIMUM_LIMIT_REACHED: `Maximum number of Twitch Notifications reached.`,
+
+    TWITCH_NOTIF_PANEL_BUTTON_ADD_NEW: `Add Twitch channel`,
+    TWITCH_NOTIF_PANEL_BUTTON_RESET: `Reset all`,
+    TWITCH_NOTIF_PANEL_BUTTON_EDIT: `Manage`,
+
+    TWITCH_NOTIF_EDIT_PANEL_HEADING: `# Manage Twitch Notification`,
+    TWITCH_NOTIF_EDIT_PANEL_DESCRIPTION: `Below are the current notification settings for the Twitch Channel **{{0}}** in this Discord Server.\nUse the attached Buttons to either edit or delete this notification.`,
+    TWITCH_NOTIF_EDIT_PANEL_CURRENT_SETTINGS: `## Current Settings`,
+    TWITCH_NOTIF_EDIT_PANEL_DISCORD_CHANNEL: `Posts in: {{0}}`,
+    TWITCH_NOTIF_EDIT_PANEL_PINGS_ROLE: `Pings the Role: {{0}}`,
+    TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_PING_ROLE: `No Roles are pinged`,
+    TWITCH_NOTIF_EDIT_PANEL_CUSTOM_MESSAGE: `Has the following custom "Going Live" message:\n>>> \`\`\`\n{{0}}\n\`\`\``,
+    TWITCH_NOTIF_EDIT_PANEL_HAS_NO_CUSTOM_MESSAGE: `Uses the default "Going Live" message`,
+    TWITCH_NOTIF_EDIT_PANEL_AUTO_PUBLISHES: `Does auto-publish in Announcements Channel`,
+    TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_AUTO_PUBLISH: `Does not auto-publish announcement`,
+    TWITCH_NOTIF_EDIT_PANEL_UPDATES_ON_STREAM_END: `Notification message is updated when stream ends`,
+    TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_UPDATE_ON_STREAM_END: `Does not update notification message when stream ends`,
+
+    TWITCH_NOTIF_EDIT_PANEL_BUTTON_CANCEL: `Cancel`,
+    TWITCH_NOTIF_EDIT_PANEL_BUTTON_EDIT: `Edit`,
+    TWITCH_NOTIF_EDIT_PANEL_BUTTON_DELETE: `Delete`,
+
+    TWITCH_NOTIF_ADD_MODAL_TITLE: `Add Twitch Notification`,
+    TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_NAME: `Twitch Channel`,
+    TWITCH_NOTIF_ADD_MODAL_TWITCH_CHANNEL_LABEL_DESCRIPTION: `The Twitch Channel's username this "go live" notification should be for`,
+    TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
+    TWITCH_NOTIF_ADD_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `The Server Channel you want to post this notification in`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_NAME: `Role to ping [Optional]`,
+    TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `The Role you want to ping in this notification. Will be prefixed to the notification's message.`,
+    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message [Optional]`,
+    TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Use {streamerName} to include the streamer's name.`,
+    TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
+    TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `If posting to an Announcement Channel, should the notification be auto-published?`,
+
+    TWITCH_NOTIF_ADD_ERROR_INVALID_TWITCH_USERNAME: `Sorry, {{0}} could not be found as a real account on Twitch.\nPlease try again, ensuring you are typing the Twitch username exactly as it appears in Twitch.`,
+    TWITCH_NOTIF_ADD_ERROR_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "View Channel" Permission for {{1}}`,
+    TWITCH_NOTIF_ADD_ERROR_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "Send Messages" Permission for {{1}}`,
+
+    TWITCH_NOTIF_ADD_ERROR_GENERIC: `There was an error trying to save your new Twitch Notification for **{{0}}**. Please try again later, or report this issue to my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_ADD_ERROR_TWITCH_CHANNEL_ALREADY_ADDED: `This Server has already added Twitch Notifications for {{0}}!`,
+
+    TWITCH_NOTIF_EDIT_MODAL_TITLE: `Edit Twitch Notification`,
+    TWITCH_NOTIF_EDIT_MODAL_DESCRIPTION: `**Editing settings for notifications from the Twitch channel: {{0}}**\n__All fields are optional and pre-filled if existing settings were found for them.__\nIf you don't want to change any setting, then leave them unchanged.`,
+    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_NAME: `Discord Channel`,
+    TWITCH_NOTIF_EDIT_MODAL_DISCORD_CHANNEL_LABEL_DESCRIPTION: `Set where this Twitch Notification is posted to.`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_NAME: `Role to ping`,
+    TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Set which Role is pinged in this notification. Will be prefixed to the notification's message`,
+    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message`,
+    TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Set the custom message for this notification. Use {streamerName} to include the streamer's name.`,
+    TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
+    TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `Set if the notification should be auto-published if posting to an Announcement Channel`,
+    
+    TWITCH_NOTIF_DELETION_MODAL_TITLE: `Delete Twitch Notification`,
+    TWITCH_NOTIF_DELETION_MODAL_CHECKBOX_LABEL_NAME: `Delete this Notification`,
+    TWITCH_NOTIF_DELETION_MODAL_CHECKBOX_LABEL_DESCRIPTION: `Select to fully disable receiving notifications for the {{0}} Twitch channel.`,
+
+    TWITCH_NOTIF_DELETE_ERROR_GENERIC: `Sorry, there was an error preventing deletion of Twitch Notifications for {{0}} in this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_EDIT_ERROR_GENERIC: `Sorry, there was an error preventing saving of your edited Twitch Notification settings for {{0}}.\nPlease try again, or contact my developers if this error keeps occurring.`,
+    TWITCH_NOTIF_EDIT_ERROR_FIELDS_UNCHANGED: `The Twitch Notification settings for {{0}} were unchanged due to no edits being made to the settings.`,
+    TWITCH_NOTIF_EDIT_ERROR_DISCORD_CHANNEL_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, I cannot set {{0}} as your new notification channel due to missing the "View Channel" Permission.`,
+    TWITCH_NOTIF_EDIT_ERROR_DISCORD_CHANNEL_MISSING_SEND_MESSAGES_PERMISSION: `Sorry, I cannot set {{0}} as your new notification channel due to missing the "Send Messages" Permission.`,
+
+    TWITCH_NOTIF_RESET_MODAL_TITLE: `Reset Twitch Notifications`,
+    TWITCH_NOTIF_RESET_MODAL_CONFIRM_LABEL_NAME: `Confirm reset`,
+    TWITCH_NOTIF_RESET_MODAL_CONFIRM_LABEL_DESCRIPTION: `Please confirm you want to fully remove *all* saved Twitch Notifications for this Server.`,
+    
+    TWITCH_NOTIF_RESET_ERROR_GENERIC: `Sorry, there was an error preventing removal of Twitch Notifications for this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
+
+    TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE: `{{0}} went live!`,
+    TWITCH_NOTIFICATION_GOING_LIVE_CATEGORY: `Category:`,
+    TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE: `Went live: {{0}}`,
+    TWITCH_NOTIFICATION_GOING_LIVE_WATCH_BUTTON_LABEL: `Watch live stream`,
+    TWITCH_NOTIFICATION_GOING_LIVE_VOD_BUTTON_LABEL: `Watch VOD`,
+
+
+
+    // ******* SHOUTOUT COMMAND
+    SHOUTOUT_COMMAND_RESPONSE_HEADING: `📣 A Shoutout has been given!`,
+    SHOUTOUT_COMMAND_RESPONSE_DESCRIPTION: `{{0}} is giving {{1}} a shout-out!!`,
+    SHOUTOUT_COMMAND_RESPONSE_AVATAR_ALT_TEXT: `The profile picture of {{0}}`,
+
+    SHOUTOUT_COMMAND_ERROR_CANNOT_SHOUTOUT_SELF: `Sorry, you cannot give yourself a shout-out!`,
 }

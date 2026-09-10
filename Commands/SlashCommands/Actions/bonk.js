@@ -78,16 +78,6 @@ export const SlashCommand = {
                 },
                 required: false
             },
-            /* {
-                type: ApplicationCommandOptionType.Boolean,
-                name: "block-return",
-                description: "Set to TRUE to prevent the \"Return Bonk\" Button from being included in the response",
-                description_localizations: {
-                    'en-GB': "Set to TRUE to prevent the \"Return Bonk\" Button from being included in the response",
-                    'en-US': "Set to TRUE to prevent the \"Return Bonk\" Button from being included in the response"
-                },
-                required: false
-            }, */
             {
                 type: ApplicationCommandOptionType.String,
                 name: "reason",

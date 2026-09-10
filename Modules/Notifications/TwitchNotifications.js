@@ -1,5 +1,5 @@
 import { ButtonStyle, ChannelType, ComponentType, InteractionResponseType, MessageFlags, SelectMenuDefaultValueType, SeparatorSpacingSize, TextInputStyle } from 'discord-api-types/v10';
-import { hexToRgb, JsonResponse, resolveImage, rgbArrayToInteger } from '../../Utility/utilityMethods.js';
+import { hexToRgb, JsonResponse, rgbArrayToInteger } from '../../Utility/utilityMethods.js';
 import { localize } from '../../Utility/localizeResponses.js';
 import { EMOJI_TWITCH_LOGO } from '../../Assets/AppEmojis.js';
 import { DefaultDiscordRequestHeaders, getTwitchApiClient } from '../../Utility/utilityConstants.js';

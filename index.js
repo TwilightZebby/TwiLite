@@ -2,7 +2,6 @@ import { ApplicationWebhookEventType, ApplicationWebhookType, InteractionRespons
 import { isChatInputApplicationCommandInteraction, isContextMenuApplicationCommandInteraction, isMessageComponentButtonInteraction, isMessageComponentSelectMenuInteraction } from 'discord-api-types/utils';
 import { AutoRouter } from 'itty-router';
 import { verifyKey } from 'discord-interactions';
-import * as crypto from 'crypto'; // THIS IS SECURITY CRYPTO NOT YUCKY BLOCKCHAIN CRYPTOCURRENCIES 💀
 
 import { handleSlashCommand } from './Handlers/Commands/slashCommandHandler.js';
 import { handleContextCommand } from './Handlers/Commands/contextCommandHandler.js';
@@ -16,7 +15,7 @@ import { handleEntitlementCreate } from './Handlers/WebhookEvents/entitlementCre
 import { handleEntitlementUpdate } from './Handlers/WebhookEvents/entitlementUpdate.js';
 import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDelete.js';
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
-import { delay, JsonResponse, verifyTwitchRequest } from './Utility/utilityMethods.js';
+import { JsonResponse, verifyTwitchRequest } from './Utility/utilityMethods.js';
 import { getTwitchApiClient } from './Utility/utilityConstants.js';
 import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
 
@@ -296,7 +295,7 @@ router.post('/webhook', async (request, env) => {
 
 
 // *******************************
-router.get('/robots.txt', () => {
+router.get('*', () => {
     return rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker();
 });
 

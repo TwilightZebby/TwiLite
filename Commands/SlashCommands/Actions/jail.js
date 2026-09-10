@@ -78,17 +78,7 @@ export const SlashCommand = {
                 },
                 required: false,
                 max_length: 500
-            },
-            /* {
-                type: ApplicationCommandOptionType.Boolean,
-                name: "include-minigame",
-                description: "Set to true to include the \"break free from jail\" buttons",
-                description_localizations: {
-                    'en-GB': "Set to true to include the \"break free from jail\" buttons",
-                    'en-US': "Set to true to include the \"break free from jail\" buttons"
-                },
-                required: false
-            }, */
+            }
         ];
 
         return CommandData;

@@ -404,7 +404,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TEMPERATURE_COMMAND_ERROR_MISSING_CONTENT: `Sorry, that Message has no content to it!\n-# *I can only search for temperatures in the actual content of the Message. Not in Embeds, Polls, etc!*`,
     TEMPERATURE_COMMAND_ERROR_TEMPERATURE_NOT_FOUND: `Sorry, but I couldn't find any temperatures to convert from that Message.\n-# *I can only search for temperatures in the actual content of the Message. Not in Embeds, Polls, etc!*`,
     TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 10 temperatures per Message that I can convert.\n\nWant to increase this limit for your Server? Consider upgrading to **TwiLite Inferno** using the button below!`,
-    TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_PREMIUM: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 20 temperatures per Message that I can convert.`,
+    TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_INFERNO: `Sorry, but there are too many temperatures found in that Message!\nI have a maximum limit of 20 temperatures per Message that I can convert.`,
     TEMPERATURE_COMMAND_ERROR_POLLS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Polls.`,
     TEMPERATURE_COMMAND_ERROR_FORWARDS_NOT_SUPPORTED: `Sorry, I currently do not support converting temperatures inside of Forwarded Messages.`,
 
@@ -435,8 +435,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     LOCKEMOJI_COMMAND_AUDIT_LOG_EMOJI_UPLOADED: `Role-locked Custom Emoji uploaded by {{0}} using TwiLite`,
     LOCKEMOJI_COMMAND_UPLOAD_SUCCESS: `Successfully uploaded your new Role-locked Custom Emoji to this Server.\nYou can rename and/or delete your Emoji, much like others, in Server Settings > Emojis, providing you have the **Manage Expressions** Permission.`,
 
-    //LOCKEMOJI_COMMAND_ERROR_MISSING_CREATE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Create Expressions** Permission.\nPlease try again, once I have been granted that Permission!`, // Unused while Discord's API still has Apps use Manage Expressions instead of Create Expressions
-    LOCKEMOJI_COMMAND_ERROR_MISSING_MANAGE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Manage Expressions** Permission.\nPlease try again, once I have been granted that Permission!`,
+    LOCKEMOJI_COMMAND_ERROR_MISSING_CREATE_EXPRESSIONS_PERMISSION: `Sorry, but I cannot upload a Custom Emoji to this Server without having the **Create Expressions** Permission.\nPlease try again, once I have been granted that Permission!`,
     LOCKEMOJI_COMMAND_ERROR_INVALID_FILE_TYPE: `Sorry, but that Emoji file wasn't a **PNG**, **JPEG**, or **GIF** file type.\nPlease try again, ensuring you use either a \`.png\`, \`.jpeg\`, or \`.gif\` file for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_FILE_TOO_LARGE: `Sorry, but that Emoji file is too large to be uploaded as a Custom Emoji.\nDiscord requires Custom Emojis to be smaller than 256kb in file size. Please try again, once you have a smaller file size for your Custom Emoji.`,
     LOCKEMOJI_COMMAND_ERROR_GENERIC: `Whoops, an error occurred while trying to upload that Role-locked Custom Emoji.`,

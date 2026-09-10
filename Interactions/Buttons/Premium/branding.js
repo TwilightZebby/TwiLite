@@ -79,7 +79,8 @@ export const Button = {
                         "custom_id": "avatar",
                         "min_values": 1,
                         "max_values": 1,
-                        "required": false
+                        "required": false,
+                        "file_types": [ 'image' ]
                     }
                 }, {
                     // BANNER
@@ -91,7 +92,8 @@ export const Button = {
                         "custom_id": "banner",
                         "min_values": 1,
                         "max_values": 1,
-                        "required": false
+                        "required": false,
+                        "file_types": [ 'image' ]
                     }
                 }, {
                     // BIO

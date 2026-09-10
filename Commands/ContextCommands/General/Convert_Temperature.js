@@ -197,7 +197,7 @@ export const ContextCommand = {
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_PREMIUM')
+                    content: localize(interaction.locale, 'TEMPERATURE_COMMAND_ERROR_EXCEEDED_TEMPERATURE_LIMIT_INFERNO')
                 }
             });
         }

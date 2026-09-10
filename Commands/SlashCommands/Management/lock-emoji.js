@@ -72,7 +72,8 @@ export const SlashCommand = {
                     'en-GB': "Custom Emoji to upload to this Server",
                     'en-US': "Custom Emoji to upload to this Server"
                 },
-                required: true
+                required: true,
+                file_types: [ 'image' ]
             },
             {
                 type: ApplicationCommandOptionType.Role,
@@ -111,12 +112,12 @@ export const SlashCommand = {
         // Ensure App has permissions to upload Custom Emojis
         let appPerms = BigInt(interaction.app_permissions);
 
-        if ( !((appPerms & PermissionFlagsBits.ManageGuildExpressions) == PermissionFlagsBits.ManageGuildExpressions) ) {
+        if ( !((appPerms & PermissionFlagsBits.CreateGuildExpressions) == PermissionFlagsBits.CreateGuildExpressions) ) {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,
                 data: {
                     flags: MessageFlags.Ephemeral,
-                    content: localize(interaction.locale, 'LOCKEMOJI_COMMAND_ERROR_MISSING_MANAGE_EXPRESSIONS_PERMISSION')
+                    content: localize(interaction.locale, 'LOCKEMOJI_COMMAND_ERROR_MISSING_CREATE_EXPRESSIONS_PERMISSION')
                 }
             });
         }

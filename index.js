@@ -270,7 +270,7 @@ router.post('/webhook', async (request, env) => {
     }
     // ENTITLEMENT_CREATE Event
     else if ( WebhookEvent.event.type === ApplicationWebhookEventType.EntitlementCreate ) {
-        return await handleEntitlementCreate(WebhookEvent);
+        return await handleEntitlementCreate(WebhookEvent, cfEnv);
     }
     // ENTITLEMENT_UPDATE Event
     else if ( WebhookEvent.event.type === ApplicationWebhookEventType.EntitlementUpdate ) {

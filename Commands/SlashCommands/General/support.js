@@ -2,7 +2,7 @@ import { ApplicationCommandType, InteractionContextType, ApplicationIntegrationT
 import { ActionRowBuilder, ButtonBuilder } from '@discordjs/builders';
 import { JsonResponse } from '../../../Utility/utilityMethods.js';
 import { localize } from '../../../Utility/localizeResponses.js';
-import { TWILITE_GITHUB_URI } from '../../../Assets/Hyperlinks.js';
+import { TWILITE_DOCS_BASE_URI, TWILITE_GITHUB_URI } from '../../../Assets/Hyperlinks.js';
 
 
 export const SlashCommand = {
@@ -82,7 +82,8 @@ export const SlashCommand = {
     async executeCommand(interaction, interactionUser, usedCommandName) {
         // Create Link Button
         const LinkActionRow = new ActionRowBuilder().addComponents([
-            new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_BUTTON_GITHUB_LABEL')).setURL(TWILITE_GITHUB_URI)
+            new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_BUTTON_GITHUB_LABEL')).setURL(TWILITE_GITHUB_URI),
+            new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel(localize(interaction.locale, 'SUPPORT_COMMAND_BUTTON_DOCS_LABEL')).setURL(TWILITE_DOCS_BASE_URI)
         ]);
 
         let actionRowJson = LinkActionRow.toJSON();

@@ -416,8 +416,9 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     
     
     // ******* SUPPORT COMMAND
-    SUPPORT_COMMAND_RESPONSE: `Need help/support with using TwiLite? Or maybe you want to report an issue or suggest an idea for TwiLite?\nFeel free to ask/post on the Issues or Discussions tab of TwiLite's GitHub (linked below).`,
+    SUPPORT_COMMAND_RESPONSE: `Need help/support with using TwiLite? Or maybe you want to report an issue or suggest an idea for TwiLite?\nFeel free to ask/post on the Issues or Discussions tab of TwiLite's GitHub (linked below).\nYou can also browse TwiLite's documentation for help too!`,
     SUPPORT_COMMAND_BUTTON_GITHUB_LABEL: `Open GitHub`,
+    SUPPORT_COMMAND_BUTTON_DOCS_LABEL: `Open Documentation`,
 
 
 

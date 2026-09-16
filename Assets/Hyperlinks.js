@@ -15,3 +15,4 @@ export const EMOJIPEDIA_URI = "https://emojipedia.org";
 
 export const TWILITE_ADD_APP_URI = "https://discord.com/oauth2/authorize?client_id=784058687412633601";
 export const TWILITE_GITHUB_URI = "https://github.com/TwilightZebby/TwiLite";
+export const TWILITE_DOCS_BASE_URI = "https://twilite.gitbook.io/docs";

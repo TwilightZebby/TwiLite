@@ -108,7 +108,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     // Just to handle the special case with `/bite` having styles now
     /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataStringOption|undefined}*/
     const InputStyle = interaction.data.options.find(option => option.name === "style");
-    const ActionName = `${interaction.data.name.toUpperCase()}${interaction.data.name.toUpperCase() === "NIBBLE" && InputStyle != undefined ? `_${InputStyle.value}` : interaction.data.name.toUpperCase() === "NIBBLE" && InputStyle == undefined ? '_AFFECTIONATE' : ''}`;
+    const ActionName = `${interaction.data.name.toUpperCase()}${interaction.data.name.toUpperCase() === "BITE" && InputStyle != undefined ? `_${InputStyle.value}` : interaction.data.name.toUpperCase() === "BITE" && InputStyle == undefined ? '_AFFECTIONATE' : ''}`;
 
 
     // atEveryone

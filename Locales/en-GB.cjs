@@ -81,7 +81,7 @@ module.exports = {
     ACTION_COMMAND_OTHER_USER_BITE_AFFECTIONATE: `**{{0}}** gave **{{1}}** an affectionate bite`,
     ACTION_COMMAND_OTHER_USER_BITE_HUNGRY: `**{{0}}** was hungry and took a bite out of **{{1}}**!`,
     ACTION_COMMAND_OTHER_USER_BITE_FERAL: `**{{0}}** went feral and bit **{{1}}**!`,
-    ACTION_COMMAND_OTHER_USER_BITE_KINKY: `**{{0}}** slowly bit **{{1}}**'s shoulder kinkly...`,
+    ACTION_COMMAND_OTHER_USER_BITE_KINKY: `**{{0}}** slowly bit **{{1}}**'s shoulder kinkily...`,
     ACTION_COMMAND_OTHER_USER_LICK: `**{{0}}** gave **{{1}}** an affectionate lick`,
     ACTION_COMMAND_OTHER_USER_GLARE: `**{{0}}** glares at **{{1}}**...`,
     ACTION_COMMAND_OTHER_USER_EXPLODE: `**{{0}}** wants to explode **{{1}}** with their mind!`,

@@ -13,14 +13,14 @@ export const SlashCommand = {
     /** Command's Description
      * @type {String}
      */
-    description: "Bites the selected target",
+    description: "Nibbles the selected target",
 
     /** Command's Localised Descriptions
      * @type {import('discord-api-types/v10').LocalizationMap}
      */
     localizedDescriptions: {
-        'en-GB': 'Bites the selected target',
-        'en-US': 'Bites the selected target'
+        'en-GB': 'Nibbles the selected target',
+        'en-US': 'Nibbles the selected target'
     },
 
     /** Command's cooldown, in seconds (whole number integers!)
@@ -61,20 +61,20 @@ export const SlashCommand = {
             {
                 type: ApplicationCommandOptionType.Mentionable,
                 name: "target",
-                description: "The target you want to bite",
+                description: "The target you want to nibble",
                 description_localizations: {
-                    'en-GB': "The target you want to bite",
-                    'en-US': "The target you want to bite"
+                    'en-GB': "The target you want to nibble",
+                    'en-US': "The target you want to nibble"
                 },
                 required: true
             },
             {
                 type: ApplicationCommandOptionType.String,
                 name: "style",
-                description: "How are you biting your target? (Defaults to affectionate)",
+                description: "How are you nibbling your target? (Defaults to affectionate)",
                 description_localizations: {
-                    'en-GB': "How are you biting your target? (Defaults to affectionate)",
-                    'en-US': "How are you biting your target? (Defaults to affectionate)"
+                    'en-GB': "How are you nibbling your target? (Defaults to affectionate)",
+                    'en-US': "How are you nibbling your target? (Defaults to affectionate)"
                 },
                 required: false,
                 choices: [{
@@ -87,7 +87,7 @@ export const SlashCommand = {
                     name: "Feral",
                     value: "FERAL"
                 }, {
-                    name: "Kinky",
+                    name: "Suggestive",
                     value: "KINKY"
                 }]
             },

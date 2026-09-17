@@ -8,19 +8,19 @@ export const SlashCommand = {
     /** Command's Name, in fulllowercase (can include hyphens)
      * @type {String}
      */
-    name: "bite",
+    name: "nibble",
 
     /** Command's Description
      * @type {String}
      */
-    description: "Affectionately bites the selected target",
+    description: "Bites the selected target",
 
     /** Command's Localised Descriptions
      * @type {import('discord-api-types/v10').LocalizationMap}
      */
     localizedDescriptions: {
-        'en-GB': 'Affectionately bites the selected target',
-        'en-US': 'Affectionately bites the selected target'
+        'en-GB': 'Bites the selected target',
+        'en-US': 'Bites the selected target'
     },
 
     /** Command's cooldown, in seconds (whole number integers!)

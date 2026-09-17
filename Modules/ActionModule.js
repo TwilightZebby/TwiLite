@@ -1,5 +1,4 @@
 import { ApplicationCommandOptionType, ButtonStyle, ComponentType, InteractionResponseType, MessageFlags } from 'discord-api-types/v10';
-import { EmbedBuilder } from '@discordjs/builders';
 import { ActionGifs } from '../Assets/ActionGifLinks.js';
 import { localize } from '../Utility/localizeResponses.js';
 import { getInteractionLocale, JsonResponse } from '../Utility/utilityMethods.js';
@@ -10,7 +9,7 @@ const MentionEveryoneRegex = new RegExp(/@(everyone|here)/g);
 const MentionRoleRegex = new RegExp(/<@&(\d{17,20})>/g);
 
 /** Actions that should NEVER include the Return Action Button */
-const NoReturnActions = [ "JAIL", "YEET", "COOKIE", "BITE", "EXPLODE", "BITE", "FISH", "LICK", "GLARE" ];
+const NoReturnActions = [ "JAIL", "YEET", "COOKIE", "NIBBLE", "EXPLODE", "FISH", "LICK", "GLARE" ];
 
 
 /**
@@ -109,7 +108,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     // Just to handle the special case with `/bite` having styles now
     /** @type {import('discord-api-types/v10').APIApplicationCommandInteractionDataStringOption|undefined}*/
     const InputStyle = interaction.data.options.find(option => option.name === "style");
-    const ActionName = `${interaction.data.name.toUpperCase()}${InputStyle != undefined ? `_${InputStyle.value}` : ""}`;
+    const ActionName = `${interaction.data.name.toUpperCase()}${interaction.data.name.toUpperCase() === "NIBBLE" && InputStyle != undefined ? `_${InputStyle.value}` : interaction.data.name.toUpperCase() === "NIBBLE" && InputStyle == undefined ? '_AFFECTIONATE' : ''}`;
 
 
     // atEveryone

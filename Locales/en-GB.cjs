@@ -590,8 +590,11 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `The Role you want to ping in this notification. Will be prefixed to the notification's message.`,
     TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message [Optional]`,
     TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Use {streamerName} to include the streamer's name.`,
+    TWITCH_NOTIF_ADD_MODAL_CHECKBOXES_LABEL: `Notification Message Management`,
     TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
     TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `If posting to an Announcement Channel, should the notification be auto-published?`,
+    TWITCH_NOTIF_ADD_MODAL_UPDATE_ON_STREAM_END_NAME: `Update on Stream End`,
+    TWITCH_NOTIF_ADD_MODAL_UPDATE_ON_STREAM_END_DESCRIPTION: `Should the notification auto-update when the stream has ended?`,
 
     TWITCH_NOTIF_ADD_ERROR_INVALID_TWITCH_USERNAME: `Sorry, {{0}} could not be found as a real account on Twitch.\nPlease try again, ensuring you are typing the Twitch username exactly as it appears in Twitch.`,
     TWITCH_NOTIF_ADD_ERROR_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "View Channel" Permission for {{1}}`,

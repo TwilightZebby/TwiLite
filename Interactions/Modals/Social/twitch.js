@@ -47,6 +47,8 @@ export const Modal = {
             let inputCustomMessage = null;
             /** @type {Boolean} */
             let inputAutoPublishAnnouncement = false;
+            /** @type {?Boolean} */
+            let inputUpdateOnEnd = null;
 
             for (let i = 0; i <= ModalComponents.length - 1; i++) {
                 // Safety Net
@@ -69,9 +71,18 @@ export const Modal = {
                     else if ( tempTopLevelComp.custom_id === "custom-message" ) {
                         inputCustomMessage = tempTopLevelComp.value;
                     }
-                    // Auto-publish
-                    else if ( tempTopLevelComp.custom_id === "auto-publish" ) {
-                        inputAutoPublishAnnouncement = tempTopLevelComp.value;
+                    // Checkboxes
+                    else if ( tempTopLevelComp.custom_id === "management-options" ) {
+                        let checkboxValues = tempTopLevelComp.values;
+
+                        if ( checkboxValues.length < 1 ) {
+                            inputAutoPublishAnnouncement = false;
+                            inputUpdateOnEnd = false;
+                        }
+                        else {
+                            if ( checkboxValues.includes("auto-publish") ) { inputAutoPublishAnnouncement = true; }
+                            if ( checkboxValues.includes("update-on-end") ) { inputUpdateOnEnd = true; }
+                        }
                     }
                 }
             }
@@ -159,7 +170,7 @@ export const Modal = {
                     ping_role_id: inputRoleIds.length > 0 ? inputRoleIds.shift() : null,
                     auto_publish_announcement: inputAutoPublishAnnouncement === false ? 0 : 1,
                     update_on_category_change: 0,
-                    update_on_stream_end: 0
+                    update_on_stream_end: inputUpdateOnEnd === false ? 0 : 1
                 };
 
                 // Create Twitch EventSub Webhook subscriptions

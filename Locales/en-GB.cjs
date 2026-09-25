@@ -590,8 +590,11 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_ADD_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `The Role you want to ping in this notification. Will be prefixed to the notification's message.`,
     TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message [Optional]`,
     TWITCH_NOTIF_ADD_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Custom message for this notification. Use {streamerName} to include the streamer's name.`,
+    TWITCH_NOTIF_ADD_MODAL_CHECKBOXES_LABEL: `Notification Message Management`,
     TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
     TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `If posting to an Announcement Channel, should the notification be auto-published?`,
+    TWITCH_NOTIF_ADD_MODAL_UPDATE_ON_STREAM_END_NAME: `Update on Stream End`,
+    TWITCH_NOTIF_ADD_MODAL_UPDATE_ON_STREAM_END_DESCRIPTION: `Should the notification auto-update when the stream has ended?`,
 
     TWITCH_NOTIF_ADD_ERROR_INVALID_TWITCH_USERNAME: `Sorry, {{0}} could not be found as a real account on Twitch.\nPlease try again, ensuring you are typing the Twitch username exactly as it appears in Twitch.`,
     TWITCH_NOTIF_ADD_ERROR_MISSING_VIEW_CHANNEL_PERMISSION: `Sorry, the Twitch Notification for {{0}} could not be added as I am missing the "View Channel" Permission for {{1}}`,
@@ -608,8 +611,11 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_EDIT_MODAL_ROLES_TO_PING_LABEL_DESCRIPTION: `Set which Role is pinged in this notification. Will be prefixed to the notification's message`,
     TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_NAME: `Custom Message`,
     TWITCH_NOTIF_EDIT_MODAL_CUSTOM_MESSAGE_LABEL_DESCRIPTION: `Set the custom message for this notification. Use {streamerName} to include the streamer's name.`,
+    TWITCH_NOTIF_EDIT_MODAL_CHECKBOXES_LABEL: `Notification Message Management`,
     TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME: `Auto-publish Announcement`,
-    TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `Set if the notification should be auto-published if posting to an Announcement Channel`,
+    TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION: `Should the notification should be auto-published if posting to an Announcement Channel?`,
+    TWITCH_NOTIF_EDIT_MODAL_UPDATE_ON_STREAM_END_NAME: `Update on Stream End`,
+    TWITCH_NOTIF_EDIT_MODAL_UPDATE_ON_STREAM_END_DESCRIPTION: `Should the notification auto-update when the stream has ended?`,
     
     TWITCH_NOTIF_DELETION_MODAL_TITLE: `Delete Twitch Notification`,
     TWITCH_NOTIF_DELETION_MODAL_CHECKBOX_LABEL_NAME: `Delete this Notification`,
@@ -628,6 +634,7 @@ Use the Select Menu below to configure this Menu's Type, Embed and Role Buttons.
     TWITCH_NOTIF_RESET_ERROR_GENERIC: `Sorry, there was an error preventing removal of Twitch Notifications for this Server.\nPlease try again, or contact my developers if this error keeps occurring.`,
 
     TWITCH_NOTIFICATION_GOING_LIVE_DEFAULT_MESSAGE: `{{0}} went live!`,
+    TWITCH_NOTIFICATION_STREAM_HAS_ENDED_DEFAULT_MESSAGE: `{{0}} was live.`,
     TWITCH_NOTIFICATION_GOING_LIVE_CATEGORY: `Category:`,
     TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE: `Went live: {{0}}`,
     TWITCH_NOTIFICATION_GOING_LIVE_WATCH_BUTTON_LABEL: `Watch live stream`,

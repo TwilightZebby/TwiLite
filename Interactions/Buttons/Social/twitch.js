@@ -89,13 +89,24 @@ export const Button = {
                         "required": false,
                     }
                 }, {
-                    // Checkbox for setting auto-publishing state
+                    // Checkboxes for setting auto publish & "update on stream end" states
                     "type": ComponentType.Label,
-                    "label": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME'),
-                    "description": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION'),
+                    "label": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_CHECKBOXES_LABEL'),
                     "component": {
-                        "type": ComponentType.Checkbox,
-                        "custom_id": `auto-publish`
+                        "type": ComponentType.CheckboxGroup,
+                        "custom_id": `management-options`,
+                        "min_values": 0,
+                        "required": false,
+                        "options": [{
+                            "label": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_NAME'),
+                            "description": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION'),
+                            "value": `auto-publish`
+                        }, {
+                            "label": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_UPDATE_ON_STREAM_END_NAME'),
+                            "description": localize(interaction.locale, 'TWITCH_NOTIF_ADD_MODAL_UPDATE_ON_STREAM_END_DESCRIPTION'),
+                            "value": `update-on-end`,
+                            "default": true
+                        }]
                     }
                 }]
             };

@@ -47,6 +47,8 @@ export const Modal = {
             let inputCustomMessage = null;
             /** @type {Boolean} */
             let inputAutoPublishAnnouncement = false;
+            /** @type {?Boolean} */
+            let inputUpdateOnEnd = null;
 
             for (let i = 0; i <= ModalComponents.length - 1; i++) {
                 // Safety Net
@@ -69,9 +71,18 @@ export const Modal = {
                     else if ( tempTopLevelComp.custom_id === "custom-message" ) {
                         inputCustomMessage = tempTopLevelComp.value;
                     }
-                    // Auto-publish
-                    else if ( tempTopLevelComp.custom_id === "auto-publish" ) {
-                        inputAutoPublishAnnouncement = tempTopLevelComp.value;
+                    // Checkboxes
+                    else if ( tempTopLevelComp.custom_id === "management-options" ) {
+                        let checkboxValues = tempTopLevelComp.values;
+
+                        if ( checkboxValues.length < 1 ) {
+                            inputAutoPublishAnnouncement = false;
+                            inputUpdateOnEnd = false;
+                        }
+                        else {
+                            if ( checkboxValues.includes("auto-publish") ) { inputAutoPublishAnnouncement = true; }
+                            if ( checkboxValues.includes("update-on-end") ) { inputUpdateOnEnd = true; }
+                        }
                     }
                 }
             }
@@ -142,10 +153,32 @@ export const Modal = {
 
             // Validation complete, now create Twitch Webhook & store to DB
             try {
-                // Create Twitch EventSub Webhook subscription
+                // For storing to DB
+                /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications}*/
+                let storeData = {
+                    notification_id: uuidv7(),
+                    discord_guild_id: interaction.guild_id,
+                    twitch_channel_id: twitchUser.id,
+                    twitch_channel_name: twitchUser.name,
+                    discord_guild_locale: interaction.guild_locale,
+                    is_notification_enabled: 1,
+                    twitch_golive_webhook_subscription_id: "",
+                    twitch_categoryupdate_webhook_subscription_id: null,
+                    twitch_streamend_webhook_subscription_id: null,
+                    discord_channel_id: inputDiscordChannelId,
+                    custom_message: inputCustomMessage != "" ? inputCustomMessage : null,
+                    ping_role_id: inputRoleIds.length > 0 ? inputRoleIds.shift() : null,
+                    auto_publish_announcement: inputAutoPublishAnnouncement === false ? 0 : 1,
+                    update_on_category_change: 0,
+                    update_on_stream_end: inputUpdateOnEnd === false ? 0 : 1
+                };
+
+                // Create Twitch EventSub Webhook subscriptions
                 let twitchToken = await getTwitchAccessToken(cfEnv);
 
-                let twitchApiRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+
+                // *** FOR STREAM STARTING
+                let twitchApiRequestForStreamUp = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
                     method: 'POST',
                     headers: {
                         "Authorization": `Bearer ${twitchToken}`,
@@ -166,8 +199,8 @@ export const Modal = {
                     })
                 });
 
-                if ( twitchApiRequest.status != 202 && twitchApiRequest.status != 409 ) {
-                    console.error(`Twitch \`stream.online\` Webhook subscription failed. Response code: ${twitchApiRequest.status} ${twitchApiRequest.statusText}`);
+                if ( twitchApiRequestForStreamUp.status != 202 && twitchApiRequestForStreamUp.status != 409 ) {
+                    console.error(`Twitch \`stream.online\` Webhook subscription failed. Response code: ${twitchApiRequestForStreamUp.status} ${twitchApiRequestForStreamUp.statusText}`);
 
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
@@ -178,31 +211,11 @@ export const Modal = {
                     });
                 }
 
-                // Store to DB
-                /** @type {import('../../../Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications}*/
-                let storeData = {
-                    notification_id: uuidv7(),
-                    discord_guild_id: interaction.guild_id,
-                    twitch_channel_id: twitchUser.id,
-                    twitch_channel_name: twitchUser.name,
-                    discord_guild_locale: interaction.guild_locale,
-                    is_notification_enabled: 1,
-                    twitch_golive_webhook_subscription_id: "",
-                    twitch_categoryupdate_webhook_subscription_id: null,
-                    twitch_streamend_webhook_subscription_id: null,
-                    discord_channel_id: inputDiscordChannelId,
-                    custom_message: inputCustomMessage != "" ? inputCustomMessage : null,
-                    ping_role_id: inputRoleIds.length > 0 ? inputRoleIds.shift() : null,
-                    auto_publish_announcement: inputAutoPublishAnnouncement === false ? 0 : 1,
-                    update_on_category_change: 0,
-                    update_on_stream_end: 0
-                };
-
-                if ( twitchApiRequest.status === 202 ) {
-                    let twitchApiData = await twitchApiRequest.json();
+                if ( twitchApiRequestForStreamUp.status === 202 ) {
+                    let twitchApiData = await twitchApiRequestForStreamUp.json();
                     storeData.twitch_golive_webhook_subscription_id = twitchApiData.data[0].id;
                 }
-                else if ( twitchApiRequest.status === 409 ) {
+                else if ( twitchApiRequestForStreamUp.status === 409 ) {
                     // Since we won't get a returned Subscription ID from Twitch, we need to copy it from another instance for the same Twitch Channel.
                     let queryFindTwitchWebhook = await cfEnv.DATABASE
                         .prepare("SELECT * FROM TwitchNotifications WHERE twitch_channel_id = ? LIMIT 5")
@@ -219,6 +232,64 @@ export const Modal = {
                     }
                 }
 
+
+                // *** FOR STREAM ENDING
+                let twitchApiRequestForStreamDown = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": `Bearer ${twitchToken}`,
+                        "Client-ID": `${TWITCH_CLIENT_ID}`,
+                        "Content-Type": `application/json`
+                    },
+                    body: JSON.stringify({
+                        "type": `stream.offline`,
+                        "version": `1`,
+                        "condition": {
+                            "broadcaster_user_id": `${twitchUser.id}`
+                        },
+                        "transport": {
+                            "method": `webhook`,
+                            "callback": `https://${CF_WORKER_URL}/twitch-webhooks`,
+                            "secret": `${RANDOMLY_GENERATED_FIXED_STRING}`
+                        }
+                    })
+                });
+
+                if ( twitchApiRequestForStreamDown.status != 202 && twitchApiRequestForStreamDown.status != 409 ) {
+                    console.error(`Twitch \`stream.offline\` Webhook subscription failed. Response code: ${twitchApiRequestForStreamDown.status} ${twitchApiRequestForStreamDown.statusText}`);
+
+                    return new JsonResponse({
+                        type: InteractionResponseType.ChannelMessageWithSource,
+                        data: {
+                            flags: MessageFlags.Ephemeral,
+                            content: localize(interaction.locale, 'TWITCH_NOTIF_ADD_ERROR_GENERIC', `${inputTwitchName}`)
+                        }
+                    });
+                }
+
+                if ( twitchApiRequestForStreamDown.status === 202 ) {
+                    let twitchApiData = await twitchApiRequestForStreamDown.json();
+                    storeData.twitch_streamend_webhook_subscription_id = twitchApiData.data[0].id;
+                }
+                else if ( twitchApiRequestForStreamDown.status === 409 ) {
+                    // Since we won't get a returned Subscription ID from Twitch, we need to copy it from another instance for the same Twitch Channel.
+                    let queryFindTwitchWebhook = await cfEnv.DATABASE
+                        .prepare("SELECT * FROM TwitchNotifications WHERE twitch_channel_id = ? LIMIT 5")
+                        .bind(twitchUser.id)
+                        .run();
+
+                    for ( let i = 0; i <= queryFindTwitchWebhook.results.length - 1; i++ ) {
+                        if ( queryFindTwitchWebhook.results[i].discord_guild_id === interaction.guild_id ) { continue; }
+
+                        if ( queryFindTwitchWebhook.results[i].twitch_streamend_webhook_subscription_id.length > 0 ) {
+                            storeData.twitch_streamend_webhook_subscription_id = queryFindTwitchWebhook.results[i].twitch_streamend_webhook_subscription_id;
+                            break;
+                        }
+                    }
+                }
+
+
+
                 // Save to DB (using INSERT)
                 const { success } = await cfEnv.DATABASE
                     .prepare("INSERT INTO TwitchNotifications ('notification_id', 'discord_guild_id', 'twitch_channel_id', 'twitch_channel_name', 'discord_guild_locale', 'is_notification_enabled', 'twitch_golive_webhook_subscription_id', 'twitch_categoryupdate_webhook_subscription_id', 'twitch_streamend_webhook_subscription_id', 'discord_channel_id', 'custom_message', 'ping_role_id', 'auto_publish_announcement', 'update_on_category_change', 'update_on_stream_end') VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
@@ -227,7 +298,7 @@ export const Modal = {
 
                 if ( success === false ) {
                     // PURELY so I can manually remove the Twitch Webhook if need be
-                    console.warn(`Saving new Twitch Notification failed. Here is the Twitch Webhook Subscription ID for this: ${storeData.twitch_golive_webhook_subscription_id}`)
+                    console.warn(`Saving new Twitch Notification failed. Here is the Twitch Webhook Subscription IDs for this: ${storeData.twitch_golive_webhook_subscription_id} / ${storeData.twitch_streamend_webhook_subscription_id}`)
 
                     return new JsonResponse({
                         type: InteractionResponseType.ChannelMessageWithSource,
@@ -254,7 +325,7 @@ export const Modal = {
             }
 
         }
-        // Edit or Delete a selected existing Twitch Notification
+        // Edit a selected existing Twitch Notification
         else if ( InputAction === 'edit' ) {
             let twitchId = SplitCustomId.pop();
 
@@ -269,6 +340,8 @@ export const Modal = {
             let inputCustomMessage = null;
             /** @type {?Boolean} */
             let inputAutoPublish = null;
+            /** @type {?Boolean} */
+            let inputUpdateOnEnd = null;
 
             for (let i = 0; i <= ModalComponents.length - 1; i++) {
                 // Safety Net
@@ -287,9 +360,18 @@ export const Modal = {
                     else if ( tempTopLevelComp.custom_id === "custom-message" ) {
                         inputCustomMessage = tempTopLevelComp.value == "" ? null : tempTopLevelComp.value;
                     }
-                    // Auto Publish
-                    else if ( tempTopLevelComp.custom_id === "auto-publish" ) {
-                        inputAutoPublish = tempTopLevelComp.value;
+                    // Checkboxes
+                    else if ( tempTopLevelComp.custom_id === "management-options" ) {
+                        let checkboxValues = tempTopLevelComp.values;
+
+                        if ( checkboxValues.length < 1 ) {
+                            inputAutoPublish = false;
+                            inputUpdateOnEnd = false;
+                        }
+                        else {
+                            if ( checkboxValues.includes("auto-publish") ) { inputAutoPublish = true; }
+                            if ( checkboxValues.includes("update-on-end") ) { inputUpdateOnEnd = true; }
+                        }
                     }
                 }
             }
@@ -306,12 +388,14 @@ export const Modal = {
             let extractedInputRoleId = inputRoleIds != null ? inputRoleIds.shift() : null;
             let extractedInputCustomMessage = inputCustomMessage == "" || inputCustomMessage == null ? null : inputCustomMessage;
             let extractedInputAutoPublish = inputAutoPublish === true ? 1 : 0;
+            let extractedInputUpdateOnEnd = inputUpdateOnEnd === true ? 1 : 0;
 
             if (
                 (inputDiscordChannelId === results[0].discord_channel_id)
                 && (extractedInputRoleId === results[0].ping_role_id)
                 && (inputCustomMessage === results[0].custom_message)
                 && (extractedInputAutoPublish === results[0].auto_publish_announcement)
+                && (extractedInputUpdateOnEnd === results[0].update_on_stream_end)
             ) {
                 return new JsonResponse({
                     type: InteractionResponseType.ChannelMessageWithSource,
@@ -359,6 +443,7 @@ export const Modal = {
             }
 
             // If input channel is not an Announcement-type Channel, force-set the "Auto Publish" field to `false`
+            //   Otherwise, update to what User set
             if ( resolvedInputChannel.type !== ChannelType.GuildAnnouncement ) { editableClonedData.auto_publish_announcement = 0; }
             else if ( extractedInputAutoPublish !== results[0].auto_publish_announcement ) { editableClonedData.auto_publish_announcement === extractedInputAutoPublish; }
 
@@ -372,11 +457,16 @@ export const Modal = {
                 editableClonedData.custom_message = extractedInputCustomMessage;
             }
 
+            // Update Notif on Stream End
+            if ( extractedInputUpdateOnEnd !== results[0].update_on_stream_end ) {
+                editableClonedData.update_on_stream_end = extractedInputUpdateOnEnd;
+            }
+
 
             // Attempt saving new values to DB
             const { success } = await cfEnv.DATABASE
-                .prepare("UPDATE TwitchNotifications SET discord_guild_locale = ?, discord_channel_id = ?, custom_message = ?, ping_role_id = ?, auto_publish_announcement = ? WHERE notification_id = ?")
-                .bind(interaction.guild_locale, editableClonedData.discord_channel_id, editableClonedData.custom_message, editableClonedData.ping_role_id, editableClonedData.auto_publish_announcement, results[0].notification_id)
+                .prepare("UPDATE TwitchNotifications SET discord_guild_locale = ?, discord_channel_id = ?, custom_message = ?, ping_role_id = ?, auto_publish_announcement = ?, update_on_stream_end = ? WHERE notification_id = ?")
+                .bind(interaction.guild_locale, editableClonedData.discord_channel_id, editableClonedData.custom_message, editableClonedData.ping_role_id, editableClonedData.auto_publish_announcement, editableClonedData.update_on_stream_end, results[0].notification_id)
                 .run();
 
             if ( success === false ) {
@@ -442,7 +532,7 @@ export const Modal = {
                     // Remove Twitch webhook subscription
                     let twitchToken = await getTwitchAccessToken(cfEnv);
 
-                    let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                    let twitchApiDeleteRequestforStreamUp = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
                         method: 'DELETE',
                         headers: {
                             "Authorization": `Bearer ${twitchToken}`,
@@ -451,6 +541,18 @@ export const Modal = {
                         },
                         body: JSON.stringify({
                             "id": `${results[0].twitch_golive_webhook_subscription_id}`
+                        })
+                    });
+
+                    let twitchApiDeleteRequestforStreamDown = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                        method: 'DELETE',
+                        headers: {
+                            "Authorization": `Bearer ${twitchToken}`,
+                            "Client-ID": `${TWITCH_CLIENT_ID}`,
+                            "Content-Type": `application/json`
+                        },
+                        body: JSON.stringify({
+                            "id": `${results[0].twitch_streamend_webhook_subscription_id}`
                         })
                     });
                 }
@@ -509,7 +611,7 @@ export const Modal = {
                     }
 
                     if ( keepTwitchWebhook === false ) {
-                        let twitchApiDeleteRequest = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                        let twitchApiDeleteRequestForStreamUp = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
                             method: 'DELETE',
                             headers: {
                                 "Authorization": `Bearer ${twitchToken}`,
@@ -518,6 +620,18 @@ export const Modal = {
                             },
                             body: JSON.stringify({
                                 "id": `${item.twitch_golive_webhook_subscription_id}`
+                            })
+                        });
+
+                        let twitchApiDeleteRequestForStreamDown = await fetch(`https://api.twitch.tv/helix/eventsub/subscriptions`, {
+                            method: 'DELETE',
+                            headers: {
+                                "Authorization": `Bearer ${twitchToken}`,
+                                "Client-ID": `${TWITCH_CLIENT_ID}`,
+                                "Content-Type": `application/json`
+                            },
+                            body: JSON.stringify({
+                                "id": `${item.twitch_streamend_webhook_subscription_id}`
                             })
                         });
                     }

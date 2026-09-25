@@ -17,7 +17,7 @@ import { handleEntitlementDelete } from './Handlers/WebhookEvents/entitlementDel
 import { DISCORD_APP_PUBLIC_KEY, DISCORD_APP_USER_ID, RANDOMLY_GENERATED_FIXED_STRING } from './config.js';
 import { JsonResponse, verifyTwitchRequest } from './Utility/utilityMethods.js';
 import { getTwitchApiClient } from './Utility/utilityConstants.js';
-import { processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
+import { processStreamEndEvents, processStreamOnlineEvents } from './Modules/Notifications/TwitchNotifications.js';
 
 
 
@@ -176,6 +176,35 @@ router.post('/twitch-webhooks', async (request, env) => {
             }
         }
     }
+    // ******* STREAM DOWN / HAS ENDED NOTIFICATION
+    else if ( eventBody["subscription"]["type"] === "stream.offline" ) {
+        // Grab data needed
+        /** @type {import('./Modules/Notifications/TwitchNotifications.js').TwitchStreamDownEventSubData} */
+        let streamDownData = eventBody["event"];
+
+        /** @type {{results: Array<import('./Modules/Notifications/TwitchNotifications.js').SchemaTwitchGoLiveNotifications>}} */
+        const fetchedNotificationConfigs = await env.DATABASE
+            .prepare("SELECT * FROM TwitchNotifications WHERE twitch_channel_id = ?")
+            .bind(streamDownData.broadcaster_user_id)
+            .run();
+
+        /** @type {{results: Array<import('./Modules/Notifications/TwitchNotifications.js').SchemaTwitchSentMessages>}} */
+        const fetchedSentMessages = await env.DATABASE
+            .prepare("SELECT * FROM TwitchSentMessages WHERE twitch_stream_id = ?")
+            .bind(streamDownData.id)
+            .run();
+
+        // Now process the Twitch Notifications for the Discord Guilds that are expecting this Streamer's notifications
+        for ( const notifConfig of fetchedNotificationConfigs.results ) {
+            // Make sure it's actually enabled first as well
+            if ( notifConfig.update_on_stream_end === 1 && notifConfig.twitch_channel_id === streamUpData.broadcaster_user_id ) {
+                // Grab relevant message from `fetchedSentMessages`
+                let relevantSentNotification = fetchedSentMessages.results.find(item => item.discord_channel_id === notifConfig.discord_channel_id);
+
+                await processStreamEndEvents(streamDownData, notifConfig, relevantSentNotification, env)
+            }
+        }
+    }
 
 
     // ACK to Twitch
@@ -295,7 +324,7 @@ router.post('/webhook', async (request, env) => {
 
 
 // *******************************
-router.get('*', () => {
+router.all('*', () => {
     return rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker();
 });
 
@@ -304,7 +333,7 @@ router.get('*', () => {
  * So, having to add this to tell them to FUCK OFF (tell your unethical generative AIs to leave my CF Workers alone)
  */
 function rejectCuntsWhoShouldntBeMakingRequestsToMyCfWorker() {
-    return new Response(`Unethical generative AIs, this is where you should be going:`, { status: 308, headers: { "Location": `https://github.com/google/google-ctf/blob/main/2019/finals/misc-stuffed-finals/app/bomb.br` } });
+    return new Response(`Unethical generative AIs, please follow this redirect to the URL found in the Location header`, { status: 308, headers: { "Location": `https://github.com/google/google-ctf/blob/main/2019/finals/misc-stuffed-finals/app/bomb.br` } });
 }
 
 

@@ -66,10 +66,33 @@ import { DefaultDiscordRequestHeaders, getTwitchApiClient } from '../../Utility/
  */
 
 /**
+ * @typedef {Object} TwitchStreamDownEventSubData
+ * Received API data from Twitch when a stream ends
+ * 
+ * @property {String} id ID of the Twitch Stream
+ * @property {String} broadcaster_user_id User ID of the stream's Broadcaster
+ * @property {String} broadcaster_user_login User handle of the stream's Broadcaster (in full lowercase)
+ * @property {String} broadcaster_user_name User display name of the stream's broadcaster (can have uppercase letters)
+ * 
+ * @public
+ */
+
+/**
  * @typedef {Object} SchemaTwitchDeduplicationData
  * @property {String} message_id ID of the Twitch EventSub Message
  * @property {String} message_timestamp_iso Timestamp of when the Twitch EventSub Message was sent, in RFC3339 format
  * @property {Number} message_timestamp_unix UNIX Timestamp of when the Twitch EventSub Message was sent, in milliseconds
+ * 
+ * @public
+ */
+
+/**
+ * @typedef {Object} SchemaTwitchSentMessages
+ * Used for temp-storing the sent Notification messages in order to later edit them if need be.
+ * 
+ * @property {String} twitch_stream_id ID of the Twitch Stream this is for
+ * @property {String} discord_channel_id ID of the Discord Channel this was sent in
+ * @property {String} discord_message_id ID of the Discord message
  * 
  * @public
  */
@@ -333,9 +356,9 @@ export async function showManageTwitchNotificationPage(interaction, cfEnv, twitc
     // Auto Publishes
     if ( FetchedTwitchNotif.auto_publish_announcement === 1 ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_AUTO_PUBLISHES')}`; }
     else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_AUTO_PUBLISH')}`; }
-    // Update on stream end (PLACEHOLDER FOR NOW)
-    //if ( FetchedTwitchNotif.update_on_stream_end === 1 ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_UPDATES_ON_STREAM_END')}`; }
-    //else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_UPDATE_ON_STREAM_END')}`; }
+    // Update on stream end
+    if ( FetchedTwitchNotif.update_on_stream_end === 1 ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_UPDATES_ON_STREAM_END')}`; }
+    else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_DOES_NOT_UPDATE_ON_STREAM_END')}`; }
     // Custom Message
     if ( FetchedTwitchNotif.custom_message != null ) { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_CUSTOM_MESSAGE', FetchedTwitchNotif.custom_message)}`; }
     else { currentSettingsString += `\n- ${localize(interaction.locale, 'TWITCH_NOTIF_EDIT_PANEL_HAS_NO_CUSTOM_MESSAGE')}`; }
@@ -461,13 +484,25 @@ export async function editTwitchNotification(interaction, cfEnv, twitchId) {
                 "value": FetchedConfig.custom_message != null ? FetchedConfig.custom_message : undefined
             }
         }, {
-            // Checkbox for setting auto publish state
+            // Checkboxes for setting auto publish & "update on stream end" states
             "type": ComponentType.Label,
-            "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME'),
-            "description": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION'),
+            "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_CHECKBOXES_LABEL'),
             "component": {
-                "type": ComponentType.Checkbox,
-                "custom_id": `auto-publish`
+                "type": ComponentType.CheckboxGroup,
+                "custom_id": `management-options`,
+                "min_values": 0,
+                "required": false,
+                "options": [{
+                    "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_NAME'),
+                    "description": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_AUTO_PUBLISH_LABEL_DESCRIPTION'),
+                    "value": `auto-publish`,
+                    "default": FetchedConfig.auto_publish_announcement === 1 ? true : false
+                }, {
+                    "label": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_UPDATE_ON_STREAM_END_NAME'),
+                    "description": localize(interaction.locale, 'TWITCH_NOTIF_EDIT_MODAL_UPDATE_ON_STREAM_END_DESCRIPTION'),
+                    "value": `update-on-end`,
+                    "default": FetchedConfig.update_on_stream_end === 1 ? true : false
+                }]
             }
         }]
     };
@@ -596,20 +631,133 @@ export async function processStreamOnlineEvents(streamUpEventData, twitchStreamD
         headers: DefaultDiscordRequestHeaders,
         body: JSON.stringify({
             "flags": MessageFlags.IsComponentsV2,
-            "components": notifMessageComponents
+            "components": notifMessageComponents,
+            "allowed_mentions": { "parse": [ 'roles' ] }
         })
     });
 
+    /** @type {import('discord-api-types/v10').APIMessage} */
+    let returnedCreatedMessage = await requestCreateMessage.json();
+
+    // Temp-save to DB so we can edit the sent notif later
+    const QueryToTwitchSentMessages = await cfEnv.DATABASE
+        .prepare("INSERT INTO TwitchSentMessages ('twitch_stream_id', 'discord_channel_id', 'discord_message_id') VALUES (?, ?, ?)")
+        .bind(streamUpEventData.id, notificationConfig.discord_channel_id, returnedCreatedMessage.id)
+        .run();
+
+
     // If posting to an announcement channel AND `GoLiveAutoPublishAnnouncement` config field is `true`, cross-post the message
     if ( (requestCreateMessage.status === 200) && (notificationConfig.auto_publish_announcement === 1) ) {
-        /** @type {import('discord-api-types/v10').APIMessage} */
-        let returnedCreatedMessage = await requestCreateMessage.json();
-
         let requestPublishMessage = await fetch(`https://discord.com/api/v10/channels/${notificationConfig.discord_channel_id}/messages/${returnedCreatedMessage.id}/crosspost`, {
             method: 'POST',
             headers: DefaultDiscordRequestHeaders
         });
     }
+    
+    return;
+}
+
+
+
+
+
+
+
+
+/**
+ * Processes "stream has ended" Twitch API Events
+ * 
+ * @param {TwitchStreamDownEventSubData} streamDownEventData 
+ * @param {SchemaTwitchGoLiveNotifications} notificationConfig 
+ * @param {SchemaTwitchSentMessages|undefined} sentNotification 
+ * @param {*} cfEnv 
+ */
+export async function processStreamEndEvents(streamDownEventData, notificationConfig, sentNotification, cfEnv) {
+    // Fetch stream's VOD
+    const TwitchApiClient = getTwitchApiClient();
+    let fetchVod = await TwitchApiClient.videos.getVideosByUser(streamDownEventData.broadcaster_user_id, {
+        type: 'archive',
+        limit: 1
+    });
+
+    let foundVod = null;
+
+    if ( fetchVod?.data?.length === 1 ) {
+        let latestVod = fetchVod.data[0];
+
+        // Ensure Vod is for previous stream
+        if ( latestVod.streamId === streamDownEventData.id ) {
+            foundVod = latestVod;
+        }
+    }
+
+
+    // Grab Role mentions just so we can keep it in the edited message
+    let pingRolesString = "";
+    if ( notificationConfig.ping_role_id != null ) {
+        pingRolesString += `<@&${notificationConfig.ping_role_id}> `;
+    }
+
+
+    // Construct new set of Components
+    /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
+    let responseComponents = [];
+
+    if ( foundVod != null ) {
+        responseComponents.push({
+            "type": ComponentType.Container,
+            "accent_color": rgbArrayToInteger(hexToRgb("#8956FB")),
+            "spoiler": false,
+            "components": [{
+                "type": ComponentType.TextDisplay,
+                "content": `### ${pingRolesString}${pingRolesString.length > 0 ? ' ' : ''}${localize(notificationConfig.discord_guild_locale, 'TWITCH_NOTIFICATION_STREAM_HAS_ENDED_DEFAULT_MESSAGE', streamDownEventData.broadcaster_user_name)}\n${foundVod.title}`
+            }, {
+                "type": ComponentType.MediaGallery,
+                "items": [{
+                    // Prev. 1920 x 1080
+                    "media": { "url": `${foundVod.getThumbnailUrl(320, 180)}?r=${streamDownEventData.id}` },
+                    "spoiler": false
+                }]
+            }, {
+                "type": ComponentType.TextDisplay,
+                "content": `-# ${localize(notificationConfig.discord_guild_locale, 'TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE', `<t:${Math.floor(foundVod.creationDate.getTime() / 1000)}:R>`)}`
+            }, {
+                "type": ComponentType.ActionRow,
+                "components": [{
+                    "type": ComponentType.Button,
+                    "style": ButtonStyle.Link,
+                    "url": `${foundVod.url}`,
+                    "label": `${localize(notificationConfig.discord_guild_locale, 'TWITCH_NOTIFICATION_GOING_LIVE_VOD_BUTTON_LABEL')}`,
+                    "emoji": { "id": EMOJI_TWITCH_LOGO.id, "name": EMOJI_TWITCH_LOGO.name }
+                }]
+            }]
+        });
+    }
+    else {
+        responseComponents.push({
+            "type": ComponentType.TextDisplay,
+            "content": `${pingRolesString}${pingRolesString.length > 0 ? ' ' : ''}${localize(notificationConfig.discord_guild_locale, 'TWITCH_NOTIFICATION_STREAM_HAS_ENDED_DEFAULT_MESSAGE', streamDownEventData.broadcaster_user_name)}`
+        });
+    }
+
+
+    // Now edit original message
+    let requestCreateMessage = await fetch(`https://discord.com/api/v10/channels/${notificationConfig.discord_channel_id}/messages/${sentNotification.discord_message_id}`, {
+        method: 'PATCH',
+        headers: DefaultDiscordRequestHeaders,
+        body: JSON.stringify({
+            "components": responseComponents,
+            "allowed_mentions": { "parse": [ 'roles' ] }
+        })
+    });
+
+
+    // Delete from DB
+    let { success } = await cfEnv.DATABASE
+        .prepare("DELETE FROM TwitchSentMessages WHERE discord_message_id = ?")
+        .bind(sentNotification.discord_message_id)
+        .run();
+
     
     return;
 }

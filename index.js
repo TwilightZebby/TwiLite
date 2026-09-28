@@ -197,7 +197,7 @@ router.post('/twitch-webhooks', async (request, env) => {
         // Now process the Twitch Notifications for the Discord Guilds that are expecting this Streamer's notifications
         for ( const notifConfig of fetchedNotificationConfigs.results ) {
             // Make sure it's actually enabled first as well
-            if ( notifConfig.update_on_stream_end === 1 && notifConfig.twitch_channel_id === streamUpData.broadcaster_user_id ) {
+            if ( notifConfig.update_on_stream_end === 1 && notifConfig.twitch_channel_id === streamDownData.broadcaster_user_id ) {
                 // Grab relevant message from `fetchedSentMessages`
                 let relevantSentNotification = fetchedSentMessages.results.find(item => item.discord_channel_id === notifConfig.discord_channel_id);
 

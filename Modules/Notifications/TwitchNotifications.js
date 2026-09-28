@@ -23,7 +23,7 @@ import { DefaultDiscordRequestHeaders, getTwitchApiClient } from '../../Utility/
  * @property {?String} ping_role_id A Role ID of the Role to ping in the go live notification
  * @property {Number} auto_publish_announcement Should the notification be automatically published, if posting to an Announcement Channel on Discord. Will be force set to FALSE if `DiscordChannelId` does not point to an Announcement-type Channel. (0 for FALSE, 1 for TRUE)
  * @property {Number} update_on_category_change Should the posted notification be updated when the stream's category is updated from Twitch? (Currently always FALSE due to being WIP) (0 for FALSE, 1 for TRUE)
- * @property {Number} update_on_stream_end Should the posted notification be updated to reflect when the stream has ended? (Currently always FALSE due to being WIP) (0 for FALSE, 1 for TRUE)
+ * @property {Number} update_on_stream_end Should the posted notification be updated to reflect when the stream has ended? (0 for FALSE, 1 for TRUE)
  * 
  * @public
  */
@@ -720,7 +720,7 @@ export async function processStreamEndEvents(streamDownEventData, notificationCo
                 }]
             }, {
                 "type": ComponentType.TextDisplay,
-                "content": `-# ${localize(notificationConfig.discord_guild_locale, 'TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE', `<t:${Math.floor(foundVod.creationDate.getTime() / 1000)}:R>`)}`
+                "content": `-# ${localize(notificationConfig.discord_guild_locale, 'TWITCH_NOTIFICATION_GOING_LIVE_WENT_LIVE', `<t:${Math.floor(foundVod.creationDate.getTime() / 1000)}:R>`)} | ${localize(notificationConfig.discord_guild_locale, 'TWITCH_NOTIFICATION_VOD_DURATION', foundVod.duration)}`
             }, {
                 "type": ComponentType.ActionRow,
                 "components": [{

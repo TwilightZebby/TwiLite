@@ -28,7 +28,7 @@
     "discord-interactions": "4.4.0",
     "emoji-regex": "10.6.0",
     "itty-router": "5.0.23",
-    "undici": "8.10.0",
+    "undici": "8.10.2",
     "uuid": "^14.0.2"
   },
   "devDependencies": {

@@ -229,7 +229,7 @@ export async function listTwitchNotifications(interaction, cfEnv, outputType) {
 
 
         // Add final buttons
-        if ( results.length < 5 ) {
+        if ( results.length < 7 ) {
             // Maximum limit not reached
             responseComponents[0].components.push({
                 "type": ComponentType.Separator,

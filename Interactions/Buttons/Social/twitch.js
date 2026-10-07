@@ -19,7 +19,7 @@ export const Button = {
     /** Button's cooldown, in seconds (whole number integers!)
      * @type {Number}
      */
-    cooldown: 4,
+    cooldown: 3,
 
     /** Runs the Button
      * @param {import('discord-api-types/v10').APIMessageComponentButtonInteraction} interaction 

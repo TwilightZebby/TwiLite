@@ -118,7 +118,6 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
     }
     // atRole
     else if ( interaction.data.resolved.roles?.[InputTarget.value] != undefined ) {
-        forceDisplayEmbed = true;
         InputBlockReturn.value = true;
         displayMessage = localize(CurrentLocale, `ACTION_COMMAND_ROLE_${ActionName}`, InteractionTriggeringUserDisplayName, `<@&${InputTarget.value}>`);
     }
@@ -173,7 +172,7 @@ export async function handleActionSlashCommand(interaction, interactionUser, use
         let gifComponent = {
             "id": 1,
             "type": ComponentType.Container,
-            "accent_color": interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].color : null,
+            "accent_color": interaction.data.resolved.roles?.[InputTarget.value] != undefined ? interaction.data.resolved.roles[InputTarget.value].colors.primary_color : null,
             "spoiler": false,
             "components": [{
                 "id": 2,

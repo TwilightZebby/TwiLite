@@ -18,20 +18,20 @@
   "author": "TwilightZebby",
   "license": "SEE LICENSE IN https://github.com/TwilightZebby/license/blob/main/license.md",
   "dependencies": {
-    "@discordjs/builders": "1.13.1",
+    "@discordjs/builders": "1.14.1",
     "@discordjs/collection": "2.1.1",
-    "@twurple/api": "8.0.3",
-    "@twurple/auth": "8.0.3",
-    "@twurple/eventsub-base": "8.0.3",
-    "@twurple/eventsub-http": "8.0.3",
-    "discord-api-types": "0.38.54",
+    "@twurple/api": "8.2.0",
+    "@twurple/auth": "8.2.0",
+    "@twurple/eventsub-base": "8.2.0",
+    "@twurple/eventsub-http": "8.2.0",
+    "discord-api-types": "0.38.57",
     "discord-interactions": "4.4.0",
-    "emoji-regex": "10.6.0",
-    "itty-router": "5.0.23",
-    "undici": "8.10.2",
-    "uuid": "^14.0.2"
+    "emoji-regex": "11.0.0",
+    "itty-router": "5.0.24",
+    "undici": "8.12.3",
+    "uuid": "14.0.3"
   },
   "devDependencies": {
-    "wrangler": "4.131.2"
+    "wrangler": "4.151.3"
   }
 }

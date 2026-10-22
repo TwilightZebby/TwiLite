@@ -52,33 +52,6 @@ export const ContextCommand = {
      * @param {import('discord-api-types/v10').APIUser} interactionUser 
      */
     async executeCommand(interaction, interactionUser) {
-        // INFERNO EARLY ACCESS
-        // Check for Inferno status
-        let guildHasInferno = checkForInfernoSku(interaction);
-
-        // Check for Inferno status to be able to use this Command
-        if ( guildHasInferno === false ) {
-            return new JsonResponse({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                    flags: MessageFlags.Ephemeral | MessageFlags.IsComponentsV2,
-                    /** @type {import('discord-api-types/v10').APIMessageTopLevelComponent[]} */
-                    components: [{
-                        type: ComponentType.TextDisplay,
-                        content: localize(interaction.locale, 'PIN_THREAD_MESSAGE_COMMAND_MISSING_INFERNO_ACCESS')
-                    }, {
-                        type: ComponentType.ActionRow,
-                        components: [{
-                            type: ComponentType.Button,
-                            style: ButtonStyle.Premium,
-                            sku_id: SKU_INFERNO_ID
-                        }]
-                    }]
-                }
-            });
-        }
-
-
         // Grab Message
         const SourceMessage = interaction.data.resolved.messages[interaction.data.target_id];
 

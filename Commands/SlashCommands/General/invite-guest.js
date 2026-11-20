@@ -185,6 +185,20 @@ export const SlashCommand = {
         }
 
 
+        // Check to see if App does have permission to create Invites in the target channel
+        let appPermInChannel = BigInt(ResolvedChannel.app_permissions);
+
+        if ( !((appPermInChannel & PermissionFlagsBits.CreateInstantInvite) == PermissionFlagsBits.CreateInstantInvite) ) {
+            return new JsonResponse({
+                type: InteractionResponseType.ChannelMessageWithSource,
+                data: {
+                    flags: MessageFlags.Ephemeral,
+                    content: localize(interaction.locale, 'INVITE_GUEST_COMMAND_ERROR_APP_MISSING_CREATE_INVITE_PERMISSION', `<#${InputChannel.value}>`)
+                }
+            });
+        }
+
+
         // Attempt to make Invite!
         // Set defaults for optional stuff
         let setMaxAge = InputExpiryAge == undefined ? 86400 : InputExpiryAge.value;
@@ -218,7 +232,7 @@ export const SlashCommand = {
             });
         }
 
-        // App didn't have CREATE_INSTANT_INVITE Permission
+        // App didn't have CREATE_INSTANT_INVITE Permission (safety net just in case)
         if ( postInviteRequest.status === 403 ) {
             return new JsonResponse({
                 type: InteractionResponseType.ChannelMessageWithSource,

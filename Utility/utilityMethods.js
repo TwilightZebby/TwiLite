@@ -1,4 +1,4 @@
-import { InteractionContextType, PermissionFlagsBits } from 'discord-api-types/v10';
+import { ChannelFlags, InteractionContextType, PermissionFlagsBits } from 'discord-api-types/v10';
 import { Buffer } from 'node:buffer';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
@@ -233,6 +233,7 @@ export async function checkForPermissionInChannel(permission, serverId, channelI
 
   // if missing VIEW_CHANNEL permission, TwiLite will not have access to the channel in question. As such, reject early!
   if ( guildChannelRaw.status === 403 ) { return 'NoAccess'; }
+  if ( (guildChannel.flags & ChannelFlags.ChannelObfuscated) == ChannelFlags.ChannelObfuscated ) { return 'NoAccess'; }
 
 
   let twiliteMemberRaw = await fetch(`https://discord.com/api/v10/guilds/${serverId}/members/${DISCORD_APP_USER_ID}`, {
